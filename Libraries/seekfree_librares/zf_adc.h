@@ -76,7 +76,7 @@ typedef enum    // 枚举ADC通道
 //此枚举定义不允许用户修改
 typedef enum    // 枚举ADC编号
 {
-    ADC_0,      //RT1021没有ADC0 这里仅用于占位
+    ADC_0,      //RT1064没有ADC0 这里仅用于占位
     ADC_1,     
     ADC_2,  
 

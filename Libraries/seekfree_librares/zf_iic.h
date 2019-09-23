@@ -44,7 +44,7 @@ typedef enum //枚举IIC引脚
 //此枚举定义不允许用户修改
 typedef enum //枚举IIC编号
 {
-    IIC_0,//RT1021没有IIC_0 这里仅用于占位
+    IIC_0,//RT1064没有IIC_0 这里仅用于占位
     IIC_1,
     IIC_2,
     IIC_3,

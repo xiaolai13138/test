@@ -39,11 +39,7 @@ int main(void)
     board_init();//务必保留，本函数用于初始化MPU 时钟 调试串口
     ips200_init();
     EnableGlobalIRQ(0);
-    //修改显示屏 显示字符或者字符串的函数为void lcd_showstr(uint16 x,uint16 y,const int8 dat[]); 主要将存放字符的数组类型切换为const int8  TFT 1.14IPS 2.0ips oled全部都修改
-    //修改1.14ips最上方备注
-    //增加并口屏幕引脚选择的说明，只能选择快速GPIO支持的引脚
-    //修改flash写入与读取函数的buf类型为uint32
-    //增加flash操作函数的参数范围
+    
     while (1)
     {
         

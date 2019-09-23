@@ -68,7 +68,7 @@ typedef enum
 //此枚举定义不允许用户修改
 typedef enum //枚举串口号
 {
-    SPI_0,//RT1021没有SPI0 这里仅用于占位
+    SPI_0,//RT1064没有SPI0 这里仅用于占位
     SPI_1,
     SPI_2,
     SPI_3,

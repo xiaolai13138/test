@@ -336,7 +336,7 @@
               <MiscControls>--library_interface=armcc --diag_suppress=66,1296,186,1 --bss_threshold=0</MiscControls>
               <Define>CPU_MIMXRT1064DVL6A,SKIP_SYSCLK_INIT,XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_DCD_ENABLE =1, XIP_BOOT_HEADER_ENABLE =1,PRINTF_FLOAT_ENABLE=1, SCANF_FLOAT_ENABLE=1, PRINTF_ADVANCED_ENABLE=1, SCANF_ADVANCED_ENABLE=1,FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CODE;..\USER\inc;..\USER\src;..\..\Libraries\nxp_libraries\CMSIS\Include;..\..\Libraries\nxp_libraries\cmsis_drivers;..\..\Libraries\nxp_libraries\drives;..\..\Libraries\nxp_libraries\startup;..\..\Libraries\nxp_libraries\startup\MDK-ARM;..\..\Libraries\nxp_libraries\utilities;..\..\Libraries\nxp_libraries\utilities\debug_console;..\..\Libraries\nxp_libraries\utilities\str;..\..\Libraries\nxp_libraries\xip;..\..\Libraries\nxp_libraries\components\serial_manager;..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter;..\..\Libraries\nxp_libraries\components\uart;..\..\Libraries\nxp_libraries\components\lists;..\..\Libraries\nxp_libraries\deceive;..\..\Libraries\seekfree_libraries\common;..\..\Libraries\seekfree_libraries\board;..\..\Libraries\seekfree_libraries;..\..\Libraries\seekfree_libraries\board;..\..\Libraries\seekfree_peripheral</IncludePath>
+              <IncludePath>..\CODE;..\USER\inc;..\USER\src;..\..\Libraries\seekfree_libraries;..\..\Libraries\nxp_libraries\CMSIS\Include;..\..\Libraries\nxp_libraries\cmsis_drivers;..\..\Libraries\nxp_libraries\drives;..\..\Libraries\nxp_libraries\startup;..\..\Libraries\nxp_libraries\startup\MDK-ARM;..\..\Libraries\nxp_libraries\utilities;..\..\Libraries\nxp_libraries\utilities\debug_console;..\..\Libraries\nxp_libraries\utilities\str;..\..\Libraries\nxp_libraries\xip;..\..\Libraries\nxp_libraries\components\serial_manager;..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter;..\..\Libraries\nxp_libraries\components\uart;..\..\Libraries\nxp_libraries\components\lists;..\..\Libraries\nxp_libraries\deceive;..\..\Libraries\seekfree_libraries\common;..\..\Libraries\seekfree_libraries\board;..\..\Libraries\seekfree_peripheral</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1117,11 +1117,6 @@
           <GroupName>seekfree_libraries</GroupName>
           <Files>
             <File>
-              <FileName>headfile.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\headfile.h</FilePath>
-            </File>
-            <File>
               <FileName>zf_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\seekfree_libraries\zf_adc.c</FilePath>
@@ -1517,11 +1512,6 @@
           <GroupName>user_h</GroupName>
           <Files>
             <File>
-              <FileName>headfile.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_librares\headfile.h</FilePath>
-            </File>
-            <File>
               <FileName>isr.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\USER\inc\isr.h</FilePath>
@@ -1530,6 +1520,11 @@
               <FileName>RT106X_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\USER\inc\RT106X_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>headfile.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_libraries\headfile.h</FilePath>
             </File>
           </Files>
         </Group>

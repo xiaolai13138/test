@@ -1,7 +1,6 @@
 *.pbi
 *.xcl
 *.dep
-*.dnx
 *.ps1
 *.cspy.bat
 *.out

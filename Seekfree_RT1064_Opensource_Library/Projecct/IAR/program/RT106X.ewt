@@ -1635,9 +1635,6 @@
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\common\common.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\headfile.h</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\common\SEEKFREE_PRINTF.c</name>
         </file>
         <file>
@@ -1869,7 +1866,7 @@
     <group>
         <name>user_h</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_librares\headfile.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\headfile.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\USER\inc\isr.h</name>

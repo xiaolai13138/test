@@ -28,10 +28,7 @@
 
 //下载代码前请根据自己使用的下载器在工程里设置下载器为自己所使用的
 
-
-
 #include "headfile.h"
-
 
 int main(void)
 {
@@ -41,7 +38,7 @@ int main(void)
 	//此处编写用户代码(例如：外设初始化代码等)
 	
 	
-	
+	gpio_init(B9,GPO,0,GPIO_PIN_CONFIG);
 	
 	
 	//总中断最后开启
@@ -49,8 +46,8 @@ int main(void)
     while (1)
     {
         //此处编写需要循环执行的代码
-		
-		
+		gpio_toggle(B9);
+		systick_delay_ms(100);
 		
     }
 }

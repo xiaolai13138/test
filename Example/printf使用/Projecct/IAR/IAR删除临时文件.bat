@@ -7,7 +7,6 @@ del *.dbgdt /s
 del *.ps1 /s
 del *.ps1 /s
 del *.xcl /s
-del *.dnx /s
 del *.reggroups /s
 
 pause

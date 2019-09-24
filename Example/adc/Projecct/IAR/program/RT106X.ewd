@@ -84,7 +84,7 @@
                 </option>
                 <option>
                     <name>OCDynDriverList</name>
-                    <state>JLINK_ID</state>
+                    <state>CMSISDAP_ID</state>
                 </option>
                 <option>
                     <name>OCLastSavedByProductVersion</name>
@@ -292,7 +292,7 @@
                 <option>
                     <name>CMSISDAPResetList</name>
                     <version>1</version>
-                    <state>4</state>
+                    <state>3</state>
                 </option>
                 <option>
                     <name>CMSISDAPHWResetDuration</name>
@@ -329,11 +329,11 @@
                 <option>
                     <name>CMSISDAPJtagSpeedList</name>
                     <version>0</version>
-                    <state>9</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CMSISDAPBreakpointRadio</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CMSISDAPRestoreBreakpointsCheck</name>
@@ -401,7 +401,7 @@
                 </option>
                 <option>
                     <name>CatchSFERR</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CatchHARDERR</name>

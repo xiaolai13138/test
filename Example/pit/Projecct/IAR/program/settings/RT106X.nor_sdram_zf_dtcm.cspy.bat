@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"D:\Professional software\IAR8.3\common\bin\cspybat" -f "F:\work\seekfree\freescale_work\单片机库开发\RT1064\逐飞科技RT1064库\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.general.xcl" --backend -f "F:\work\seekfree\freescale_work\单片机库开发\RT1064\逐飞科技RT1064库\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "E:\[SEEKFREE]\RT1064\RT1064开源库\Seekfree_RT1064_Opensource_Library\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.general.xcl" --backend -f "E:\[SEEKFREE]\RT1064\RT1064开源库\Seekfree_RT1064_Opensource_Library\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"D:\Professional software\IAR8.3\common\bin\cspybat" -f "F:\work\seekfree\freescale_work\单片机库开发\RT1064\逐飞科技RT1064库\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.general.xcl" "--debug_file=%~1" --backend -f "F:\work\seekfree\freescale_work\单片机库开发\RT1064\逐飞科技RT1064库\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "E:\[SEEKFREE]\RT1064\RT1064开源库\Seekfree_RT1064_Opensource_Library\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.general.xcl" "--debug_file=%~1" --backend -f "E:\[SEEKFREE]\RT1064\RT1064开源库\Seekfree_RT1064_Opensource_Library\Projecct\IAR\program\settings\RT106X.nor_sdram_zf_dtcm.driver.xcl" 
 
 @echo off 
 :end

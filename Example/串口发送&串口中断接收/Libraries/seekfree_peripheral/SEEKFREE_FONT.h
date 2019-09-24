@@ -34,7 +34,7 @@
 #define GRAY  			0X8430 	//灰色
 #define BROWN 			0XBC40 	//棕色
 #define PURPLE    		0XF81F	//紫色
-
+#define PINK    		0XFE19	//粉色
 
 
 extern const uint8 tft_ascii[95][16];

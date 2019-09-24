@@ -37,12 +37,21 @@ int main(void)
 {
 	DisableGlobalIRQ();
     board_init();//务必保留，本函数用于初始化MPU 时钟 调试串口
-    ips200_init();
+	
+	//此处编写用户代码(例如：外设初始化代码等)
+	
+	
+	
+	
+	
+	//总中断最后开启
     EnableGlobalIRQ(0);
-    
     while (1)
     {
-        
+        //此处编写需要循环执行的代码
+		
+		
+		
     }
 }
 

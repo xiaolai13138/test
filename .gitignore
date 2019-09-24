@@ -25,5 +25,3 @@
 *.sim
 *JLinkLog.txt
 *.tmp
-
-*.dnx

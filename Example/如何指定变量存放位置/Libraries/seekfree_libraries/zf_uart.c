@@ -244,6 +244,18 @@ void uart_rx_irq(UARTN_enum uartn,uint8 status)
     //NVIC_SetPriority((IRQn_Type)((IRQn_Type)(uartn) + LPUART1_IRQn),0);//优先级设置 范围0-15 越小优先级越高
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      串口接收中断设置
+//  @param      uartn           串口模块号(USART_1,USART_2,USART_3,USART_4,USART_5,USART_6,USART_7,USART_8)
+//  @param      *handle			串口中断结构体变量	
+//  @param      *callback		中断后需要执行的函数
+//  @param      *tx_buff		需要发送数据的地址
+//  @param      *tx_count	    需要发送的字节数
+//  @param      *rx_buff		需要接收数据的地址
+//  @param      *rx_count		需要接收的字节数	
+//  @return     void        
+//  Sample usage:               uart_set_handle(USART_1,1);       // 打开串口1接收中断
+//-------------------------------------------------------------------------------------------------------------------
 void uart_set_handle(UARTN_enum uartn, lpuart_handle_t *handle, lpuart_transfer_callback_t callback, uint8 *tx_buff, uint32 tx_count, uint8 *rx_buff, uint32 rx_count)
 {
     LPUART_TransferCreateHandle(UARTN[uartn], handle, callback, NULL);

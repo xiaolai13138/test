@@ -42,18 +42,18 @@
 #include "SEEKFREE_FONT.h"
 
 //-----------------引脚定义------------------------------
-#define IPS114_SPIN_PIN        SPI_3           //定义使用的SPI号
-#define IPS114_SCL_PIN         SPI3_SCK_B0    //定义SPI_SCK引脚
-#define IPS114_SDA_PIN         SPI3_MOSI_B1   //定义SPI_MOSI引脚
-#define IPS114_SDA_IN_PIN      SPI3_MISO_B2   //定义SPI_MISO引脚  IPS没有MISO引脚，但是这里任然需要定义，在spi的初始化时需要使用
-#define IPS114_CS_PIN          SPI3_CS0_B3    //定义SPI_CS引脚
+#define IPS114_SPIN_PIN         SPI_3           //定义使用的SPI号
+#define IPS114_SCL_PIN          SPI3_SCK_B0    //定义SPI_SCK引脚
+#define IPS114_SDA_PIN          SPI3_MOSI_B1   //定义SPI_MOSI引脚
+#define IPS114_SDA_IN_PIN       SPI3_MISO_B2   //定义SPI_MISO引脚  IPS没有MISO引脚，但是这里任然需要定义，在spi的初始化时需要使用
+#define IPS114_CS_PIN           SPI3_CS0_B3    //定义SPI_CS引脚
      
-#define IPS114_BL_PIN      C18	            //液晶背光引脚定义  
-#define IPS114_REST_PIN    B2              //液晶复位引脚定义 由于实际通讯未使用D15因此 这里复用为GPIO
-#define IPS114_DC_PIN 	    C19	            //液晶命令位引脚定义
+#define IPS114_BL_PIN           C18	            //液晶背光引脚定义  
+#define IPS114_REST_PIN         B2              //液晶复位引脚定义 由于实际通讯未使用D15因此 这里复用为GPIO
+#define IPS114_DC_PIN 	        C19	            //液晶命令位引脚定义
 
-#define IPS114_DC(x)       gpio_set(IPS114_DC_PIN,x);
-#define IPS114_REST(x)     gpio_set(IPS114_REST_PIN,x);
+#define IPS114_DC(x)            gpio_set(IPS114_DC_PIN,x);
+#define IPS114_REST(x)          gpio_set(IPS114_REST_PIN,x);
 
 
 
@@ -69,6 +69,8 @@
 //#define GRAY  			0X8430 	//灰色
 //#define BROWN 			0XBC40 	//棕色
 //#define PURPLE    		0XF81F	//紫色
+//#define PINK    		    0XFE19	//粉色
+
 
 //定义写字笔的颜色
 #define IPS114_PENCOLOR    RED
@@ -116,6 +118,8 @@ void ips114_showfloat(uint16 x,uint16 y,double dat,uint8 num,uint8 pointnum);
 void ips114_displayimage032(uint8 *p, uint16 width, uint16 height);
 void ips114_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
 void ips114_displayimage032_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height);
+void ips114_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
+void ips114_displayimage8660_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height);
 void ips114_displayimage7725(uint8 *p, uint16 width, uint16 height);
 void ips114_display_chinese(uint16 x, uint16 y, uint8 size, const uint8 *p, uint8 number, uint16 color);
 

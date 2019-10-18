@@ -72,15 +72,15 @@
 //#define GRAY  			0X8430 	//灰色
 //#define BROWN 			0XBC40 	//棕色
 //#define PURPLE    		0XF81F	//紫色
-
+//#define PINK    		    0XFE19	//粉色
 
 
 
 //定义写字笔的颜色
-#define PENCOLOR    RED
+#define TFT_PENCOLOR    RED
 
 //定义背景颜色
-#define BGCOLOR	    WHITE
+#define TFT_BGCOLOR	    WHITE
 
      
      
@@ -119,6 +119,7 @@ void lcd_showfloat(uint16 x,uint16 y,double dat,uint8 num,uint8 pointnum);
 void showimage(const unsigned char *p);
 void lcd_displayimage032(uint8 *p, uint16 width, uint16 height);
 void lcd_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
+void lcd_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
 void lcd_displayimage7725(uint8 *p, uint16 width, uint16 height);
 void lcd_display_chinese(uint16 x, uint16 y, uint8 size, const uint8 *p, uint8 number, uint16 color);
 

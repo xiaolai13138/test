@@ -289,7 +289,7 @@ void lcd_drawpoint(uint16 x,uint16 y,uint16 color)
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      液晶显示字符
 //  @param      x     	        坐标x方向的起点 参数范围 0 -（TFT_X_MAX-1）
-//  @param      y     	        坐标y方向的起点 参数范围 0 -（TFT_Y_MAX-1）
+//  @param      y     	        坐标y方向的起点 参数范围 0 -（TFT_Y_MAX/16-1）
 //  @param      dat       	    需要显示的字符
 //  @return     void
 //  @since      v1.0
@@ -306,8 +306,8 @@ void lcd_showchar(uint16 x,uint16 y,const int8 dat)
 		temp = tft_ascii[dat-32][i];//减32因为是取模是从空格开始取得 空格在ascii中序号是32
 		for(j=0; j<8; j++)
 		{
-			if(temp&0x01)	lcd_writedata_16bit(PENCOLOR);
-			else			lcd_writedata_16bit(BGCOLOR);
+			if(temp&0x01)	lcd_writedata_16bit(TFT_PENCOLOR);
+			else			lcd_writedata_16bit(TFT_BGCOLOR);
 			temp>>=1;
 		}
 	}
@@ -576,7 +576,7 @@ void showimage(const unsigned char *p)
 //  @param      height     	    图像高度
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              
+//  Sample usage:               lcd_displayimage032(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_displayimage032(uint8 *p, uint16 width, uint16 height) 
@@ -634,11 +634,11 @@ void lcd_displayimage032(uint8 *p, uint16 width, uint16 height)
 //  @param      *p     			图像数组地址
 //  @param      width     	    图像宽度
 //  @param      height     	    图像高度
-//  @param      dis_width       图像显示宽度  0 -（TFT_X_MAX-1）
-//  @param      dis_height      图像显示高度  0 -（TFT_Y_MAX-1）
+//  @param      dis_width       图像显示宽度  1 -（TFT_X_MAX）
+//  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              
+//  Sample usage:               lcd_displayimage032_zoom(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H, 0, 0, MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
@@ -662,6 +662,39 @@ void lcd_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_
         }
     }
 }
+
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      凌瞳(彩色摄像头)液晶缩放显示函数
+//  @param      *p     			图像数组地址
+//  @param      width     	    图像宽度
+//  @param      height     	    图像高度
+//  @param      dis_width       图像显示宽度  1 -（TFT_X_MAX）
+//  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
+//  @return     void
+//  @since      v1.0
+//  Sample usage:              	lcd_displayimage8660_zoom(user_color_image[0],SCC8660_CSI_PIC_W,SCC8660_CSI_PIC_H,320,240);
+//  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
+//-------------------------------------------------------------------------------------------------------------------
+void lcd_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
+{
+    uint32 i,j;
+                
+    uint16 color = 0;
+
+    lcd_set_region(0,0,dis_width-1,dis_height-1);//设置显示区域
+    
+    for(j=0;j<dis_height;j++)
+    {
+        for(i=0;i<dis_width;i++)
+        {
+            color = *(p+(j*height/dis_height)*width+i*width/dis_width);//读取像素点
+			color = ((color&0xff)<<8) | (color>>8);
+            lcd_writedata_16bit(color); 
+        }
+    }
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      小钻风(二值化摄像头)液晶显示函数
@@ -725,7 +758,7 @@ void lcd_display_chinese(uint16 x, uint16 y, uint8 size, const uint8 *p, uint8 n
                 {
                     temp = (*p_data>>(j-1)) & 0x01;
                     if(temp)    lcd_writedata_16bit(color);
-                    else        lcd_writedata_16bit(BGCOLOR);
+                    else        lcd_writedata_16bit(TFT_BGCOLOR);
                 }
                 p_data++;
             }

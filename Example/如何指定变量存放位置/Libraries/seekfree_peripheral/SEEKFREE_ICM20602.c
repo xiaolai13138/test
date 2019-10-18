@@ -51,9 +51,10 @@ void icm20602_self1_check(void)
         dat = simiic_read_reg(ICM20602_DEV_ADDR,ICM20602_WHO_AM_I,SIMIIC);
         systick_delay_ms(10);
         //卡在这里原因有以下几点
-        //1 MPU6050坏了，如果是新的这样的概率极低
+        //1 ICM20602坏了，如果是新的这样的概率极低
         //2 接线错误或者没有接好
         //3 可能你需要外接上拉电阻，上拉到3.3V
+		//4 可能没有调用模拟IIC的初始化函数
     }
 }
 
@@ -85,7 +86,7 @@ void icm20602_init(void)
     simiic_write_reg(ICM20602_DEV_ADDR,ICM20602_SMPLRT_DIV,0x07);               //采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
     simiic_write_reg(ICM20602_DEV_ADDR,ICM20602_GYRO_CONFIG,0x18);              //±2000 dps
     simiic_write_reg(ICM20602_DEV_ADDR,ICM20602_ACCEL_CONFIG,0x10);             //±8g
-    simiic_write_reg(ICM20602_DEV_ADDR,ICM20602_ACCEL_CONFIG_2,0x23);           //Average 16 samples   44.8HZ
+    simiic_write_reg(ICM20602_DEV_ADDR,ICM20602_ACCEL_CONFIG_2,0x03);           //Average 4 samples   44.8HZ   //0x23 Average 16 samples
 }
 
 
@@ -153,7 +154,7 @@ void icm20602_self2_check(void)
         iic_read_reg(IIC_NUM, ICM20602_DEV_ADDR, ICM20602_WHO_AM_I, &dat);
         systick_delay_ms(10);
         //卡在这里原因有以下几点
-        //1 MPU6050坏了，如果是新的这样的概率极低
+        //1 ICM20602坏了，如果是新的这样的概率极低
         //2 接线错误或者没有接好
         //3 可能你需要外接上拉电阻，上拉到3.3V
     }
@@ -193,7 +194,7 @@ void icm20602_init_hardware(void)
     iic_write_reg(IIC_NUM,ICM20602_DEV_ADDR, ICM20602_SMPLRT_DIV, 0x07);            //采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
     iic_write_reg(IIC_NUM,ICM20602_DEV_ADDR, ICM20602_GYRO_CONFIG, 0x18);           //±2000 dps
     iic_write_reg(IIC_NUM,ICM20602_DEV_ADDR, ICM20602_ACCEL_CONFIG, 0x10);          //±8g
-    iic_write_reg(IIC_NUM,ICM20602_DEV_ADDR, ICM20602_ACCEL_CONFIG_2, 0x23);        //Average 16 samples   44.8HZ
+    iic_write_reg(IIC_NUM,ICM20602_DEV_ADDR, ICM20602_ACCEL_CONFIG_2, 0x03);		//Average 4 samples   44.8HZ   //0x23 Average 16 samples
           
 }
 
@@ -314,7 +315,7 @@ void icm20602_self3_check(void)
         icm_spi_r_reg_byte(ICM20602_WHO_AM_I,&dat);
         systick_delay_ms(10);
         //卡在这里原因有以下几点
-        //1 MPU6050坏了，如果是新的这样的概率极低
+        //1 ICM20602坏了，如果是新的这样的概率极低
         //2 接线错误或者没有接好
         //3 可能你需要外接上拉电阻，上拉到3.3V
     }
@@ -351,7 +352,7 @@ void icm20602_init_spi(void)
     icm_spi_w_reg_byte(ICM20602_SMPLRT_DIV,     0x07);            //采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
     icm_spi_w_reg_byte(ICM20602_GYRO_CONFIG,    0x18);            //±2000 dps
     icm_spi_w_reg_byte(ICM20602_ACCEL_CONFIG,   0x10);            //±8g
-    icm_spi_w_reg_byte(ICM20602_ACCEL_CONFIG_2, 0x23);            //Average 16 samples   44.8HZ  
+    icm_spi_w_reg_byte(ICM20602_ACCEL_CONFIG_2, 0x03);            //Average 4 samples   44.8HZ   //0x23 Average 16 samples
 }
 
 //-------------------------------------------------------------------------------------------------------------------

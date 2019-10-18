@@ -45,7 +45,7 @@
 #include "SEEKFREE_SCC8660_CSI.h"
 
 
-//定义图像缓冲区  如果用户需要访问图像数据 最好通过user_image来访问数据，最好不要直接访问缓冲区
+//定义图像缓冲区  如果用户需要访问图像数据 最好通过scc8660_csi_image来访问数据，最好不要直接访问缓冲区
 //由于默认分辨率160*120数据量较小，所以默认将图像数组放置于DTCM区域，访问速度更快。
 //以下注释的两句是将图像数组定义在SDRAM内，如果图像分辨率超过160*120，请将这两句解注并注释掉位于DTCM的两句。
 AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
@@ -55,39 +55,46 @@ AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_
 
 //用户访问图像数据直接访问这个指针变量就可以
 //访问方式非常简单，可以直接使用下标的方式访问
-//例如访问第10行 50列的点，user_color_image[10][50]就可以了
-uint16 (*user_color_image)[SCC8660_CSI_PIC_W];
+//例如访问第10行 50列的点，scc8660_csi_image[10][50]就可以了
+uint16 (*scc8660_csi_image)[SCC8660_CSI_PIC_W];
 
 uint8   scc8660_uart_receive[3];
 uint8   scc8660_uart_receive_num = 0;
 vuint8  scc8660_uart_receive_flag;
 
 //需要配置到摄像头的数据
-int16 SCC8660_CFG_CSI[SCC8660_CONFIG_FINISH][2]=
+uint16 SCC8660_CFG_CSI[SCC8660_CONFIG_FINISH][2]=
 {
-    {SCC8660_BRIGHT,            105},                   //亮度设置     默认：105   范围0-255，此选项可以控制图像亮度，数值越大，图像越亮。
-    {SCC8660_FPS,               50},                    //图像帧率     默认：50    可选参数为：60 50 30 25。
-    {SCC8660_SET_COL,           SCC8660_CSI_PIC_W},     //图像列数     默认：160   请在.h的宏定义处修改
-    {SCC8660_SET_ROW,           SCC8660_CSI_PIC_H},     //图像行数     默认：120   请在.h的宏定义处修改
-    {SCC8660_PCLK_DIV,          0},                     //PCLK分频系数 默认：0     可选参数为：0:1/1 1:2/3 2:1/2 3:1/3 4:1/4 5:1/8。  
+    {SCC8660_AUTO_EXP,          0},                     //自动曝光     默认：0     	可选参数为：0 1。      0：手动曝光  1：自动曝光
+    {SCC8660_BRIGHT,            800},                   //亮度设置     默认：800   	手动曝光时：参数范围0-65535   自动曝光时参数设置范围0-255
+    {SCC8660_FPS,               50},                    //图像帧率     默认：50    	可选参数为：60 50 30 25。 实际帧率还需要看SCC8660_PCLK_DIV参数的设置
+    {SCC8660_SET_COL,           SCC8660_CSI_PIC_W},     //图像列数     默认：160   	请在.h的宏定义处修改
+    {SCC8660_SET_ROW,           SCC8660_CSI_PIC_H},     //图像行数     默认：120   	请在.h的宏定义处修改
+    {SCC8660_PCLK_DIV,          0},                     //PCLK分频系数 默认：0     	可选参数为：0:1/1 1:2/3 2:1/2 3:1/3 4:1/4 5:1/8。  
                                                        //分频系数越大，PCLK频率越低，降低PCLK可以减轻DVP接口的干扰，但降低PCLK频率则会影响帧率。若无特殊需求请保持默认。
                                                        //例如设置FPS为50帧，但是pclk分频系数选择的为5，则摄像头输出的帧率为50*（1/8）=6.25帧
     
-    {SCC8660_PCLK_MODE,         0},                     //PCLK模式    默认：0      可选参数为：0 1。      0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用STM32的DCMI接口采集需要设置为1)
-    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0     可选参数为：0 1 2。    0：正常彩色模式  1：鲜艳模式（色彩饱和度提高） 2：灰度模式 
+    {SCC8660_PCLK_MODE,         0},                     //PCLK模式     默认：0		可选参数为：0 1。         0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用STM32的DCMI接口采集需要设置为1)
+    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0		可选参数为：0 1 2。       0：正常彩色模式    1：鲜艳模式（色彩饱和度提高）
+    {SCC8660_DATA_FORMAT,       0},                     //输出数据格式 默认：0		可选参数为：0 1 2 3。     0：RGB565 1：RGB565(字节交换) 2：YUV422(YUYV) 3：YUV422(UYVY)
+    {SCC8660_MANUAL_WB,         0},                     //手动白平衡   默认：0		可选参数为：0 0x65-0xa0。 0：关闭手动白平衡，启用自动白平衡    其他：手动白平衡 手动白平衡时 参数范围0x65-0xa0
+    
     {SCC8660_INIT,              0}                      //摄像头开始初始化
 };
 
 //从摄像头内部获取到的配置数据
-int16 SCC8660_GET_CFG_CSI[SCC8660_CONFIG_FINISH-1][2]=
+uint16 SCC8660_GET_CFG_CSI[SCC8660_CONFIG_FINISH-1][2]= 
 {
-    {SCC8660_BRIGHT,            0},   //亮度设置          
-    {SCC8660_FPS,               0},   //图像帧率           
-    {SCC8660_SET_COL,           0},   //图像列数           
-    {SCC8660_SET_ROW,           0},   //图像行数          
-    {SCC8660_PCLK_DIV,          0},   //PCLK分频系数      
-    {SCC8660_PCLK_MODE,         0},   //PCLK模式      
-    {SCC8660_COLOR_MODE,        0},   //图像色彩模式
+    {SCC8660_AUTO_EXP,          0},
+    {SCC8660_BRIGHT,            0}, //亮度设置          
+    {SCC8660_FPS,               0}, //图像帧率           
+    {SCC8660_SET_COL,           0}, //图像列数           
+    {SCC8660_SET_ROW,           0}, //图像行数          
+    {SCC8660_PCLK_DIV,          0}, //PCLK分频系数      
+    {SCC8660_PCLK_MODE,         0}, //PCLK模式      
+    {SCC8660_COLOR_MODE,        0}, //图像色彩模式
+    {SCC8660_DATA_FORMAT,       0}, //输出数据格式 	
+    {SCC8660_MANUAL_WB,         0}, //白平衡设置
 };
 
 uint8               scc8660_csi_rx_buffer;
@@ -138,12 +145,12 @@ void scc8660_csi_isr(CSI_Type *base, csi_handle_t *handle, status_t status, void
         csi_add_empty_buffer(&csi_handle,(uint8 *)fullCameraBufferAddr);
         if(fullCameraBufferAddr == (uint32)scc8660_csi1_image[0])
         {
-            user_color_image = scc8660_csi1_image;//采集完成
+            scc8660_csi_image = scc8660_csi1_image;//采集完成
             L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_csi1_image[0],SCC8660_CSI_W*SCC8660_CSI_H);
         }
         else if(fullCameraBufferAddr == (uint32)scc8660_csi2_image[0])
         {
-            user_color_image = scc8660_csi2_image;//采集完成
+            scc8660_csi_image = scc8660_csi2_image;//采集完成
             L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_csi2_image[0],SCC8660_CSI_W*SCC8660_CSI_H);
         }
         scc8660_csi_finish_flag = 1;//采集完成标志位置一
@@ -178,7 +185,7 @@ void scc8660_csi_cof_uart_init(void)
 //  @since      v1.0
 //  Sample usage:           调用该函数前请先初始化串口
 //-------------------------------------------------------------------------------------------------------------------
-void scc8660_set_all_config(UARTN_enum uartn, int16 buff[SCC8660_CONFIG_FINISH-1][2])
+void scc8660_set_all_config(UARTN_enum uartn, uint16 buff[SCC8660_CONFIG_FINISH-1][2])
 {
     uint16 temp, i;
     uint8  send_buffer[4];
@@ -215,7 +222,7 @@ void scc8660_set_all_config(UARTN_enum uartn, int16 buff[SCC8660_CONFIG_FINISH-1
 //  @since      v1.0
 //  Sample usage:           调用该函数前请先初始化摄像头配置串口
 //-------------------------------------------------------------------------------------------------------------------
-void scc8660_get_all_config(UARTN_enum uartn, int16 buff[SCC8660_CONFIG_FINISH-1][2])
+void scc8660_get_all_config(UARTN_enum uartn, uint16 buff[SCC8660_CONFIG_FINISH-1][2])
 {
     uint16 temp, i;
     uint8  send_buffer[4];
@@ -293,7 +300,7 @@ uint16 scc8660_get_config(UARTN_enum uartn, uint8 config)
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      获取彩色摄像头固件版本
 //  @param      uartn       选择使用的串口
-//  @return     void
+//  @return     uint16      版本号
 //  @since      v1.0
 //  Sample usage:           调用该函数前请先初始化摄像头配置串口
 //-------------------------------------------------------------------------------------------------------------------
@@ -316,6 +323,61 @@ uint16 scc8660_get_version(UARTN_enum uartn)
     return ((uint16)(scc8660_uart_receive[1]<<8) | scc8660_uart_receive[2]);
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      单独设置图像亮度
+//  @param      uartn       选择使用的串口
+//  @param      data        需要设置的亮度值
+//  @return     uint16      返回设置的亮度值
+//  @since      v1.0
+//  Sample usage:           调用该函数前请先初始化摄像头配置串口
+//  @note                   通过该函数设置的参数，不会被51单片机保存
+//-------------------------------------------------------------------------------------------------------------------
+uint16  scc8660_set_bright(UARTN_enum uartn, uint16 data)
+{
+    uint8  send_buffer[4];
+
+    send_buffer[0] = 0xA5;
+    send_buffer[1] = SCC8660_SET_BRIGHT;
+    send_buffer[2] = data>>8;
+    send_buffer[3] = (uint8)data;
+    
+    uart_putbuff(uartn,send_buffer,4);
+    
+    //等待接受回传数据
+    while(!scc8660_uart_receive_flag);
+    scc8660_uart_receive_flag = 0;
+    
+    data = scc8660_uart_receive[1]<<8 | scc8660_uart_receive[2];
+    return data;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      单独设置白平衡
+//  @param      uartn       选择使用的串口
+//  @param      data        需要设置的亮度值
+//  @return     uint16      返回设置的亮度值
+//  @since      v1.0
+//  Sample usage:           调用该函数前请先初始化摄像头配置串口
+//  @note                   通过该函数设置的参数，不会被51单片机保存
+//-------------------------------------------------------------------------------------------------------------------
+uint16  scc8660_set_maunal_wb(UARTN_enum uartn, uint16 data)
+{
+    uint8  send_buffer[4];
+
+    send_buffer[0] = 0xA5;
+    send_buffer[1] = SCC8660_SET_MANUAL_WB;
+    send_buffer[2] = data>>8;
+    send_buffer[3] = (uint8)data;
+    
+    uart_putbuff(uartn,send_buffer,4);
+    
+    //等待接受回传数据
+    while(!scc8660_uart_receive_flag);
+    scc8660_uart_receive_flag = 0;
+    
+    data = scc8660_uart_receive[1]<<8 | scc8660_uart_receive[2];
+    return data;
+}
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      单独设置摄像头寄存器
@@ -338,9 +400,7 @@ uint16 scc8660_set_reg_addr(UARTN_enum uartn, uint8 reg, uint16 data)
     
     uart_putbuff(uartn,send_buffer,4);
     
-    //等待接受回传数据
-    while(!scc8660_uart_receive_flag);
-    scc8660_uart_receive_flag = 0;
+    systick_delay_ms(2);
     
     send_buffer[0] = 0xA5;
     send_buffer[1] = SCC8660_SET_REG_DATA;
@@ -370,12 +430,19 @@ uint16 scc8660_set_reg_addr(UARTN_enum uartn, uint8 reg, uint16 data)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_csi_init(void)
 {
+    //摄像头开始初始化之前务必将场信号拉高
+    if      (SCC8660_CSI_VSYNC_PIN == CSI_VSYNC_B14)  gpio_init(B14,GPO,1,GPIO_PIN_CONFIG);
+    else if (SCC8660_CSI_VSYNC_PIN == CSI_VSYNC_B22)  gpio_init(B22,GPO,1,GPIO_PIN_CONFIG);
+    else if (SCC8660_CSI_VSYNC_PIN == CSI_VSYNC_C29)  gpio_init(C29,GPO,1,GPIO_PIN_CONFIG);
+    
     //初始化摄像头配置串口
     scc8660_csi_cof_uart_init();
 	//开总中断
 	EnableGlobalIRQ(0);
-    //等待摄像头上电初始化成功
-    systick_delay_ms(500);
+    //等待摄像头上电初始化成功 方式有两种：延时或者通过获取配置的方式 二选一
+    //systick_delay_ms(500);//延时方式
+    scc8660_get_all_config(SCC8660_CSI_COF_UART,SCC8660_GET_CFG_CSI);//获取配置的方式
+    
     scc8660_uart_receive_flag = 0;
     //向摄像头发送配置信息
     scc8660_set_all_config(SCC8660_CSI_COF_UART,SCC8660_CFG_CSI);
@@ -390,19 +457,54 @@ void scc8660_csi_init(void)
 	csi_add_empty_buffer(&csi_handle, (uint8 *)&scc8660_csi2_image[0][0]);
     csi_start(&csi_handle);
     //设置图像地址初值，务必保留
-    user_color_image = scc8660_csi1_image;
+    scc8660_csi_image = scc8660_csi1_image;
 }
+
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      SCC8660(凌瞳摄像头)图像上传至上位机
-//  @param      NULL
+//  @param      uartn	需要发送的串口
+//  @param      image	图像数组地址
+//  @param      width	图像高度
+//  @param      height	图像宽度
 //  @return     void                    
 //  @since      v1.0
-//  Sample usage:       
+//  Sample usage:       csi_seekfree_sendimg_scc8660(USART_1,(uint8 *)scc8660_csi_image[0],SCC8660_CSI_PIC_W,SCC8660_CSI_PIC_H);
 //-------------------------------------------------------------------------------------------------------------------
 void csi_seekfree_sendimg_scc8660(UARTN_enum uartn, uint8 *image, uint16 width, uint16 height)
 {
     uart_putchar(uartn,0x00);uart_putchar(uartn,0xff);uart_putchar(uartn,0x01);uart_putchar(uartn,0x01);//发送命令
-    uart_putbuff(uartn, image, width*height);  //发送图像
+    uart_putbuff(uartn, image, 2*width*height);  //发送图像 因为彩色图像 一个像素点占用两个字节 因此这里字节数需要乘以2
 }
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      SCC8660(凌瞳摄像头)获取像素点RGB分量
+//  @param      *dat    图像数组的地址
+//  @param      x       需要获取的像素所在列
+//  @param      y       需要获取的像素所在行
+//  @param      *r      接收r分量地址 返回值范围0-31
+//  @param      *g      接收g分量地址 返回值范围0-63
+//  @param      *b      接收b分量地址 返回值范围0-31
+//  @return     void					
+//  @since      v1.0
+//  Sample usage:		color_camera_take_point(scc8660_csi_image[0],0, 0,&r_value,&g_value,&b_value);//获取第0列 第0行像素的RGB分量  摄像头的数据格式必须设置为0
+//	@note				此函数主要目的是为了让大家能够清晰的了解RGB数据是如何存储的
+//-------------------------------------------------------------------------------------------------------------------
+void inline color_camera_take_point(uint16 *dat, uint16 x, uint16 y, uint8 *r, uint8 *g, uint8 *b)
+{
+    uint16 pixel;
+    
+    //获取指定坐标的像素数据
+    pixel = dat[x*y];
+    
+    //因为R5G3是存储在低八位 G3B5是存储在高八位
+    //因为我们先将位置进行交换，便于获取每个分量的数据
+    pixel = ((pixel&0xff)<<8) |(pixel>>8);
+    
+    *r = pixel>>11;
+    *g = (pixel>>5)&0x3f;
+    *b = pixel&0x1f;
+}
+
+
 

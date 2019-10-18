@@ -59,31 +59,32 @@
 //#define GRAY  			0X8430 	//灰色
 //#define BROWN 			0XBC40 	//棕色
 //#define PURPLE    		0XF81F	//紫色
-     
-     
-     
-#define BACK_COLOR 			WHITE	//背景颜色
-#define POINT_COLOR 		RED		//画笔颜色
+//#define PINK    		    0XFE19	//粉色
+
+
+#define IPS200_BGCOLOR      WHITE	//背景颜色
+#define IPS200_PENCOLOR     RED		//画笔颜色
 
 
 //引脚只能选择B C D这三个端口中的引脚，便于使用快速GPIO以提高显示速度
-#define IPS200_BL_PIN  		D12
-#define IPS200_CS_PIN  		D1
-#define IPS200_RD_PIN  		D4
-#define IPS200_WR_PIN  		D2
-#define IPS200_RS_PIN  		D0
-#define IPS200_RST_PIN 		D3
+#define IPS200_RD_PIN  		B0
+#define IPS200_WR_PIN  		B1
+#define IPS200_RS_PIN  		B2
+#define IPS200_RST_PIN 		C19
+#define IPS200_CS_PIN  		B3
+#define IPS200_BL_PIN  		C18
+
 
 //8个数据引脚必须连续 例如C0-C7,C6-C13等等。
 //引脚只能选择B C D这三个端口中的引脚，便于使用快速GPIO以提高显示速度
-#define IPS200_D0_PIN 		C1
-#define IPS200_D1_PIN 		C2
-#define IPS200_D2_PIN 		C3
-#define IPS200_D3_PIN 		C4
-#define IPS200_D4_PIN 		C5
-#define IPS200_D5_PIN 		C6
-#define IPS200_D6_PIN 		C7
-#define IPS200_D7_PIN 		C8
+#define IPS200_D0_PIN 		C8
+#define IPS200_D1_PIN 		C9
+#define IPS200_D2_PIN 		C10
+#define IPS200_D3_PIN 		C11
+#define IPS200_D4_PIN 		C12
+#define IPS200_D5_PIN 		C13
+#define IPS200_D6_PIN 		C14
+#define IPS200_D7_PIN 		C15
 
 //定义数据端口所在PORT，切换引脚后务必根据引脚所在PORT进行更改
 //默认数据引脚使用的是C端口，因此这里默认设置为2
@@ -102,12 +103,12 @@
 
 
 
-#define IPS200_BL(x)		fast_gpio_set(IPS200_BL_PIN,x);
-#define IPS200_CS(x)       	fast_gpio_set(IPS200_CS_PIN,x);
-#define IPS200_RD(x)       	fast_gpio_set(IPS200_RD_PIN,x);
-#define IPS200_WR(x)       	fast_gpio_set(IPS200_WR_PIN,x);
-#define IPS200_RS(x)       	fast_gpio_set(IPS200_RS_PIN,x);
-#define IPS200_RST(x)      	fast_gpio_set(IPS200_RST_PIN,x);
+#define IPS200_BL(x)		fast_gpio_set(IPS200_BL_PIN,x)
+#define IPS200_CS(x)       	fast_gpio_set(IPS200_CS_PIN,x)
+#define IPS200_RD(x)       	fast_gpio_set(IPS200_RD_PIN,x)
+#define IPS200_WR(x)       	fast_gpio_set(IPS200_WR_PIN,x)
+#define IPS200_RS(x)       	fast_gpio_set(IPS200_RS_PIN,x)
+#define IPS200_RST(x)      	fast_gpio_set(IPS200_RST_PIN,x)
 
 
 #define IPS200_W 240
@@ -142,7 +143,7 @@ void ips200_wr_data(uint8 dat);
 void ips200_wr_data16(uint16 dat);
 void ips200_w_reg(uint8 com,uint8 dat);
 void ips200_address_set(uint16 x1,uint16 y1,uint16 x2,uint16 y2);
-void ips200_clear(uint16 Color);
+void ips200_clear(uint16 color);
 void ips200_drawpoint(uint16 x,uint16 y,uint16 color);
 void ips200_showchar(uint16 x,uint16 y,const int8 dat);
 void ips200_showstr(uint16 x,uint16 y,const int8 dat[]);
@@ -159,6 +160,9 @@ void ips200_showimage(uint16 x,uint16 y,uint16 w,uint16 l,const unsigned char *p
 void ips200_displayimage032(uint8 *p, uint16 width, uint16 height);
 void ips200_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
 void ips200_displayimage032_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height);
+void ips200_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
+void ips200_displayimage8660_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height);
+void ips200_displayimage8660_grayscale_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
 void ips200_displayimage7725(uint8 *p, uint16 width, uint16 height);
 void ips200_display_chinese(uint16 x, uint16 y, uint8 size, const uint8 *p, uint8 number, uint16 color);
 

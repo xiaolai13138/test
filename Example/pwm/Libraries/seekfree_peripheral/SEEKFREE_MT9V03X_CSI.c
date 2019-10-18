@@ -44,14 +44,14 @@
 #include "SEEKFREE_MT9V03X_CSI.h"
 
 
-//图像缓冲区  如果用户需要访问图像数据 最好通过user_image来访问数据，最好不要直接访问缓冲区
+//图像缓冲区  如果用户需要访问图像数据 最好通过mt9v03x_csi_image来访问数据，最好不要直接访问缓冲区
 ALIGN(64) uint8 image_csi1[MT9V03X_CSI_H][MT9V03X_CSI_W];
 ALIGN(64) uint8 image_csi2[MT9V03X_CSI_H][MT9V03X_CSI_W];
 
 //用户访问图像数据直接访问这个指针变量就可以
 //访问方式非常简单，可以直接使用下标的方式访问
-//例如访问第10行 50列的点，user_image[10][50]就可以了
-uint8 (*user_image)[MT9V03X_CSI_W];
+//例如访问第10行 50列的点，mt9v03x_csi_image[10][50]就可以了
+uint8 (*mt9v03x_csi_image)[MT9V03X_CSI_W];
 
 
 
@@ -135,11 +135,11 @@ void csi_isr(CSI_Type *base, csi_handle_t *handle, status_t status, void *userDa
         csi_add_empty_buffer(&csi_handle,(uint8 *)fullCameraBufferAddr);
         if(fullCameraBufferAddr == (uint32)image_csi1[0])
         {
-            user_image = image_csi1;//image_csi1采集完成
+            mt9v03x_csi_image = image_csi1;//image_csi1采集完成
         }
         else if(fullCameraBufferAddr == (uint32)image_csi2[0])
         {
-            user_image = image_csi2;//image_csi2采集完成
+            mt9v03x_csi_image = image_csi2;//image_csi2采集完成
         }
         mt9v03x_csi_finish_flag = 1;//采集完成标志位置一
     }
@@ -164,8 +164,10 @@ void mt9v03x_csi_init(void)
     
     uart_set_handle(MT9V03X_CSI_COF_UART, &csi_g_lpuartHandle, csi_mt9v03x_uart_callback, NULL, 0, csi_receivexfer.data, 1);
     EnableGlobalIRQ(0);
-    //等待摄像头上电初始化成功
-    systick_delay_ms(1000);
+    //等待摄像头上电初始化成功 方式有两种：延时或者通过获取配置的方式 二选一
+    //systick_delay_ms(1000);//延时方式
+    get_config(MT9V03X_CSI_COF_UART,GET_CFG_CSI);//获取配置的方式
+    
 	uart_receive_flag = 0;
     set_config(MT9V03X_CSI_COF_UART,MT9V03X_CFG_CSI);
     //获取配置便于查看配置是否正确
@@ -177,7 +179,7 @@ void mt9v03x_csi_init(void)
     csi_add_empty_buffer(&csi_handle, image_csi1[0]);
     csi_add_empty_buffer(&csi_handle, image_csi2[0]);
     csi_start(&csi_handle);
-    user_image = image_csi1;//设置初值
+    mt9v03x_csi_image = image_csi1;//设置初值
 }
 
 

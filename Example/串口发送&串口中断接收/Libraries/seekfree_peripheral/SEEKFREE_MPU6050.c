@@ -56,6 +56,7 @@ void mpu6050_self1_check(void)
         //1 MPU6050坏了，如果是新的这样的概率极低
         //2 接线错误或者没有接好
         //3 可能你需要外接上拉电阻，上拉到3.3V
+		//4 可能没有调用模拟IIC的初始化函数
     }
 }
 
@@ -74,7 +75,7 @@ void mpu6050_init(void)
     mpu6050_self1_check();
     simiic_write_reg(MPU6050_DEV_ADDR, PWR_MGMT_1, 0x00);	//解除休眠状态
     simiic_write_reg(MPU6050_DEV_ADDR, SMPLRT_DIV, 0x07);   //125HZ采样率
-    simiic_write_reg(MPU6050_DEV_ADDR, CONFIG, 0x04);       //
+    simiic_write_reg(MPU6050_DEV_ADDR, MPU6050_CONFIG, 0x04);       //
     simiic_write_reg(MPU6050_DEV_ADDR, GYRO_CONFIG, 0x18);  //2000
     simiic_write_reg(MPU6050_DEV_ADDR, ACCEL_CONFIG, 0x10); //8g
 	simiic_write_reg(MPU6050_DEV_ADDR, User_Control, 0x00);
@@ -172,7 +173,7 @@ void mpu6050_init_hardware(void)
     mpu6050_self2_check();
     iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, PWR_MGMT_1, 0x00);	//解除休眠状态
     iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, SMPLRT_DIV, 0x07);    //125HZ采样率
-    iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, CONFIG, 0x04);        //
+    iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, MPU6050_CONFIG, 0x04);        //
     iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, GYRO_CONFIG, 0x18);   //2000
     iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, ACCEL_CONFIG, 0x10);  //8g
 	iic_write_reg(IIC_NUM,MPU6050_DEV_ADDR, User_Control, 0x00);

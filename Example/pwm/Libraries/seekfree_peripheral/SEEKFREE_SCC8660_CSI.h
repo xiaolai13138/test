@@ -39,18 +39,14 @@
 #include "common.h"
 #include "zf_uart.h"
 
-//--------------------------------------------------------------------------------------------------
-//摄像头参数配置
-//--------------------------------------------------------------------------------------------------
-//原始分辨率为720*480，但由于像素颗粒并不是正方形，所以图像会有横向拉伸失真。最大无失真分辨率为 640 * 480
-//当分辨率为640*480时，图像长宽比例无失真，所以如果修改图像分辨率，若行列比例与640*480不同，则图像拉伸缩放。
+
 //默认图像分辨率为160*120，若更改图像分辨率比默认分辨率大，请在.c文件内更改图像缓冲区保存位置为SDRAM。避免编译出错。
 
 
 //------------ 请仔细以上注释后再更改分辨率 ------------
 //------------ 请仔细以上注释后再更改分辨率 ------------
 //------------ 请仔细以上注释后再更改分辨率 ------------
-#define SCC8660_CSI_PIC_W				160			//实际图像分辨率宽度	可选参数为：160 180 240 320 360 480 640 720。
+#define SCC8660_CSI_PIC_W				160			//实际图像分辨率宽度	可选参数为：160 180 240 320 360 480 640。
 #define SCC8660_CSI_PIC_H				120			//实际图像分辨率高度	可选参数为：120 160 180 240 320 360 480。
 
 #define SCC8660_CSI_W		SCC8660_CSI_PIC_W*2		//此参数为图像数据存储宽度 请勿修改
@@ -73,7 +69,7 @@
 
 extern uint16  scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W];
 extern uint16  scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W];
-extern uint16  (*user_color_image)[SCC8660_CSI_PIC_W];  //图像数据
+extern uint16  (*scc8660_csi_image)[SCC8660_CSI_PIC_W];  //图像数据
 
 extern uint8   scc8660_csi_finish_flag;       //一场图像采集完成标志位
 
@@ -84,34 +80,41 @@ extern vuint8  scc8660_uart_receive_flag;
 
 typedef enum
 {
-    SCC8660_INIT 			= 0x00,
-    SCC8660_BRIGHT,
-    SCC8660_FPS,
-    SCC8660_SET_COL,
-    SCC8660_SET_ROW,
-    SCC8660_PCLK_DIV,
-    SCC8660_PCLK_MODE,
-    SCC8660_COLOR_MODE,
-    SCC8660_CONFIG_FINISH,
-    
-    SCC8660_GET_WHO_AM_I = 0xEF,
-    SCC8660_GET_STATUS 	= 0XF1,
-    SCC8660_GET_VERSION	= 0xF2,
-	
-    SCC8660_SET_REG_ADDR	= 0xFE,
-    SCC8660_SET_REG_DATA	= 0xFF,
+    SCC8660_INIT 			= 0x00, //摄像头初始化命令
+    SCC8660_AUTO_EXP,               //自动曝光命令
+    SCC8660_BRIGHT,                 //亮度命令
+    SCC8660_FPS,                    //摄像头帧率命令
+    SCC8660_SET_COL,                //图像列命令
+    SCC8660_SET_ROW,                //图像行命令
+    SCC8660_PCLK_DIV,               //像素时钟分频命令
+    SCC8660_PCLK_MODE,              //像素时钟模式命令
+    SCC8660_COLOR_MODE,             //色彩模式命令
+    SCC8660_DATA_FORMAT,	        //数据格式命令
+	SCC8660_MANUAL_WB,	            //手动白平衡命令
+    SCC8660_CONFIG_FINISH,          //非命令位，主要用来占位计数
+        
+    SCC8660_GET_WHO_AM_I = 0xEF,    //我是谁命令，用于判断摄像头型号
+    SCC8660_SET_BRIGHT = 0xF0,      //单独设置亮度
+    SCC8660_GET_STATUS 	= 0XF1,     //获取摄像头配置命令
+    SCC8660_GET_VERSION	= 0xF2,     //固件版本号
+	SCC8660_SET_MANUAL_WB = 0xF3,   //单独设置手动白平衡
+        
+    SCC8660_SET_REG_ADDR	= 0xFE, 
+    SCC8660_SET_REG_DATA	= 0xFF, 
 }SCC8660_CMD;
 
 
 
 void    scc8660_csi_init(void);
-void    scc8660_set_all_config(UARTN_enum uartn, int16 buff[SCC8660_CONFIG_FINISH-1][2]);
-void    scc8660_get_all_config(UARTN_enum uartn, int16 buff[SCC8660_CONFIG_FINISH-1][2]);
+void    scc8660_set_all_config(UARTN_enum uartn, uint16 buff[SCC8660_CONFIG_FINISH-1][2]);
+void    scc8660_get_all_config(UARTN_enum uartn, uint16 buff[SCC8660_CONFIG_FINISH-1][2]);
 uint16  scc8660_get_id(UARTN_enum uartn);
 uint16  scc8660_get_config(UARTN_enum uartn, uint8 config);
 uint16  scc8660_get_version(UARTN_enum uartn);
+uint16  scc8660_set_bright(UARTN_enum uartn, uint16 data);
+uint16  scc8660_set_maunal_wb(UARTN_enum uartn, uint16 data);
 uint16  scc8660_set_reg_addr(UARTN_enum uartn, uint8 reg, uint16 data);
 void    csi_seekfree_sendimg_scc8660(UARTN_enum uartn, uint8 *image, uint16 width, uint16 height);
-
+void inline color_camera_take_point(uint16 *dat, uint16 width, uint16 height, uint8 *r, uint8 *g, uint8 *b);
 
 #endif

@@ -25,7 +25,7 @@
 
 extern GPIO_Type * PORTPTR[];
 
-#define GPIO_PIN_CONFIG         SPEED_100MHZ | DSE_R0 | PULLUP_47K | PULL_EN    //宏定义GPIO引脚的默认配置，便于初始化GPIO时快速填写参数，如果需要其他参数可自行修改
+#define GPIO_PIN_CONFIG         SPEED_100MHZ | DSE_R0 | PULLUP_47K | PULL_EN	//宏定义GPIO引脚的默认配置，便于初始化GPIO时快速填写参数，如果需要其他参数可自行修改
 #define FAST_GPIO_PIN_CONFIG    SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN    //宏定义快速GPIO引脚的默认配置，便于初始化GPIO时快速填写参数，如果需要其他参数可自行修改
 #define GPIO_INT_CONFIG         SPEED_100MHZ | HYS_EN | PULLUP_22K | PULL_EN    //宏定义GPIO中断引脚的默认配置，便于初始化GPIO中断时快速填写参数，如果需要其他参数可自行修改
 
@@ -41,17 +41,28 @@ typedef enum    // 枚举触发方式
 
 
 
+//------------------------------------------------------
+//通用GPIO操作
 void gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf);
 void gpio_set(PIN_enum pin, uint8 dat);
 uint8 gpio_get(PIN_enum pin);
 void gpio_dir(PIN_enum pin, GPIODIR_enum dir);
 void gpio_toggle(PIN_enum pin);
 
+#define PORTB_DR           		GPIO1->DR                   //B端口数据输出寄存器
+#define PORTC_DR           		GPIO2->DR                   //C端口数据输出寄存器
+#define PORTD_DR           		GPIO3->DR                   //D端口数据输出寄存器
 
 
-//中断标志位清除   
-#define CLEAR_GPIO_FLAG(pin) GPIO_ClearPinsInterruptFlags(PORTPTR[pin>>5], 1<<(pin&0x1f));//
+
+//GPIO中断初始化
 void gpio_interrupt_init(PIN_enum pin, TRIGGER_enum trigger, uint32 pinconf);
+
+
+//中断标志位获取 
+#define GET_GPIO_FLAG(pin)      ((GPIO_GetPinsInterruptFlags(PORTPTR[pin>>5]) >> (pin&0x1f)) & 0x01)
+//中断标志位清除   
+#define CLEAR_GPIO_FLAG(pin)    GPIO_ClearPinsInterruptFlags(PORTPTR[pin>>5], 1<<(pin&0x1f));
 
 
 //------------------------------------------------------
@@ -82,6 +93,10 @@ void fast_gpio_toggle(PIN_enum pin);
 #define PORTB_FAST_TOGGLE(X)    GPIO6->DR_TOGGLE = 1<<X     //B端口快速GPIO取反寄存器     X选择端口号 5：表示B5
 #define PORTC_FAST_TOGGLE(X)    GPIO7->DR_TOGGLE = 1<<X     //C端口快速GPIO取反寄存器     X选择端口号 5：表示C5
 #define PORTD_FAST_TOGGLE(X)    GPIO8->DR_TOGGLE = 1<<X     //D端口快速GPIO取反寄存器     X选择端口号 5：表示D5
+
+
+
+
 
 
 #endif

@@ -57,31 +57,41 @@ AT_DTCM_SECTION_ALIGN(uint16 scc8660_image[SCC8660_PIC_H][SCC8660_PIC_W],4);
 
 
 //需要配置到摄像头的数据
-int16 SCC8660_CFG[SCC8660_CONFIG_FINISH][2]=
+uint16 SCC8660_CFG[SCC8660_CONFIG_FINISH][2]=
 {
-    {SCC8660_BRIGHT,            105},                   //亮度设置     默认：105   范围0-255，此选项可以控制图像亮度，数值越大，图像越亮。
-    {SCC8660_FPS,               50},                    //图像帧率     默认：50    可选参数为：60 50 30 25。
+    {SCC8660_AUTO_EXP,          0},                     //自动曝光     默认：0     可选参数为：0 1。      0：手动曝光  1：自动曝光
+    {SCC8660_BRIGHT,            800},                   //亮度设置     默认：500   手动曝光时：参数范围0-65535   自动曝光时参数设置范围0-255
+    {SCC8660_FPS,               50},                    //图像帧率     默认：50    可选参数为：60 50 30 25。 实际帧率还需要看SCC8660_PCLK_DIV参数的设置
     {SCC8660_SET_COL,           SCC8660_PIC_W},         //图像列数     默认：160   请在.h的宏定义处修改
     {SCC8660_SET_ROW,           SCC8660_PIC_H},         //图像行数     默认：120   请在.h的宏定义处修改
-    {SCC8660_PCLK_DIV,          0},                     //PCLK分频系数 默认：0     可选参数为：0:1/1 1:2/3 2:1/2 3:1/3 4:1/4 5:1/8。  
+    {SCC8660_PCLK_DIV,          2},                     //PCLK分频系数 默认：0     可选参数为：0:1/1 1:2/3 2:1/2 3:1/3 4:1/4 5:1/8。  
                                                        //分频系数越大，PCLK频率越低，降低PCLK可以减轻DVP接口的干扰，但降低PCLK频率则会影响帧率。若无特殊需求请保持默认。
                                                        //例如设置FPS为50帧，但是pclk分频系数选择的为5，则摄像头输出的帧率为50*（1/8）=6.25帧
+                                                       //FLEXIO不能接受过大的频率，因此这里最好设置为2或者以上
     
-    {SCC8660_PCLK_MODE,         0},                     //PCLK模式    默认：0      可选参数为：0 1。      0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用STM32的DCMI接口采集需要设置为1)
-    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0     可选参数为：0 1 2。    0：正常彩色模式  1：鲜艳模式（色彩饱和度提高） 2：灰度模式
+    {SCC8660_PCLK_MODE,         0},                     //PCLK模式     默认：0     可选参数为：0 1。        0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用STM32的DCMI接口采集需要设置为1)
+    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0     可选参数为：0 1 2。      0：正常彩色模式  1：鲜艳模式（色彩饱和度提高）
+    {SCC8660_DATA_FORMAT,       0},                     //输出数据格式 默认：0	   可选参数为：0 1 2 3。    0:RGB565 1:RGB565(字节交换) 2:YUV422(YUYV) 3:YUV422(UYVY)
+    {SCC8660_MANUAL_WB,         0},                     //手动白平衡   默认：0     可选参数为：0 0x65-0xa0。0:关闭手动白平衡，启用自动白平衡    其他：手动白平衡 手动白平衡时 参数范围0x65-0xa0
+    
     {SCC8660_INIT,              0}                      //摄像头开始初始化
 };
 
+
+
 //从摄像头内部获取到的配置数据
-int16 SCC8660_GET_CFG[SCC8660_CONFIG_FINISH-1][2]=
+uint16 SCC8660_GET_CFG[SCC8660_CONFIG_FINISH-1][2]=
 {
-    {SCC8660_BRIGHT,            0},   //亮度设置          
-    {SCC8660_FPS,               0},   //图像帧率           
-    {SCC8660_SET_COL,           0},   //图像列数           
-    {SCC8660_SET_ROW,           0},   //图像行数          
-    {SCC8660_PCLK_DIV,          0},   //PCLK分频系数      
-    {SCC8660_PCLK_MODE,         0},   //PCLK模式      
-    {SCC8660_COLOR_MODE,        0},   //图像色彩模式
+    {SCC8660_AUTO_EXP,          0},
+    {SCC8660_BRIGHT,            0}, //亮度设置          
+    {SCC8660_FPS,               0}, //图像帧率           
+    {SCC8660_SET_COL,           0}, //图像列数           
+    {SCC8660_SET_ROW,           0}, //图像行数          
+    {SCC8660_PCLK_DIV,          0}, //PCLK分频系数      
+    {SCC8660_PCLK_MODE,         0}, //PCLK模式      
+    {SCC8660_COLOR_MODE,        0}, //图像色彩模式
+    {SCC8660_DATA_FORMAT,       0}, //输出数据格式 	
+    {SCC8660_MANUAL_WB,         0}, //白平衡设置
 };
 
 
@@ -146,12 +156,17 @@ void scc8660_cof_uart_init(void)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_init(void)
 {
+    //摄像头开始初始化之前务必将场信号拉高
+    gpio_init(SCC8660_VSYNC_PIN,GPO,1,GPIO_PIN_CONFIG);
+    
     //初始化摄像头配置串口
     scc8660_cof_uart_init();
 	//开总中断
 	EnableGlobalIRQ(0);
-    //等待摄像头上电初始化成功
-    systick_delay_ms(500);
+    //等待摄像头上电初始化成功 方式有两种：延时或者通过获取配置的方式 二选一
+    //systick_delay_ms(500);//延时方式
+    scc8660_get_all_config(SCC8660_COF_UART,SCC8660_GET_CFG);//获取配置的方式
+    
     scc8660_uart_receive_flag = 0;
     //向摄像头发送配置信息
     scc8660_set_all_config(SCC8660_COF_UART,SCC8660_CFG);
@@ -199,5 +214,5 @@ void scc8660_vsync(void)
 void scc8660_dma(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
 	scc8660_finish_flag = 1;//一副图像从采集开始到采集结束耗时18MS左右(50FPS)
-    L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0],SCC8660_W*SCC8660_H);
+    L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
 }

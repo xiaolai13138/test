@@ -187,9 +187,9 @@ void ips200_init(void)
 	
 	IPS200_BL(1);
 	IPS200_RST(0);	
-	systick_delay_ms(250);		
+	systick_delay_ms(5);		
 	IPS200_RST(1);		
-	systick_delay_ms(250);	
+	systick_delay_ms(5);	
 	
 	ips200_wr_reg(0x11);
 	systick_delay_ms(120);	
@@ -274,7 +274,7 @@ void ips200_init(void)
 	ips200_wr_reg(0x21);
 	
 	ips200_wr_reg(0x29);
-	ips200_clear(BACK_COLOR);	//初始化为白屏	
+	ips200_clear(IPS200_BGCOLOR);	//初始化为白屏	
 } 
 
 
@@ -285,7 +285,7 @@ void ips200_init(void)
 //  @since      v1.0
 //  Sample usage:               ips200_clear(YELLOW);// 全屏设置为黄色
 //-------------------------------------------------------------------------------------------------------------------
-void ips200_clear(uint16 Color) 
+void ips200_clear(uint16 color) 
 { 
 	uint16 i,j;  	
 	ips200_address_set(0,0,IPS200_X_MAX-1,IPS200_Y_MAX-1);
@@ -293,7 +293,7 @@ void ips200_clear(uint16 Color)
 	{
 		for (j=0;j<IPS200_Y_MAX;j++)
 		{
-			ips200_wr_data16(Color);	 			 
+			ips200_wr_data16(color);	 			 
 		}
 	}
 }
@@ -318,7 +318,7 @@ void ips200_drawpoint(uint16 x,uint16 y,uint16 color)
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      液晶显示字符
 //  @param      x     	        坐标x方向的起点 参数范围 0 - (IPS200_X_MAX-1)
-//  @param      y     	        坐标y方向的起点 参数范围 0 - (IPS200_Y_MAX-1)
+//  @param      y     	        坐标y方向的起点 参数范围 0 - (IPS200_Y_MAX/16-1)
 //  @param      dat       	    需要显示的字符
 //  @return     void
 //  @since      v1.0
@@ -335,8 +335,8 @@ void ips200_showchar(uint16 x,uint16 y,const int8 dat)
 		temp = tft_ascii[(uint16)dat-32][i];//减32因为是取模是从空格开始取得 空格在ascii中序号是32
 		for(j=0; j<8; j++)
 		{
-			if(temp&0x01)	ips200_wr_data16(POINT_COLOR);
-			else			ips200_wr_data16(BACK_COLOR);
+			if(temp&0x01)	ips200_wr_data16(IPS200_PENCOLOR);
+			else			ips200_wr_data16(IPS200_BGCOLOR);
 			temp>>=1;
 		}
 	}
@@ -610,7 +610,7 @@ void ips200_showimage(uint16 x,uint16 y,uint16 w,uint16 l,const unsigned char *p
 //  @param      height     	    图像高度
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              
+//  Sample usage:               ips200_displayimage032(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_displayimage032(uint8 *p, uint16 width, uint16 height) 
@@ -651,7 +651,7 @@ void ips200_displayimage032(uint8 *p, uint16 width, uint16 height)
 //  @param      dis_height      图像显示高度  0 -（IPS200_Y_MAX-1）
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              
+//  Sample usage:               ips200_displayimage032_zoom(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H, MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
@@ -685,12 +685,11 @@ void ips200_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 d
 //  @param      height     	    图像高度
 //  @param      start_x         设置显示起点的x轴坐标
 //  @param      start_y     	设置显示起点的y轴坐标
-//  @param      dis_width       图像显示宽度  0 -（IPS200_X_MAX-1）
-//  @param      dis_height      图像显示高度  0 -（IPS200_Y_MAX-1）
+//  @param      dis_width       图像显示宽度  1 -（TFT_X_MAX）
+//  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              
-//  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
+//  Sample usage:               ips200_displayimage032_zoom1(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H, 0, 0, MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_displayimage032_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height)
 {
@@ -699,6 +698,10 @@ void ips200_displayimage032_zoom1(uint8 *p, uint16 width, uint16 height, uint16 
     uint16 color = 0;
 	uint16 temp = 0;
 
+	//检查设置的参数是否超过屏幕的分辨率
+	if((start_x+dis_width)>IPS200_X_MAX)	assert(0);
+	if((start_y+dis_height)>IPS200_Y_MAX)	assert(0);
+
     ips200_address_set(start_x,start_y,start_x+dis_width-1,start_y+dis_height-1);//设置显示区域 
     
     for(j=0;j<dis_height;j++)
@@ -706,6 +709,109 @@ void ips200_displayimage032_zoom1(uint8 *p, uint16 width, uint16 height, uint16 
         for(i=0;i<dis_width;i++)
         {
             temp = *(p+(j*height/dis_height)*width+i*width/dis_width);//读取像素点
+            color=(0x001f&((temp)>>3))<<11;
+            color=color|(((0x003f)&((temp)>>2))<<5);
+            color=color|(0x001f&((temp)>>3));
+            ips200_wr_data16(color); 
+        }
+    }
+}
+
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      凌瞳(彩色摄像头)液晶缩放显示函数
+//  @param      *p     			图像数组地址
+//  @param      width     	    图像宽度
+//  @param      height     	    图像高度
+//  @param      dis_width       图像显示宽度  0 -（TFT_X_MAX-1）
+//  @param      dis_height      图像显示高度  0 -（TFT_Y_MAX-1）
+//  @return     void
+//  @since      v1.0
+//  Sample usage:               ips200_displayimage8660_zoom(scc8660_csi_image[0], SCC8660_CSI_PIC_W, SCC8660_CSI_PIC_H, 320, 240);//显示彩色摄像头 图像
+//  @note       此函数仅支持摄像头数据格式(SCC8660_DATA_FORMAT)设置为0时，显示彩色图像
+//              图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
+//-------------------------------------------------------------------------------------------------------------------
+void ips200_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
+{
+    uint32 i,j;
+    uint16 color = 0;
+
+    ips200_address_set(0,0,dis_width-1,dis_height-1);//设置显示区域 
+    
+    for(j=0;j<dis_height;j++)
+    {
+        for(i=0;i<dis_width;i++)
+        {
+            color = *(p+(j*height/dis_height)*width+i*width/dis_width);//读取像素点
+            color = ((color&0xff)<<8) | (color>>8);
+            ips200_wr_data16(color); 
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      凌瞳(彩色摄像头)液晶缩放显示函数
+//  @param      *p     			图像数组地址
+//  @param      width     	    图像宽度
+//  @param      height     	    图像高度
+//  @param      start_x         设置显示起点的x轴坐标
+//  @param      start_y     	设置显示起点的y轴坐标
+//  @param      dis_width       图像显示宽度  1 -（TFT_X_MAX）
+//  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
+//  @return     void
+//  @since      v1.0
+//  Sample usage:               ips200_displayimage8660_zoom1(scc8660_csi_image[0], SCC8660_CSI_PIC_W, SCC8660_CSI_PIC_H, 0, 0, 320, 240);
+//-------------------------------------------------------------------------------------------------------------------
+void ips200_displayimage8660_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height)
+{
+    uint32 i,j;
+                
+    uint16 color = 0;
+
+	//检查设置的参数是否超过屏幕的分辨率
+	if((start_x+dis_width)>IPS200_X_MAX)	assert(0);
+	if((start_y+dis_height)>IPS200_Y_MAX)	assert(0);
+
+    ips200_address_set(start_x,start_y,start_x+dis_width-1,start_y+dis_height-1);//设置显示区域 
+    
+	for(j=0;j<dis_height;j++)
+    {
+        for(i=0;i<dis_width;i++)
+        {
+            color = *(p+(j*height/dis_height)*width+i*width/dis_width);//读取像素点
+            color = ((color&0xff)<<8) | (color>>8);
+            ips200_wr_data16(color); 
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      凌瞳(彩色摄像头)液晶缩放显示函数(显示灰度)
+//  @param      *p     			图像数组地址
+//  @param      width     	    图像宽度
+//  @param      height     	    图像高度
+//  @param      dis_width       图像显示宽度  0 -（TFT_X_MAX-1）
+//  @param      dis_height      图像显示高度  0 -（TFT_Y_MAX-1）
+//  @return     void
+//  @since      v1.0
+//  Sample usage:               ips200_displayimage8660_grayscale_zoom(scc8660_csi_image[0], SCC8660_CSI_PIC_W, SCC8660_CSI_PIC_H, 320, 240)//显示彩色摄像头图像   显示Y分量
+//  @note       此函数仅支持摄像头数据格式(SCC8660_DATA_FORMAT)设置为2时，提取Y分量显示灰度图像
+//              图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
+//-------------------------------------------------------------------------------------------------------------------
+void ips200_displayimage8660_grayscale_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
+{
+    uint32 i,j;
+    uint16 color = 0;
+    uint16 temp = 0;
+    
+    ips200_address_set(0,0,dis_width-1,dis_height-1);//设置显示区域 
+    
+    for(j=0;j<dis_height;j++)
+    {
+        for(i=0;i<dis_width;i++)
+        {
+            temp = *(p+(j*height/dis_height)*width+i*width/dis_width);//读取像素点
+            temp = temp&0xff;
             color=(0x001f&((temp)>>3))<<11;
             color=color|(((0x003f)&((temp)>>2))<<5);
             color=color|(0x001f&((temp)>>3));
@@ -778,7 +884,7 @@ void ips200_display_chinese(uint16 x, uint16 y, uint8 size, const uint8 *p, uint
                 {
                     temp = (*p_data>>(j-1)) & 0x01;
                     if(temp)    ips200_wr_data16(color);
-                    else        ips200_wr_data16(BACK_COLOR);
+                    else        ips200_wr_data16(IPS200_BGCOLOR);
                 }
                 p_data++;
             }

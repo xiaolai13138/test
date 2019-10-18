@@ -426,7 +426,7 @@ void BOARD_BootClockRUN(void)
     /* Set FLEXIO2_CLK_PRED. */
     CLOCK_SetDiv(kCLOCK_Flexio2PreDiv, 1);
     /* Set FLEXIO2_CLK_PODF. */
-    CLOCK_SetDiv(kCLOCK_Flexio2Div, 7);
+    CLOCK_SetDiv(kCLOCK_Flexio2Div, 1);
     /* Set Flexio2 clock source. */
     CLOCK_SetMux(kCLOCK_Flexio2Mux, 3);
     /* Set Pll3 sw clock source. */

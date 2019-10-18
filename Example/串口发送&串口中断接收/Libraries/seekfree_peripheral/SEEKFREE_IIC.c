@@ -61,7 +61,7 @@ static uint16 simiic_delay_time=100;   //ICM等传感器应设置为100
 //-------------------------------------------------------------------------------------------------------------------
 void simiic_delay_set(uint16 time)
 {
-    simiic_delay_time = time;           //使用小钻风摄像头时，此延时需要设置为2000左右  //ICM等传感器应设置为100
+    simiic_delay_time = time;           //ICM等传感器应设置为100
 }
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      模拟IIC延时
@@ -71,7 +71,9 @@ void simiic_delay_set(uint16 time)
 //-------------------------------------------------------------------------------------------------------------------
 void simiic_delay(void)
 {
-	while(simiic_delay_time--);
+	uint16 delay_time;
+    delay_time = simiic_delay_time;
+	while(delay_time--);
 }
 
 

@@ -61,7 +61,7 @@
                             
 
 extern uint8 mt9v03x_csi_finish_flag;               //一场图像采集完成标志位
-extern uint8 (*user_image)[MT9V03X_CSI_W];          //图像数据
+extern uint8 (*mt9v03x_csi_image)[MT9V03X_CSI_W];          //图像数据
 
 void mt9v03x_csi_init(void);
 void csi_seekfree_sendimg_03x(UARTN_enum uartn, uint8 *image, uint16 width, uint16 height);

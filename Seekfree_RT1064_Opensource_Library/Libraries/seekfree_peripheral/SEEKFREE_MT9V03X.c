@@ -43,7 +43,7 @@
 
 
 //必须4字节对齐
-ALIGN(4) uint8 image[MT9V03X_H][MT9V03X_W];
+ALIGN(4) uint8 mt9v03x_image[MT9V03X_H][MT9V03X_W];
 
 uint8   receive[3];
 uint8   receive_num = 0;
@@ -295,7 +295,10 @@ void mt9v03x_init(void)
     uart_set_handle(MT9V03X_COF_UART, &g_lpuartHandle, mt9v03x_uart_callback, NULL, 0, receivexfer.data, 1);
     EnableGlobalIRQ(0);
     
-    systick_delay_ms(1000);
+    //等待摄像头上电初始化成功 方式有两种：延时或者通过获取配置的方式 二选一
+    //systick_delay_ms(1000);//延时方式
+    get_config(MT9V03X_COF_UART,GET_CFG);//获取配置的方式
+    
     uart_receive_flag = 0;
     set_config(MT9V03X_COF_UART,MT9V03X_CFG);
     
@@ -307,7 +310,7 @@ void mt9v03x_init(void)
 
     dma_mux_init();
     flexio_camera(MT9V03X_DATA_PIN, MT9V03X_PCLK_PIN, MT9V03X_HREF_PIN);
-    flexio_dma_init(&image[0][0], MT9V03X_W*MT9V03X_H, mt9v03x_dma);
+    flexio_dma_init(&mt9v03x_image[0][0], MT9V03X_W*MT9V03X_H, mt9v03x_dma);
     flexio_enable_rxdma();
     NVIC_SetPriority(DMA0_DMA16_IRQn,1);            //设置DMA中断优先级 范围0-15 越小优先级越高
     
@@ -329,7 +332,7 @@ uint8   mt9v03x_finish_flag = 0;    //一场图像采集完成标志位
 void mt9v03x_vsync(void)
 {
     CLEAR_GPIO_FLAG(MT9V03X_VSYNC_PIN);
-    dma_restart(image[0]);
+    dma_restart(mt9v03x_image[0]);
 
 }
 

@@ -93,7 +93,7 @@ extern vuint8   uart_receive_flag;  //仅用于接收配置信息时所用  禁止用户使用该变
 
 
 extern uint8    mt9v03x_finish_flag;//一场图像采集完成标志位
-extern uint8    image[MT9V03X_H][MT9V03X_W];
+extern uint8    mt9v03x_image[MT9V03X_H][MT9V03X_W];
 
 
 void set_config(UARTN_enum uartn, int16 buff[CONFIG_FINISH-1][2]);

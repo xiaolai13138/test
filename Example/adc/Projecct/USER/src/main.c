@@ -37,7 +37,7 @@ int main(void)
     DisableGlobalIRQ();
     board_init();   //务必保留，本函数用于初始化MPU 时钟 调试串口
     
-    //初始化ADC_1模块 0通道 引脚为B12， 精度为12位
+    //初始化ADC_1模块 3通道 引脚为B14， 精度为12位
 	//每一个ADC模块 所包含的通道，分辨率应设置为一样
 	//如果设置不一样则最后一个初始化的分辨率生效
     adc_init(ADC_1,ADC1_CH3_B14,ADC_8BIT);

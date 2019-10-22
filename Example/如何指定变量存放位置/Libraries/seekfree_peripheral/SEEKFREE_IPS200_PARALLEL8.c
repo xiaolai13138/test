@@ -761,7 +761,7 @@ void ips200_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16
 //  @since      v1.0
 //  Sample usage:               ips200_displayimage8660_zoom1(scc8660_csi_image[0], SCC8660_CSI_PIC_W, SCC8660_CSI_PIC_H, 0, 0, 320, 240);
 //-------------------------------------------------------------------------------------------------------------------
-void ips200_displayimage8660_zoom1(uint8 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height)
+void ips200_displayimage8660_zoom1(uint16 *p, uint16 width, uint16 height, uint16 start_x, uint16 start_y, uint16 dis_width, uint16 dis_height)
 {
     uint32 i,j;
                 

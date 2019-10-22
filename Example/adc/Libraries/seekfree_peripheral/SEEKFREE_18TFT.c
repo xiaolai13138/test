@@ -638,7 +638,7 @@ void lcd_displayimage032(uint8 *p, uint16 width, uint16 height)
 //  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
 //  @return     void
 //  @since      v1.0
-//  Sample usage:               lcd_displayimage032_zoom(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H, 0, 0, MT9V03X_CSI_W, MT9V03X_CSI_H)//显示灰度摄像头 图像
+//  Sample usage:               lcd_displayimage032_zoom(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H, 0, 0, 160, 120)//显示灰度摄像头 图像
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
@@ -673,7 +673,7 @@ void lcd_displayimage032_zoom(uint8 *p, uint16 width, uint16 height, uint16 dis_
 //  @param      dis_height      图像显示高度  1 -（TFT_Y_MAX）
 //  @return     void
 //  @since      v1.0
-//  Sample usage:              	lcd_displayimage8660_zoom(user_color_image[0],SCC8660_CSI_PIC_W,SCC8660_CSI_PIC_H,320,240);
+//  Sample usage:              	lcd_displayimage8660_zoom(scc8660_csi_image[0],SCC8660_CSI_PIC_W,SCC8660_CSI_PIC_H,160,128);
 //  @note       图像的宽度如果超过液晶的宽度，则自动进行缩放显示。这样可以显示全视野
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_displayimage8660_zoom(uint16 *p, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)

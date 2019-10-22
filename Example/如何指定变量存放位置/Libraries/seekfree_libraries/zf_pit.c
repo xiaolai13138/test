@@ -32,7 +32,7 @@ void pit_init(void)
     pit_config_t pitConfig;
     
     CLOCK_SetMux(kCLOCK_PerclkMux, 0U); //将PERCLK_CLK链接到IPG_CLK
-    CLOCK_SetDiv(kCLOCK_PerclkDiv, 0U); //分频系数设置为1
+    CLOCK_SetDiv(kCLOCK_PerclkDiv, 2U); //分频系数设置为1
     
     PIT_GetDefaultConfig(&pitConfig);   //默认配置为false
               
@@ -52,8 +52,9 @@ void pit_interrupt(PIT_enum pit_ch, uint32 count)
 {
     PIT_SetTimerPeriod(PIT, (pit_chnl_t)pit_ch, count);
     PIT_EnableInterrupts(PIT, (pit_chnl_t)pit_ch, kPIT_TimerInterruptEnable);//打开PIT通道0中断
+	PIT_SetTimerChainMode(PIT, (pit_chnl_t)pit_ch,false);
     PIT_StartTimer(PIT, (pit_chnl_t)pit_ch);
-    EnableIRQ(PIT_IRQn);        
+    EnableIRQ(PIT_IRQn);
     
     //NVIC_SetPriority(PIT_IRQn,0);//优先级设置 范围0-15 越小优先级越高
     
@@ -69,6 +70,7 @@ void pit_interrupt(PIT_enum pit_ch, uint32 count)
 void pit_delay(PIT_enum pit_ch, uint32 count)
 {
     PIT_SetTimerPeriod(PIT, (pit_chnl_t)pit_ch, count);
+	PIT_SetTimerChainMode(PIT, (pit_chnl_t)pit_ch,false);
     PIT_StartTimer(PIT, (pit_chnl_t)pit_ch);
     
     while(!PIT_GetStatusFlags(PIT, (pit_chnl_t)pit_ch));//等待计时结束
@@ -85,6 +87,7 @@ void pit_delay(PIT_enum pit_ch, uint32 count)
 void pit_start(PIT_enum pit_ch)
 {
     PIT_SetTimerPeriod(PIT, (pit_chnl_t)pit_ch, 0xFFFFFFFF);
+	PIT_SetTimerChainMode(PIT, (pit_chnl_t)pit_ch,false);
     PIT_StartTimer(PIT, (pit_chnl_t)pit_ch);
     
     

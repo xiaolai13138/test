@@ -41,6 +41,7 @@
 #include "zf_iomuxc.h"
 #include "zf_csi.h"
 #include "fsl_cache.h"
+#include "zf_usb_cdc.h"
 #include "seekfree_iic.h"
 #include "SEEKFREE_SCC8660_CSI.h"
 
@@ -48,10 +49,10 @@
 //定义图像缓冲区  如果用户需要访问图像数据 最好通过scc8660_csi_image来访问数据，最好不要直接访问缓冲区
 //由于默认分辨率160*120数据量较小，所以默认将图像数组放置于DTCM区域，访问速度更快。
 //以下注释的两句是将图像数组定义在SDRAM内，如果图像分辨率超过160*120，请将这两句解注并注释掉位于DTCM的两句。
-AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
-AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
-//AT_DTCM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
-//AT_DTCM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
+//AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
+//AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
+AT_DTCM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
+AT_DTCM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
 
 //用户访问图像数据直接访问这个指针变量就可以
 //访问方式非常简单，可以直接使用下标的方式访问
@@ -66,7 +67,11 @@ vuint8  scc8660_uart_receive_flag;
 uint16 SCC8660_CFG_CSI[SCC8660_CONFIG_FINISH][2]=
 {
     {SCC8660_AUTO_EXP,          0},                     //自动曝光     默认：0     	可选参数为：0 1。      0：手动曝光  1：自动曝光
-    {SCC8660_BRIGHT,            800},                   //亮度设置     默认：800   	手动曝光时：参数范围0-65535   自动曝光时参数设置范围0-255
+    {SCC8660_BRIGHT,            800},                   //亮度设置     手动曝光默认：800	手动曝光时：参数范围0-65535   自动曝光推荐值：100 自动曝光时参数设置范围0-255
+														//需要注意SCC8660_BRIGHT的参数固定时，不同的SCC8660_PCLK_DIV参数会影响图像的亮度。
+														//假设SCC8660_BRIGHT的参数为800，SCC8660_PCLK_DIV的参数为0时 和 SCC8660_PCLK_DIV的参数为2时 
+														//参数为2的时候图像明显要比为0的时候亮，在使用双摄的时候感觉两个摄像头亮度不一致时需要注意这个问题。
+														
     {SCC8660_FPS,               50},                    //图像帧率     默认：50    	可选参数为：60 50 30 25。 实际帧率还需要看SCC8660_PCLK_DIV参数的设置
     {SCC8660_SET_COL,           SCC8660_CSI_PIC_W},     //图像列数     默认：160   	请在.h的宏定义处修改
     {SCC8660_SET_ROW,           SCC8660_CSI_PIC_H},     //图像行数     默认：120   	请在.h的宏定义处修改
@@ -76,7 +81,7 @@ uint16 SCC8660_CFG_CSI[SCC8660_CONFIG_FINISH][2]=
 													   //其他参数不变的情况下，SCC8660_PCLK_DIV参数越大图像会越亮
     
     {SCC8660_PCLK_MODE,         0},                     //PCLK模式     默认：0		可选参数为：0 1。         0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用STM32的DCMI接口采集需要设置为1)
-    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0		可选参数为：0 1 2。       0：正常彩色模式    1：鲜艳模式（色彩饱和度提高）
+    {SCC8660_COLOR_MODE,        0},                     //图像色彩模式 默认：0		可选参数为：0 1。         0：正常彩色模式    1：鲜艳模式（色彩饱和度提高）
     {SCC8660_DATA_FORMAT,       0},                     //输出数据格式 默认：0		可选参数为：0 1 2 3。     0：RGB565 1：RGB565(字节交换) 2：YUV422(YUYV) 3：YUV422(UYVY)
     {SCC8660_MANUAL_WB,         0},                     //手动白平衡   默认：0		可选参数为：0 0x65-0xa0。 0：关闭手动白平衡，启用自动白平衡    其他：手动白平衡 手动白平衡时 参数范围0x65-0xa0
     
@@ -476,6 +481,24 @@ void csi_seekfree_sendimg_scc8660(UARTN_enum uartn, uint8 *image, uint16 width, 
 {
     uart_putchar(uartn,0x00);uart_putchar(uartn,0xff);uart_putchar(uartn,0x01);uart_putchar(uartn,0x01);//发送命令
     uart_putbuff(uartn, image, 2*width*height);  //发送图像 因为彩色图像 一个像素点占用两个字节 因此这里字节数需要乘以2
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      SCC8660(凌瞳摄像头)图像上传至上位机（使用USB虚拟串口发送）
+//  @param      uartn	需要发送的串口
+//  @param      image	图像数组地址
+//  @param      width	图像高度
+//  @param      height	图像宽度
+//  @return     void                    
+//  @since      v1.0
+//  Sample usage:       seekfree_sendimg_scc8660_usb_cdc((uint8 *)scc8660_csi_image[0],SCC8660_CSI_PIC_W,SCC8660_CSI_PIC_H);
+//-------------------------------------------------------------------------------------------------------------------
+void seekfree_sendimg_scc8660_usb_cdc(uint8 *image, uint16 width, uint16 height)
+{
+	uint8 cmd[4];
+	cmd[0] = 0x00; cmd[1] = 0xff; cmd[2] = 0x01; cmd[3] = 0x01; 
+	usb_cdc_send_buff(cmd,4);					//发送命令
+    usb_cdc_send_buff(image, width*height*2);  	//发送图像 因为彩色图像 一个像素点占用两个字节 因此这里字节数需要乘以2
 }
 
 //-------------------------------------------------------------------------------------------------------------------

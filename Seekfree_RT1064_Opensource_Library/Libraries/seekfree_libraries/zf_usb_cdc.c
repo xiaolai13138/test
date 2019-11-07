@@ -593,7 +593,10 @@ void usb_cdc_send_char(uint8 dat)
 {
 	if(usb_cdc_com_open_flag)
 	{
-		while(usb_check_busy());//正在忙
+		while(usb_check_busy())//正在忙
+		{
+			if(!usb_cdc_com_open_flag) return;//串口已关闭
+		}
 		USB_DeviceCdcAcmSend(s_cdcVcom.cdcAcmHandle, USB_CDC_VCOM_BULK_IN_ENDPOINT, &dat, 1);
 	}
     
@@ -610,7 +613,10 @@ void usb_cdc_send_str(const int8 *str)
 {
 	if(usb_cdc_com_open_flag)
 	{
-		while(usb_check_busy());//正在忙
+		while(usb_check_busy())//正在忙
+		{
+			if(!usb_cdc_com_open_flag) return;//串口已关闭
+		}
 		USB_DeviceCdcAcmSend(s_cdcVcom.cdcAcmHandle, USB_CDC_VCOM_BULK_IN_ENDPOINT, (uint8 *)str, strlen(str));
 	}
     
@@ -628,7 +634,10 @@ void usb_cdc_send_buff(uint8 *p, uint32 length)
 {
 	while(length)
 	{
-		while(usb_check_busy());//正在忙
+		while(usb_check_busy())//正在忙
+		{
+			if(!usb_cdc_com_open_flag) return;//串口已关闭
+		}
 		if(usb_cdc_com_open_flag)
 		{
 			if(length>512)

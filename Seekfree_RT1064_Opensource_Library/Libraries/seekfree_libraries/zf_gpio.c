@@ -36,7 +36,7 @@ GPIO_Type * PORTPTR[] = GPIO_BASE_PTRS;
 //  @param      dat         引脚初始化时设置的电平状态，输出时有效 0：低电平 1：高电平
 //  @param      pinconf     引脚配置（可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void
-//  Sample usage:           gpio_init(D5, GPO, 1, PULLUP_100K|SPEED_50MHZ|DSE_R0);//D5初始化为GPIO功能、输出模式、输出高电平、上拉100K IO速度50MHZ 驱动强度R0
+//  Sample usage:           gpio_init(D5, GPO, 1, GPIO_PIN_CONFIG);//D5初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度100MHZ 驱动强度R0
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)
 {
@@ -140,7 +140,7 @@ void gpio_interrupt_init(PIN_enum pin, TRIGGER_enum trigger, uint32 pinconf)
 //  @param      dat         引脚初始化时设置的电平状态，输出时有效 0：低电平 1：高电平
 //  @param      pinconf     引脚配置（可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void
-//  Sample usage:           fast_gpio_init(D5, GPO, 1, PULLUP_100K|SPEED_50MHZ|DSE_R0);//D5初始化为GPIO功能、输出模式、输出高电平、上拉100K IO速度50MHZ 驱动强度R0
+//  Sample usage:           fast_gpio_init(D5, GPO, 1, FAST_GPIO_PIN_CONFIG);//D5初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度2000MHZ 驱动强度R0
 //                          快速GPIO 最高可达150M的翻转输出，需要达到最高速度不能使用库函数来输出电平，需要直接操作寄存器来控制引脚，具体可以查看h文件中有宏定义
 //-------------------------------------------------------------------------------------------------------------------
 void fast_gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)

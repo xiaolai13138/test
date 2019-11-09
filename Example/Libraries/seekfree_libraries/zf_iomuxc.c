@@ -241,7 +241,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
             case B12:
             {
                 //设置引脚复用
-                if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_12_LPI2C4_SCL,0);
+                if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_12_LPI2C4_SCL,1);
                 else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_12_CCM_PMIC_READY,0);
                 else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_12_LPUART1_TX,0);
                 else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B0_12_WDOG2_WDOG_B,0);
@@ -309,7 +309,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
                 if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_USB_OTG2_ID,0);
                 else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_QTIMER3_TIMER0,0);
                 else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_LPUART2_CTS_B,0);
-                else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_LPI2C1_SCL,0);
+                else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_LPI2C1_SCL,1);
                 else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_WDOG1_B,0);
                 else if (ALT5 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_GPIO1_IO16,0);
                 else if (ALT6 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_00_USDHC1_WP,0);
@@ -433,7 +433,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
             {
                 //设置引脚复用
                 if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_FLEXSPIB_DATA00,0);
-                else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_LPI2C3_SCL,0);
+                else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_LPI2C3_SCL,1);
                 else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_LPUART3_RX,0);
                 else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_SPDIF_EXT_CLK,0);
                 else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_AD_B1_07_CSI_HSYNC,0);
@@ -666,7 +666,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
                 //设置引脚复用
                 if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_LCD_DATA00,0);
                 else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_QTIMER2_TIMER1,0);
-                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_LPI2C2_SCL,0);
+                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_LPI2C2_SCL,1);
                 else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_ARM_TRACE0,0);
                 else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_FLEXIO2_FLEXIO04,0);
                 else if (ALT5 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_B0_04_GPIO2_IO04,0);
@@ -1193,7 +1193,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
                 //设置引脚复用
                 if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_USDHC2_CLK,0);
                 else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_FLEXSPIB_SCLK,0);
-                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_LPI2C1_SCL,0);
+                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_LPI2C1_SCL,1);
                 else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_SAI1_RX_SYNC,0);
                 else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_FLEXSPIA_SS1_B,0);
                 else if (ALT5 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_04_GPIO3_IO04,0);
@@ -1299,7 +1299,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
 //                if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_USDHC2_DATA7,0);
 //                else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_FLEXSPIA_DATA03,0);
 //                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_LPUART2_TX,0);
-//                else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_LPI2C2_SCL,0);
+//                else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_LPI2C2_SCL,1);
 //                else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_LPSPI2_PCS3,0);
 //                else if (ALT5 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B1_11_GPIO3_IO11,0);
 //                else                    assert(0);//复用错误 进入断言失败
@@ -1312,7 +1312,7 @@ void iomuxc_pinconf(PIN_enum pin, ALT_enum alt, uint32 pinconf)
                 //设置引脚复用
                 if      (ALT0 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,0);
                 else if (ALT1 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_FLEXPWM1_PWMA00,0);
-                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_LPI2C3_SCL,0);
+                else if (ALT2 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_LPI2C3_SCL,1);
                 else if (ALT3 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_XBAR1_INOUT04,0);
                 else if (ALT4 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_LPSPI1_SCK,0);
                 else if (ALT5 == alt)   IOMUXC_SetPinMux(IOMUXC_GPIO_SD_B0_00_GPIO3_IO12,0);

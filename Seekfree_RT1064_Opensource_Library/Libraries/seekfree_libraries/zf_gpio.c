@@ -36,7 +36,7 @@ GPIO_Type * PORTPTR[] = GPIO_BASE_PTRS;
 //  @param      dat         引脚初始化时设置的电平状态，输出时有效 0：低电平 1：高电平
 //  @param      pinconf     引脚配置（可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void
-//  Sample usage:           gpio_init(D5, GPO, 1, GPIO_PIN_CONFIG);//D5初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度100MHZ 驱动强度R0
+//  Sample usage:           gpio_init(D0, GPO, 1, GPIO_PIN_CONFIG);//D0初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度100MHZ 驱动强度R0
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)
 {
@@ -59,7 +59,7 @@ void gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @param      dat         0：低电平 1：高电平
 //  @return     void
-//  Sample usage:           gpio_set(D5,1);//D5 输出高电平
+//  Sample usage:           gpio_set(D0,1);//D0 输出高电平
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_set(PIN_enum pin, uint8 dat)
 {
@@ -71,7 +71,7 @@ void gpio_set(PIN_enum pin, uint8 dat)
 //  @brief      GPIO状态获取
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @return     uint8       0：低电平 1：高电平
-//  Sample usage:           uint8 status = gpio_get(D5);//获取D5引脚电平
+//  Sample usage:           uint8 status = gpio_get(D0);//获取D0引脚电平
 //-------------------------------------------------------------------------------------------------------------------
 uint8 gpio_get(PIN_enum pin)
 {
@@ -83,7 +83,7 @@ uint8 gpio_get(PIN_enum pin)
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @param      dir         引脚的方向   输出：GPO   输入：GPI
 //  @return     void        
-//  Sample usage:           gpio_dir(D5,GPO);//设置D5为输出模式
+//  Sample usage:           gpio_dir(D0,GPO);//设置D0为输出模式
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_dir(PIN_enum pin, GPIODIR_enum dir)
 {
@@ -95,7 +95,7 @@ void gpio_dir(PIN_enum pin, GPIODIR_enum dir)
 //  @brief      GPIO 翻转
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @return     void        
-//  Sample usage:           gpio_toggle(D5);//D5引脚电平翻转
+//  Sample usage:           gpio_toggle(D0);//D0引脚电平翻转
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_toggle(PIN_enum pin)
 {
@@ -113,7 +113,7 @@ void gpio_toggle(PIN_enum pin)
 //  @param      trigger     中断触发方式 选择范围参见h文件TRIGGER_enum枚举
 //  @param      pinconf     引脚配置 （可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void        
-//  Sample usage:           gpio_interrupt_init(D5,RISING,GPIO_INT_CONFIG);//D5上升沿中断
+//  Sample usage:           gpio_interrupt_init(D0,RISING,GPIO_INT_CONFIG);//D0上升沿中断
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_interrupt_init(PIN_enum pin, TRIGGER_enum trigger, uint32 pinconf)
 {
@@ -140,7 +140,7 @@ void gpio_interrupt_init(PIN_enum pin, TRIGGER_enum trigger, uint32 pinconf)
 //  @param      dat         引脚初始化时设置的电平状态，输出时有效 0：低电平 1：高电平
 //  @param      pinconf     引脚配置（可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void
-//  Sample usage:           fast_gpio_init(D5, GPO, 1, FAST_GPIO_PIN_CONFIG);//D5初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度2000MHZ 驱动强度R0
+//  Sample usage:           fast_gpio_init(D0, GPO, 1, FAST_GPIO_PIN_CONFIG);//D0初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度2000MHZ 驱动强度R0
 //                          快速GPIO 最高可达150M的翻转输出，需要达到最高速度不能使用库函数来输出电平，需要直接操作寄存器来控制引脚，具体可以查看h文件中有宏定义
 //-------------------------------------------------------------------------------------------------------------------
 void fast_gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)
@@ -188,7 +188,7 @@ void fast_gpio_init(PIN_enum pin, GPIODIR_enum dir, uint8 dat, uint32 pinconf)
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @param      dat         0：低电平 1：高电平
 //  @return     void
-//  Sample usage:           fast_gpio_set(D5,1);//D5 输出高电平
+//  Sample usage:           fast_gpio_set(D0,1);//D0 输出高电平
 //-------------------------------------------------------------------------------------------------------------------
 void fast_gpio_set(PIN_enum pin, uint8 dat)
 {
@@ -200,7 +200,7 @@ void fast_gpio_set(PIN_enum pin, uint8 dat)
 //  @brief      快速GPIO输出设置
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @return     uint8       0：低电平 1：高电平
-//  Sample usage:           uint8 status = fast_gpio_get(D5);//获取D5引脚电平
+//  Sample usage:           uint8 status = fast_gpio_get(D0);//获取D0引脚电平
 //-------------------------------------------------------------------------------------------------------------------
 uint8 fast_gpio_get(PIN_enum pin)
 {
@@ -212,7 +212,7 @@ uint8 fast_gpio_get(PIN_enum pin)
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @param      dir         引脚的方向   输出：GPO   输入：GPI
 //  @return     void        
-//  Sample usage:           fast_gpio_dir(D5,GPO);//设置D5为输出模式
+//  Sample usage:           fast_gpio_dir(D0,GPO);//设置D0为输出模式
 //-------------------------------------------------------------------------------------------------------------------
 void fast_gpio_dir(PIN_enum pin, GPIODIR_enum dir)
 {
@@ -224,7 +224,7 @@ void fast_gpio_dir(PIN_enum pin, GPIODIR_enum dir)
 //  @brief      快速GPIO 翻转
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内PIN_enum枚举值确定)
 //  @return     void        
-//  Sample usage:           fast_gpio_toggle(D5);//D5引脚电平翻转
+//  Sample usage:           fast_gpio_toggle(D0);//D0引脚电平翻转
 //  @note                   使用本函数进行翻转IO，最多只能达到20多M的IO翻转速率，如果使用h文件的寄存器宏定义可以达到最高150M
 //                          但是需要注意，如果使用while(1)+宏定义寄存器来翻转IO，会发现频率最多只有100M，那是因为while(1)也占用了指令
 //                          想达到最高频率，需要牺牲代码大小来增加速度，也就是写很多宏定义寄存器来翻转IO，这样就没有while(1)指令了

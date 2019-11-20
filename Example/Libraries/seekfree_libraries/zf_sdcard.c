@@ -62,8 +62,8 @@ void sdhc_iomuxc(void)
     iomuxc_pinconf(D15,ALT0,SDHC_PIN_CONF);//DATA1
     iomuxc_pinconf(D16,ALT0,SDHC_PIN_CONF);//DATA2
     iomuxc_pinconf(D17,ALT0,SDHC_PIN_CONF);//DATA3
-    
-    
+	
+	
 }
 
 

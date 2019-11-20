@@ -26,8 +26,17 @@
 #include "common.h"
 #include "fsl_lpspi.h"
 
-
-#define SYSTICK_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_CpuClk)//定义SYSTICK定时器的输入时钟
+#define DELAY_TIMER_TYPE            1//0：适用systick进行延时   1：适用GPT进行延时
+    
+    
+#define DELAY_GPT GPT2              //选择使用的GPT定时器
+#define GPT_DIV   2                 //设置GPT输入时钟分频
+    
+#if(0==DELAY_TIMER_TYPE)    
+    #define DELAY_CLK               CLOCK_GetFreq(kCLOCK_CpuClk)//定义SYSTICK定时器的输入时钟
+#else   
+    #define DELAY_CLK               CLOCK_GetFreq(kCLOCK_PerClk)/GPT_DIV//定义GPT模块时钟
+#endif
 
 
 
@@ -37,21 +46,23 @@ void systick_start(void);
 uint32 systick_getval(void);
 
 
-//------------------------------------以下宏定义用于SYSTICK延时------------------------------------
-void systick_delay_ms(uint32 ms);                                                                   //毫秒级systick延时函数 由于滴答定时器最大只有24位，因此用函数实现，这样延时时间范围较宽
-#define systick_delay_us(time)      systick_delay(USEC_TO_COUNT(time, SYSTICK_SOURCE_CLOCK))        //设置SYSTICK延时时间  单位us   范围0  -  16777215(0xffffff)/(kCLOCK_CpuClk*1000)ms   主频500M 最大延时时间大约为33ms
-#define systick_delay_ns(time)      systick_delay(USEC_TO_COUNT(time, SYSTICK_SOURCE_CLOCK/1000))   //设置SYSTICK延时时间  单位ns   范围0  -  16777215(0xffffff)*1000/(kCLOCK_CpuClk)ns   主频500M 最大延时时间大约为33ms
-    
-    
-//------------------------------------以下宏定义用于SYSTICK定时------------------------------------  
-#define systick_timing_ms(time)     systick_timing(MSEC_TO_COUNT(time, SYSTICK_SOURCE_CLOCK))       //设置SYSTICK定时时间  单位ms   范围0  -  16777215(0xffffff)/(kCLOCK_CpuClk*1000)ms   主频500M 最大定时时间大约为33ms
-#define systick_timing_us(time)     systick_timing(USEC_TO_COUNT(time, SYSTICK_SOURCE_CLOCK))       //设置SYSTICK定时时间  单位us   范围0  -  16777215(0xffffff)/(kCLOCK_CpuClk)us        主频500M 最大定时时间大约为33ms
-#define systick_timing_ns(time)     systick_timing(USEC_TO_COUNT(time, SYSTICK_SOURCE_CLOCK/1000))  //设置SYSTICK定时时间  单位ns   范围0  -  16777215(0xffffff)*1000/(kCLOCK_CpuClk)ns   主频500M 最大定时时间大约为33ms
+//------------------------------------以下宏定义用于延时------------------------------------
+void systick_delay_ms(uint32 ms);                                                        //毫秒级延时函数 由于滴答定时器最大只有24位，因此用函数实现，这样延时时间范围较宽
+#define systick_delay_us(time)      systick_delay(USEC_TO_COUNT(time, DELAY_CLK))        //设置延时时间  单位us   范围0  -  16777215(0xffffff)/(DELAY_CLK*1000)ms   主频500M systick最大延时时间大约为33ms
+#define systick_delay_ns(time)      systick_delay(USEC_TO_COUNT(time, DELAY_CLK/1000))   //设置延时时间  单位ns   范围0  -  16777215(0xffffff)*1000/(DELAY_CLK)ns   主频500M systick最大延时时间大约为33ms
+//以上延时函数可以DELAY_TIMER_TYPE宏定义选择  延时所使用的定时器类型，当使用库里面的文件系统时请将宏定义设置为1，因为文件系统需要占用systick定时器
 
 
-//------------------------------------以下宏定义用于获取当前SYSTICK时间------------------------------------
-#define systick_getval_ms()         COUNT_TO_MSEC(systick_getval(),SYSTICK_SOURCE_CLOCK)            //获取SYSTICK当前计时时间  单位ms
-#define systick_getval_us()         COUNT_TO_USEC(systick_getval(),SYSTICK_SOURCE_CLOCK)            //获取SYSTICK当前计时时间  单位us
-#define systick_getval_ns()         COUNT_TO_USEC(systick_getval()*1000,SYSTICK_SOURCE_CLOCK)       //获取SYSTICK当前计时时间  单位ns
+    
+//------------------------------------以下宏定义用于定时------------------------------------  
+#define systick_timing_ms(time)     systick_timing(MSEC_TO_COUNT(time, DELAY_CLK))       //设置定时时间  单位ms   范围0  -  16777215(0xffffff)/(DELAY_CLK*1000)ms   主频500M 最大定时时间大约为33ms
+#define systick_timing_us(time)     systick_timing(USEC_TO_COUNT(time, DELAY_CLK))       //设置定时时间  单位us   范围0  -  16777215(0xffffff)/(DELAY_CLK)us        主频500M 最大定时时间大约为33ms
+#define systick_timing_ns(time)     systick_timing(USEC_TO_COUNT(time, DELAY_CLK/1000))  //设置定时时间  单位ns   范围0  -  16777215(0xffffff)*1000/(DELAY_CLK)ns   主频500M 最大定时时间大约为33ms
+
+
+//------------------------------------以下宏定义用于获取当前时间------------------------------------
+#define systick_getval_ms()         COUNT_TO_MSEC(systick_getval(),DELAY_CLK)            //获取当前计时时间  单位ms
+#define systick_getval_us()         COUNT_TO_USEC(systick_getval(),DELAY_CLK)            //获取当前计时时间  单位us
+#define systick_getval_ns()         COUNT_TO_USEC(systick_getval()*1000,DELAY_CLK)       //获取当前计时时间  单位ns
 
 #endif

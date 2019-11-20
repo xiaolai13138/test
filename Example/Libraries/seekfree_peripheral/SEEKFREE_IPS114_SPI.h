@@ -49,11 +49,11 @@
 #define IPS114_CS_PIN           SPI3_CS0_B3    //定义SPI_CS引脚
      
 #define IPS114_BL_PIN           C18	            //液晶背光引脚定义  
-#define IPS114_REST_PIN         B2              //液晶复位引脚定义 由于实际通讯未使用D15因此 这里复用为GPIO
+#define IPS114_REST_PIN         B2              //液晶复位引脚定义 由于实际通讯未使用B2因此 这里复用为GPIO
 #define IPS114_DC_PIN 	        C19	            //液晶命令位引脚定义
 
-#define IPS114_DC(x)            gpio_set(IPS114_DC_PIN,x);
-#define IPS114_REST(x)          gpio_set(IPS114_REST_PIN,x);
+#define IPS114_DC(x)            gpio_set(IPS114_DC_PIN,x)
+#define IPS114_REST(x)          gpio_set(IPS114_REST_PIN,x)
 
 
 

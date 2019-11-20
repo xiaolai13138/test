@@ -56,8 +56,8 @@
 
 
      
-#define DC(x)   	gpio_set(DC_PIN,x);
-#define REST(x) 	gpio_set(REST_PIN,x);
+#define DC(x)   	gpio_set(DC_PIN,x)
+#define REST(x) 	gpio_set(REST_PIN,x)
 
 
 

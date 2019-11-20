@@ -36,6 +36,10 @@
 #include "zf_vector.h"
 
 
+#include "ff.h"
+#include "diskio.h"
+#include "fsl_sd_disk.h"
+
 #include "SEEKFREE_PRINTF.h"
 
 
@@ -55,6 +59,7 @@
 #include "zf_csi.h"
 #include "zf_rom_api.h"
 #include "zf_usb_cdc.h"
+#include "zf_sdcard.h"
 
 //------逐飞科技产品驱动头文件
 #include "SEEKFREE_FONT.h"

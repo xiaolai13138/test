@@ -61,3 +61,10 @@ V1.1.6
 
 V1.1.7
 	修改usb虚拟串口底层，通过延时的方式来判断串口的关闭，以适应更多的串口助手或者上位机，避免出现程序卡死的问题
+    
+V1.1.8
+    添加sdmmc相关驱动
+    添加fatfs文件系统驱动
+    对zf_systick文件添加  定时器选择功能，当其他程序需要占用systick时，可以将zf_systick.h文件中的DELAY_TIMER_TYPE宏定义改为1，即可使用GPT定时器作为延时的定时器
+    DELAY_TIMER_TYPE库默认使用GPT2作为 systick文件的定时器，因为库里面的文件系统需要占用systick
+    

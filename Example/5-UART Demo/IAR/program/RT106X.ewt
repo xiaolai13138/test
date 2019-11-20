@@ -1633,6 +1633,78 @@
         </file>
     </group>
     <group>
+        <name>fatfs</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\diskio.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\diskio.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\ff.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\ff.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\ffconf.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\ffsystem.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\ffunicode.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\fsl_sd_disk\fsl_sd_disk.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\fsl_sd_disk\fsl_sd_disk.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\integer.h</name>
+        </file>
+    </group>
+    <group>
+        <name>sdmmc</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\src\fsl_mmc.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc\fsl_mmc.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\src\fsl_sd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc\fsl_sd.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\src\fsl_sdio.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc\fsl_sdio.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\src\fsl_sdmmc_common.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc\fsl_sdmmc_common.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt\fsl_sdmmc_event.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port\fsl_sdmmc_event.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt\fsl_sdmmc_host.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc\fsl_sdmmc_spec.h</name>
+        </file>
+    </group>
+    <group>
         <name>seekfree_libraries</name>
         <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\common\common.c</name>
@@ -1711,6 +1783,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\zf_rom_api.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\zf_sdcard.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\zf_sdcard.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\zf_spi.c</name>

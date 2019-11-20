@@ -56,7 +56,9 @@ void PendSV_Handler(void)
 {
 	while(1);
 }
-void SysTick_Handler(void)
-{
-	while(1);
-}
+
+//此函数已经在fsl_sdmmc_event.c文件中定义
+//void SysTick_Handler(void)
+//{
+//	while(1);
+//}

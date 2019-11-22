@@ -133,9 +133,8 @@ int main(void)
         PRINTF("创建文件系统失败\r\n");
         return -1;
     }
-	BOARD_USDHC_SDCARD_POWER_CONTROL(0);//关闭SD卡电源
-    systick_delay_ms(500);
-    BOARD_USDHC_SDCARD_POWER_CONTROL(1);//开启SD卡电源
+	SD_PowerOffCard(g_sd.host.base, g_sd.usrParam.pwr); //创建文件系统后关闭SD卡电源
+    SD_PowerOnCard(g_sd.host.base, g_sd.usrParam.pwr);  //打开sd卡电源
 #endif /* FF_USE_MKFS */
 
     PRINTF("\r\n创建目录中\r\n");

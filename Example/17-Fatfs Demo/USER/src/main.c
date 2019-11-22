@@ -58,7 +58,7 @@ AT_DTCM_SECTION_ALIGN(uint8_t g_bufferRead[SDK_SIZEALIGN(BUFFER_SIZE, SDMMC_DATA
 
 
 //SD卡需要使用的引脚有 B23 C30 D4 D12 D13 D14 D15 D16 D17
-//如果核心板插在主板上的请确认这些端口是没有连接其他外设（确认拨码开关处于OFF 没有插舵机 与运放模块）
+//如果核心板插在主板上的请确认这些端口是没有连接其他外设（确认拨码开关处于OFF 且没有插  舵机、运放模块、2寸IPS并口屏幕、无线转串口模块）
 //否则有可能导致例程无法使用
 
 

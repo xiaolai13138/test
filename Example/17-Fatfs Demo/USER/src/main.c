@@ -126,11 +126,16 @@ int main(void)
 
 #if FF_USE_MKFS
     PRINTF("\r\n创建文件系统中。。。这可能需要一个比较长的时间\r\n");
+	//当SD卡文件系统创建完毕之后，就不需要在每次都创建了
+	//因为每次创建都是会把SD卡格式化一遍的，每次都格式化容易导致卡报废
     if (f_mkfs(driverNumberBuffer, FM_ANY, 0U, work, sizeof work))
     {
         PRINTF("创建文件系统失败\r\n");
         return -1;
     }
+	BOARD_USDHC_SDCARD_POWER_CONTROL(0);//关闭SD卡电源
+    systick_delay_ms(500);
+    BOARD_USDHC_SDCARD_POWER_CONTROL(1);//开启SD卡电源
 #endif /* FF_USE_MKFS */
 
     PRINTF("\r\n创建目录中\r\n");

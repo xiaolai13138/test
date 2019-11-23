@@ -163,7 +163,7 @@ void uart_putbuff(UARTN_enum uartn, uint8 *buff, uint32 len)
 //  @return     void
 //  Sample usage:               uart_putstr(USART_1,"i lvoe you"); 
 //-------------------------------------------------------------------------------------------------------------------
-void uart_putstr(UARTN_enum uartn, const uint8 *str)
+void uart_putstr(UARTN_enum uartn, const int8 *str)
 {
     while(*str)
     {
@@ -180,7 +180,7 @@ void uart_putstr(UARTN_enum uartn, const uint8 *str)
 //-------------------------------------------------------------------------------------------------------------------
 void uart_getchar(UARTN_enum uartn, uint8 *dat)
 {
-    while ((UARTN[uartn]->WATER & LPUART_WATER_RXCOUNT_MASK) >> LPUART_WATER_RXCOUNT_SHIFT);
+    while (!((UARTN[uartn]->WATER & LPUART_WATER_RXCOUNT_MASK) >> LPUART_WATER_RXCOUNT_SHIFT));
     *dat = LPUART_ReadByte(UARTN[uartn]);
 }
 

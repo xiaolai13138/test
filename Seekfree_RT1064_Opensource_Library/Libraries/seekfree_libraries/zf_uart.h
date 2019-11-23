@@ -72,7 +72,7 @@ typedef enum //Ã¶¾Ù´®¿ÚºÅ
 void uart_init(UARTN_enum uartn, uint32 baud, UARTPIN_enum tx_pin, UARTPIN_enum rx_pin);
 void uart_putchar(UARTN_enum uartn, uint8 dat);
 void uart_putbuff(UARTN_enum uartn, uint8 *buff, uint32 len);
-void uart_putstr(UARTN_enum uartn, const uint8 *str);
+void uart_putstr(UARTN_enum uartn, const int8 *str);
 void uart_getchar(UARTN_enum uartn, uint8 *dat);
 uint8 uart_query(UARTN_enum uartn, uint8 *dat);
 void uart_tx_irq(UARTN_enum uartn,uint8 status);

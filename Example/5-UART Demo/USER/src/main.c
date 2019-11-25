@@ -43,7 +43,7 @@ void example_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t 
 {
     if(kStatus_LPUART_RxIdle == status)
     {
-        //数据已经被写入到了 之前社会的BUFF中
+        //数据已经被写入到了 之前设置的BUFF中
         //本例程使用的BUFF为 example_rx_buffer
         uart_data = example_rx_buffer;//将数据取出
     }

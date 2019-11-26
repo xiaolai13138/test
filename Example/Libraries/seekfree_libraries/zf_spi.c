@@ -140,7 +140,7 @@ void spi_iomuxc(SPIN_enum spi_n, SPI_PIN_enum sck_pin, SPI_PIN_enum mosi_pin, SP
 //  @param      mode            SPI模式 0：CPOL=0 CPHA=0    1：CPOL=0 CPHA=1   2：CPOL=1 CPHA=0   3：CPOL=1 CPHA=1 //具体细节可自行百度
 //  @param      baud            设置SPI的波特率
 //  @return     void
-//  Sample usage:               spi_init(SPI_1, SPI1_SCK_D12, SPI1_MOSI_D14, SPI1_MISO_D15, SPI1_CS0_D13, 1*1000*1000);//硬件SPI初始化  波特率为1Mhz   
+//  Sample usage:               spi_init(SPI_1, SPI1_SCK_D12, SPI1_MOSI_D14, SPI1_MISO_D15, SPI1_CS0_D13, 0, 1*1000*1000);//硬件SPI初始化  模式0 波特率为1Mhz   
 //-------------------------------------------------------------------------------------------------------------------
 void spi_init(SPIN_enum spi_n, SPI_PIN_enum sck_pin, SPI_PIN_enum mosi_pin, SPI_PIN_enum miso_pin, SPI_PIN_enum cs_pin, uint8 mode, uint32 baud)
 {
@@ -214,7 +214,7 @@ void spi_init(SPIN_enum spi_n, SPI_PIN_enum sck_pin, SPI_PIN_enum mosi_pin, SPI_
 //  @param      continuous      本次通信是CS是否持续保持有效状态 1:持续保持  0:每传输完一个字节关闭CS(一般设置为1 即可)
 //  @return     void				
 //  @since      v2.0
-//  Sample usage:       		spi_mosi(SPI_1,SPI1_CS0_D13,buf,buf,1);    //发送buff的内容，并接收到buf里，长度为1字节
+//  Sample usage:       		spi_mosi(SPI_1,SPI1_CS0_D13,buf,buf,1,1);    //发送buff的内容，并接收到buf里，长度为1字节 通信期间CS持续拉低
 //-------------------------------------------------------------------------------------------------------------------
 void spi_mosi(SPIN_enum spi_n, SPI_PIN_enum cs_pin, uint8 *modata, uint8 *midata, uint32 len, uint8 continuous)
 {

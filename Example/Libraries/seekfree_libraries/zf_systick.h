@@ -26,16 +26,16 @@
 #include "common.h"
 #include "fsl_lpspi.h"
 
-#define DELAY_TIMER_TYPE            1//0：适用systick进行延时   1：适用GPT进行延时
+#define DELAY_TIMER_TYPE            1		//0：适用systick进行延时   1：适用GPT进行延时
     
     
-#define DELAY_GPT GPT2              //选择使用的GPT定时器
-#define GPT_DIV   2                 //设置GPT输入时钟分频
+#define DELAY_GPT 					GPT2	//选择使用的GPT定时器
+#define GPT_DIV   					2		//设置GPT输入时钟分频
     
 #if(0==DELAY_TIMER_TYPE)    
     #define DELAY_CLK               CLOCK_GetFreq(kCLOCK_CpuClk)//定义SYSTICK定时器的输入时钟
 #else   
-    #define DELAY_CLK               CLOCK_GetFreq(kCLOCK_PerClk)/GPT_DIV//定义GPT模块时钟
+    #define DELAY_CLK               (CLOCK_GetFreq(kCLOCK_PerClk)/(GPT_DIV))//定义GPT模块时钟
 #endif
 
 

@@ -20,8 +20,29 @@
 #include "fsl_gpt.h"
 #include "zf_systick.h"
 
+static uint8 gpt_init_flag;
 
 
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      gpt初始化
+//  @param      void            
+//  @return     void
+//  Sample usage:               无需用户调用，用户请使用h文件中的宏定义
+//-------------------------------------------------------------------------------------------------------------------
+void gpt_init(void)
+{
+    if(!gpt_init_flag)
+    {
+        gpt_config_t gptConfig;
+        
+        gpt_init_flag = 1;
+        GPT_GetDefaultConfig(&gptConfig);           //获取默认配置
+        GPT_Init(DELAY_GPT, &gptConfig);            //GPT初始化 便于打开时钟
+        GPT_Deinit(DELAY_GPT);                      //GPT反初始化
+        GPT_Init(DELAY_GPT, &gptConfig);            //GPT初始化
+        GPT_SetClockDivider(DELAY_GPT, GPT_DIV);    //设置分频系数
+    }
+}
 
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -45,21 +66,13 @@ void systick_delay(uint32 time)
     while( !(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk));//等待时间到
     
 #elif(1==DELAY_TIMER_TYPE)
-    static uint8 gpt_init_flag;
     
-    if(!gpt_init_flag)
-    {
-        gpt_config_t gptConfig;
-        
-        gpt_init_flag = 1;
-        GPT_GetDefaultConfig(&gptConfig);           //获取默认配置
-        GPT_Init(DELAY_GPT, &gptConfig);            //GPT初始化
-        GPT_SetClockDivider(DELAY_GPT, GPT_DIV);    //设置分频系数
-    }
+    
+    gpt_init();
     GPT_SetOutputCompareValue(DELAY_GPT, kGPT_OutputCompare_Channel1, time);//设置定时时间
     GPT_StartTimer(DELAY_GPT);                      //启动定时器
-    while(!GPT_GetStatusFlags(DELAY_GPT,GPT_SR_OF1_MASK));
-    GPT_ClearStatusFlags(DELAY_GPT,GPT_SR_OF1_MASK);
+    while(!GPT_GetStatusFlags(DELAY_GPT,kGPT_OutputCompare1Flag));
+    GPT_ClearStatusFlags(DELAY_GPT,kGPT_OutputCompare1Flag);
     GPT_StopTimer(DELAY_GPT);
 #endif
 }
@@ -94,20 +107,12 @@ void systick_timing(uint32 time)
                     | SysTick_CTRL_CLKSOURCE_Msk    //时钟源选择 (core clk) 
                 );
 #elif(1==DELAY_TIMER_TYPE)
-    static uint8 gpt_init_flag;
     
-    if(!gpt_init_flag)
-    {
-        gpt_config_t gptConfig;
-        
-        gpt_init_flag = 1;
-        GPT_GetDefaultConfig(&gptConfig);           //获取默认配置
-        GPT_Init(DELAY_GPT, &gptConfig);            //GPT初始化
-        GPT_SetClockDivider(DELAY_GPT, GPT_DIV);    //设置分频系数
-    }
+    gpt_init();
     GPT_SetOutputCompareValue(DELAY_GPT, kGPT_OutputCompare_Channel1, time);//设置定时时间
     GPT_StartTimer(DELAY_GPT);                      //启动定时器
     GPT_EnableInterrupts(DELAY_GPT,GPT_IR_OF1IE_MASK);//使能中断
+    EnableIRQ(GPT2_IRQn);
 #endif
 }
 
@@ -128,17 +133,8 @@ void systick_start(void)
                     | SysTick_CTRL_CLKSOURCE_Msk    //时钟源选择 (core clk) 
                 );
 #elif(1==DELAY_TIMER_TYPE)
-    static uint8 gpt_init_flag;
     
-    if(!gpt_init_flag)
-    {
-        gpt_config_t gptConfig;
-        
-        gpt_init_flag = 1;
-        GPT_GetDefaultConfig(&gptConfig);           //获取默认配置
-        GPT_Init(DELAY_GPT, &gptConfig);            //GPT初始化
-        GPT_SetClockDivider(DELAY_GPT, GPT_DIV);    //设置分频系数
-    }
+    gpt_init();
     GPT_SetOutputCompareValue(DELAY_GPT, kGPT_OutputCompare_Channel1, 0xffffffff);//设置定时时间
     GPT_StartTimer(DELAY_GPT);                      //启动定时器
 #endif

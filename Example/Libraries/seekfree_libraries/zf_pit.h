@@ -34,7 +34,7 @@ typedef enum
 }PIT_enum;
 
 
-#define PIT_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_IpgClk)//定义PIT定时器的输入时钟
+#define PIT_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_PerClk)//定义PIT定时器的输入时钟
 
 
 

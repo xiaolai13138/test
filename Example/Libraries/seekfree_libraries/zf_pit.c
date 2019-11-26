@@ -31,9 +31,6 @@ void pit_init(void)
 {
     pit_config_t pitConfig;
     
-    CLOCK_SetMux(kCLOCK_PerclkMux, 0U); //将PERCLK_CLK链接到IPG_CLK
-    CLOCK_SetDiv(kCLOCK_PerclkDiv, 0U); //分频系数设置为1
-    
     PIT_GetDefaultConfig(&pitConfig);   //默认配置为false
               
     PIT_Init(PIT, &pitConfig);          //第一次初始化便于打开时钟

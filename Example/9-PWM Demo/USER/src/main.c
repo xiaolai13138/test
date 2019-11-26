@@ -36,9 +36,11 @@ int main(void)
     DisableGlobalIRQ();
     board_init();   //务必保留，本函数用于初始化MPU 时钟 调试串口
     
-    //初始化PWM1 MODULE0 的通道B 引脚为B23 频率50hz 占空比为 百分之100*5000/PWM_DUTY_MAX   PWM_DUTY_MAX在fsl_pwm.h文件中 默认为50000
+    //初始化PWM1 MODULE3 的通道B 引脚为D1 频率50hz 占空比为 百分之100*5000/PWM_DUTY_MAX   PWM_DUTY_MAX在fsl_pwm.h文件中 默认为50000
     //每一个通道只能有一个引脚输出PWM
     pwm_init(PWM1_MODULE3_CHB_D1 , 50, 5000);
+	
+	
     pwm_init(PWM1_MODULE3_CHA_D0 , 50, 5000);
     pwm_init(PWM2_MODULE3_CHB_D3 , 50, 5000);
     pwm_init(PWM2_MODULE3_CHA_D2 , 50, 5000);

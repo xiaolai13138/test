@@ -30,7 +30,9 @@
 
 #include "headfile.h"
 
-
+//可以修改zf_systick.h中DELAY_TIMER_TYPE宏定义的值来选择使用systick还是gpt定时器 
+//完成延时与计时相关的功能
+//默认设置为1，因为库加入了文件系统相关的驱动，文件系统需要占用systick定时器
 
 
 uint32 use_time;

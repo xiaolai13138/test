@@ -78,3 +78,10 @@ V1.1.9
 V1.1.10
 	修复uart_getchar函数无法等待的问题
     
+V1.1.11
+    修复当使用PIT之后导致GPT延时不准确的问题
+    降低PIT的输入频率
+    修改GPT_SR_OF1_MASK为kGPT_OutputCompare1Flag
+    更改变量gpt_init_flag为当前文件都可用
+	更改PIT时钟频率获取的方式
+    

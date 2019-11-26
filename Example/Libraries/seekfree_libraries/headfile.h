@@ -35,7 +35,7 @@
 #include "common.h"
 #include "zf_vector.h"
 
-
+//------文件系统相关头文件
 #include "ff.h"
 #include "diskio.h"
 #include "fsl_sd_disk.h"

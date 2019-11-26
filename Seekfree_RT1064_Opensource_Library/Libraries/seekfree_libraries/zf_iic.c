@@ -162,7 +162,7 @@ uint8 iic_write_reg(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 data)
 //  @param      *data       读取回来的数据
 //  @return                 返回的状态值 0：成功  1：失败
 //  @since      v2.0
-//  Sample usage:       	uint8 value = iic_read_reg(IIC_2, 0x2D, 0x50);//读取0x50地址的数据，从机地址为0x2D
+//  Sample usage:       	iic_read_reg(IIC_2, 0x2D, 0x50, dat);//读取0x50地址的数据存放到dat中，从机地址为0x2D
 //-------------------------------------------------------------------------------------------------------------------
 uint8 iic_read_reg(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 *data)
 {
@@ -196,7 +196,7 @@ uint8 iic_read_reg(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 *data)
 //  @param      num         读取字节数
 //  @return                 返回的状态值 0：成功  1：失败
 //  @since      v2.0
-//  Sample usage:       	uint8 value = iic_read_reg(IIC_2, 0x2D, 0x50, 10, buf);//读取0x50地址的数据，从机地址为0x2D开始的10个字节
+//  Sample usage:       	iic_read_reg(IIC_2, 0x2D, 0x50, 10, buf);//读取0x50地址的数据存放到buf中，从机地址为0x2D开始的10个字节
 //-------------------------------------------------------------------------------------------------------------------
 uint8 iic_read_reg_bytes(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 *data, uint8 num)
 {

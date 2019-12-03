@@ -83,8 +83,6 @@ int main(void)
         status = flash_erase_sector(EXAMPLE_FLASH_SECTOR);//擦除扇区，如果扇区已经有数据则必须擦除扇区之后才能再次写入新的数据
         if(status)  while(1);//擦除失败
     }
-    //这里特别提示下 flash_check函数有 cache清空函数，因此不要在数据载入缓冲区之后执行。
-    //如果不理解,严格按照本例程的顺序编写程序就行
     
     write_buf[0] = write_data1;
     write_buf[1] = write_data2;

@@ -31,9 +31,6 @@
 #include "headfile.h"
 
 
-
-uint8 test[50];
-
 int main(void)
 {
 	DisableGlobalIRQ();
@@ -52,7 +49,7 @@ int main(void)
     NVIC_SetPriority(GPIO2_Combined_16_31_IRQn,4);  //设置C16-C31 GPIO中断的优先级为4 范围0-15 越小优先级越高
 	
     //其他中断优先级设置都是使用这个函数，对于函数的第一个参数填写，可以通过任意选中一个NVIC_SetPriority后面的第一个参数，然后go to过去查看，其他的IRQ号
-    //所有的IAR都定义在 MIMXRT1064.h IRQn_Type枚举中
+    //所有的IRQ都定义在 MIMXRT1064.h IRQn_Type枚举中
     
 	//总中断最后开启
     EnableGlobalIRQ(0);

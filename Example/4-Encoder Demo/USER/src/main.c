@@ -56,9 +56,7 @@ int main(void)
     
     //初始化 QTIMER_1 A相使用QTIMER1_TIMER2_C2 B相使用QTIMER1_TIMER3_C24
     qtimer_quad_init(QTIMER_1,QTIMER1_TIMER2_C2,QTIMER1_TIMER3_C24);
-    
-    
-    
+
     
     qtimer_quad_init(QTIMER_2,QTIMER2_TIMER0_C3,QTIMER2_TIMER3_C25);
     qtimer_quad_init(QTIMER_3,QTIMER3_TIMER2_B18,QTIMER3_TIMER3_B19);
@@ -94,8 +92,6 @@ int main(void)
         systick_delay_ms(100);
         
     }
-
-    
 }
 
 

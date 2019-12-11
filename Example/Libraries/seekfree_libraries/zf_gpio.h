@@ -62,7 +62,7 @@ void gpio_interrupt_init(PIN_enum pin, TRIGGER_enum trigger, uint32 pinconf);
 //中断标志位获取 
 #define GET_GPIO_FLAG(pin)      ((GPIO_GetPinsInterruptFlags(PORTPTR[pin>>5]) >> (pin&0x1f)) & 0x01)
 //中断标志位清除   
-#define CLEAR_GPIO_FLAG(pin)    GPIO_ClearPinsInterruptFlags(PORTPTR[pin>>5], 1<<(pin&0x1f));
+#define CLEAR_GPIO_FLAG(pin)    GPIO_ClearPinsInterruptFlags(PORTPTR[pin>>5], (uint32)1<<(pin&0x1f));
 
 
 //------------------------------------------------------

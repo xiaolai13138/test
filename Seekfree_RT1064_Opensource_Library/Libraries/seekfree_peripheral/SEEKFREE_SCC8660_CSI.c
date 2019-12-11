@@ -506,20 +506,21 @@ void seekfree_sendimg_scc8660_usb_cdc(uint8 *image, uint16 width, uint16 height)
 //  @param      *dat    图像数组的地址
 //  @param      x       需要获取的像素所在列
 //  @param      y       需要获取的像素所在行
+//  @param      z       图像宽度
 //  @param      *r      接收r分量地址 返回值范围0-31
 //  @param      *g      接收g分量地址 返回值范围0-63
 //  @param      *b      接收b分量地址 返回值范围0-31
 //  @return     void					
 //  @since      v1.0
-//  Sample usage:		color_camera_take_point(scc8660_csi_image[0],0, 0,&r_value,&g_value,&b_value);//获取第0列 第0行像素的RGB分量  摄像头的数据格式必须设置为0
+//  Sample usage:		color_camera_take_point(scc8660_csi_image[0],0, 0, SCC8660_CSI_PIC_W, &r_value,&g_value,&b_value);//获取第0列 第0行像素的RGB分量  摄像头的数据格式必须设置为0
 //	@note				此函数主要目的是为了让大家能够清晰的了解RGB数据是如何存储的
 //-------------------------------------------------------------------------------------------------------------------
-void inline color_camera_take_point(uint16 *dat, uint16 x, uint16 y, uint8 *r, uint8 *g, uint8 *b)
+void inline color_camera_take_point(uint16 *dat, uint16 x, uint16 y, uint16 z, uint8 *r, uint8 *g, uint8 *b)
 {
     uint16 pixel;
     
     //获取指定坐标的像素数据
-    pixel = dat[x*y];
+    pixel = dat[x+y*z];
     
     //因为R5G3是存储在低八位 G3B5是存储在高八位
     //因为我们先将位置进行交换，便于获取每个分量的数据

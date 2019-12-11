@@ -598,7 +598,7 @@ void usb_cdc_send_char(uint8 dat)
 	{
 		while(usb_check_busy())//正在忙
 		{
-			systick_delay_us(1);
+			systick_delay_us(10);
 			if(5000 <= delay_num++)usb_cdc_com_open_flag = 0;
 			if(!usb_cdc_com_open_flag) return;//串口已关闭
 		}
@@ -620,7 +620,7 @@ void usb_cdc_send_str(const int8 *str)
 	{
 		while(usb_check_busy())//正在忙
 		{
-			systick_delay_us(1);
+			systick_delay_us(10);
 			if(5000 <= delay_num++)usb_cdc_com_open_flag = 0;
 			if(!usb_cdc_com_open_flag) return;//串口已关闭
 		}
@@ -644,8 +644,8 @@ void usb_cdc_send_buff(uint8 *p, uint32 length)
 		if(!usb_cdc_com_open_flag) 		return;//串口已关闭
 		while(usb_check_busy())//正在忙
 		{
-			systick_delay_us(1);
-			if(5000 <= delay_num++)
+			systick_delay_us(10);
+			if(10000 <= delay_num++)
 			{
 				usb_cdc_com_open_flag = 0;
 			}

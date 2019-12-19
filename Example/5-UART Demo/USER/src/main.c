@@ -53,7 +53,7 @@ void example_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t 
 }
 
 
-//实验现象说明：将RX TX短接
+//实验现象说明：将RX TX短接 然后实现自发自收的功能
 //通过在线调试可以看到 uart_data数据在持续加一操作
 
 uint8 uart_send;

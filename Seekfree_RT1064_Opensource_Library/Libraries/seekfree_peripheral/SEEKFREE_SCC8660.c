@@ -162,6 +162,8 @@ void scc8660_cof_uart_init(void)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_init(void)
 {
+    flexio_camera_type = 2;//设置flexio接口连接摄像头类型
+    
     //摄像头开始初始化之前务必将场信号拉高
     gpio_init(SCC8660_VSYNC_PIN,GPO,1,GPIO_PIN_CONFIG);
     
@@ -183,7 +185,7 @@ void scc8660_init(void)
     DisableGlobalIRQ();
 
     dma_mux_init();
-    flexio_camera(SCC8660_DATA_PIN, SCC8660_PCLK_PIN, SCC8660_HREF_PIN);
+    flexio_camera(SCC8660_DATA_PIN, SCC8660_PCLK_PIN, SCC8660_HREF_PIN, SCC8660_W, SCC8660_H);
     flexio_dma_init((uint8 *)scc8660_image[0], SCC8660_W*SCC8660_H, scc8660_dma);
     flexio_enable_rxdma();
     NVIC_SetPriority(DMA0_DMA16_IRQn,1);            //设置DMA中断优先级 范围0-15 越小优先级越高

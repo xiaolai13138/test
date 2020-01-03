@@ -287,6 +287,9 @@ uint16 set_mt9v03x_reg(UARTN_enum uartn, uint8 addr, uint16 data)
 //-------------------------------------------------------------------------------------------------------------------
 void mt9v03x_init(void)
 {
+    
+    flexio_camera_type = 1;//设置flexio接口连接摄像头类型
+        
     uart_init (MT9V03X_COF_UART, 9600,MT9V03X_COF_UART_TX,MT9V03X_COF_UART_RX);	//初始换串口 配置摄像头    
     uart_rx_irq(MT9V03X_COF_UART,1);
     //配置串口接收的缓冲区及缓冲区长度
@@ -310,7 +313,7 @@ void mt9v03x_init(void)
     DisableGlobalIRQ();
 
     dma_mux_init();
-    flexio_camera(MT9V03X_DATA_PIN, MT9V03X_PCLK_PIN, MT9V03X_HREF_PIN);
+    flexio_camera(MT9V03X_DATA_PIN, MT9V03X_PCLK_PIN, MT9V03X_HREF_PIN, MT9V03X_W, MT9V03X_H);
     flexio_dma_init(&mt9v03x_image[0][0], MT9V03X_W*MT9V03X_H, mt9v03x_dma);
     flexio_enable_rxdma();
     NVIC_SetPriority(DMA0_DMA16_IRQn,1);            //设置DMA中断优先级 范围0-15 越小优先级越高

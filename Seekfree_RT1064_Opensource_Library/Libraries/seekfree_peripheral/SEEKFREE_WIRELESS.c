@@ -21,7 +21,7 @@
     					RX              查看SEEKFREE_WIRELESS.h文件中的WIRELESS_UART_TX宏定义
     					TX              查看SEEKFREE_WIRELESS.h文件中的WIRELESS_UART_RX宏定义
     					RTS             查看SEEKFREE_WIRELESS.h文件中的RTS_PIN宏定义
-    					CMD             查看SEEKFREE_WIRELESS.h文件中的CMD_PIN宏定义
+    					CMD             悬空或者上拉
 					------------------------------------ 
  ********************************************************************************************************************/
 
@@ -74,7 +74,6 @@ void seekfree_wireless_init(void)
 {
     //本函数使用的波特率为115200，为无线转串口模块的默认波特率，如需其他波特率请自行配置模块并修改串口的波特率
     gpio_init(RTS_PIN,GPI,0,GPIO_PIN_CONFIG);//初始化流控引脚
-    gpio_init(CMD_PIN,GPO,1,GPIO_PIN_CONFIG);//初始化命令引脚  命令初始化引脚 尽量在单片机上电之后1s内进行初始化
     
     uart_init (WIRELESS_UART, WIRELESS_UART_BAUD,WIRELESS_UART_TX,WIRELESS_UART_RX);	//初始换串口    
     uart_rx_irq(WIRELESS_UART,1);

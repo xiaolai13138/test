@@ -61,15 +61,16 @@ int main(void)
     qtimer_quad_init(QTIMER_2,QTIMER2_TIMER0_C3,QTIMER2_TIMER3_C25);
     qtimer_quad_init(QTIMER_3,QTIMER3_TIMER2_B18,QTIMER3_TIMER3_B19);
     
-    
+    //测试方法一 
+	//例程默认使用D0 D1 D2 D3输出PWM 来模拟编码器给出的信号
     //将C0与 D0使用杜邦线链接起来
     //将C2与 D1使用杜邦线链接起来
     //将C3与 D2使用杜邦线链接起来
     //将B18与 D3使用杜邦线链接起来
-    
-    
     //将C1 C3 C24 B19 接地，可以看到采集到的数据为5.
     
+	
+	//测试方式二
     //如果直接连接编码器的A B相，那么则可以直接采集编码器数据
     
     EnableGlobalIRQ(0);

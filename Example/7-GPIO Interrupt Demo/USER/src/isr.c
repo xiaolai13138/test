@@ -53,20 +53,31 @@ void PIT_IRQHandler(void)
     __DSB();
 }
 
-uint32 gpio_int_test;
+
 void GPIO2_Combined_16_31_IRQHandler(void)
 {
-
-    CLEAR_GPIO_FLAG(C16);//清除中断标志位
-    gpio_int_test++;
+    if(GET_GPIO_FLAG(C16))
+    {
+        CLEAR_GPIO_FLAG(C16);//清除中断标志位
+    }
+    
+    
 }
 
 
 
 void GPIO2_Combined_0_15_IRQHandler(void)
 {
-    //mt9v03x_vsync();
-    scc8660_vsync();
+    if(GET_GPIO_FLAG(MT9V03X_VSYNC_PIN))
+    {
+        //不用清除标志位，标志位在mt9v03x_vsync函数内部会清除
+        if(1 == flexio_camera_type)mt9v03x_vsync();
+    }
+    if(GET_GPIO_FLAG(SCC8660_VSYNC_PIN))
+    {
+        //不用清除标志位，标志位在scc8660_vsync函数内部会清除
+        if(2 == flexio_camera_type)scc8660_vsync();
+    }
 }
 
 

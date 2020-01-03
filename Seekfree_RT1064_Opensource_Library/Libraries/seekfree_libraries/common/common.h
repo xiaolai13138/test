@@ -208,6 +208,12 @@ typedef enum //枚举端口电平
 #include <math.h>
 #include <string.h>
 
+            
+            
+            
+extern uint8 flexio_camera_type;//1：总钻风  2：凌瞳
+
+            
 
 void NMI_Handler(void);
 void HardFault_Handler(void);

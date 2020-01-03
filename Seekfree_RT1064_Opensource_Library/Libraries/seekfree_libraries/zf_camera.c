@@ -21,8 +21,6 @@
 #include "zf_iomuxc.h"
 #include "zf_camera.h"
 
-#define FLEXIO_SHIFT_COUNT      1u
-
 #define FLEXIO_PIN_CONF         SPEED_100MHZ | KEEPER_EN | DSE_R0_6 //配置FLEXIO引脚默认配置
 
 
@@ -31,7 +29,7 @@
 
 
 
-
+uint8 flexio_shift_count;
 static FLEXIO_CAMERA_Type s_FlexioCameraDevice;
 
 
@@ -68,16 +66,19 @@ static flexio_camera_config_t s_FlexioCameraConfig;
 //  @return     void
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
-void flexio_camera(FLEXIO_PIN_enum dat_pin_start, FLEXIO_PIN_enum pclk_pin, FLEXIO_PIN_enum href_pin)
+void flexio_camera(FLEXIO_PIN_enum dat_pin_start, FLEXIO_PIN_enum pclk_pin, FLEXIO_PIN_enum href_pin, uint16 col, uint16 row)
 {
     flexio_iomuxc(dat_pin_start,pclk_pin,href_pin);
+    
+    if(col*row>=(376*240))  flexio_shift_count = 2;
+    else                    flexio_shift_count = 1;
     
     s_FlexioCameraDevice.flexioBase = FLEXIO2;                  //设置基地址
     s_FlexioCameraDevice.datPinStartIdx = dat_pin_start;        //设置数据引脚起始位
     s_FlexioCameraDevice.pclkPinIdx = pclk_pin;                 //设置像素时钟引脚
     s_FlexioCameraDevice.hrefPinIdx = href_pin;                 //设置行信号引脚
-    s_FlexioCameraDevice.shifterStartIdx = 4-FLEXIO_SHIFT_COUNT;//设置环移器起始编号  由于1064的缓冲区只有四个因此这里写的是4-
-    s_FlexioCameraDevice.shifterCount = FLEXIO_SHIFT_COUNT;     //设置缓冲区数量
+    s_FlexioCameraDevice.shifterStartIdx = 4-flexio_shift_count;//设置环移器起始编号  由于1064的缓冲区只有四个因此这里写的是4-
+    s_FlexioCameraDevice.shifterCount = flexio_shift_count;     //设置缓冲区数量
     s_FlexioCameraDevice.timerIdx = 3;                          //设置定时器编号
     
     CLOCK_EnableClock(kCLOCK_Flexio2);
@@ -173,14 +174,14 @@ void flexio_dma_init(uint8 *dest_addr, uint32 count, edma_callback callback)
     4,
     (void *)(dest_addr), 
     4,
-    4*FLEXIO_SHIFT_COUNT,
+    4*flexio_shift_count,
     count,
     kEDMA_MemoryToMemory);
     
     
     EDMA_SubmitTransfer(&g_EDMA_Handle, &transferConfig);
     
-    switch(4*FLEXIO_SHIFT_COUNT)
+    switch(4*flexio_shift_count)
     {
         case 4:     s_addr_modulo = kEDMA_Modulo4bytes;break;
         case 8:     s_addr_modulo = kEDMA_Modulo8bytes;break;

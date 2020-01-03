@@ -19,6 +19,11 @@
  
 #include "common.h"
 
+
+uint8 flexio_camera_type;//1£º×Ü×ê·ç  2£ºÁèÍ«
+
+
+
 void NMI_Handler(void)
 {
 	while(1);

@@ -69,7 +69,7 @@ typedef enum    //FLEXIO Òý½Å¶¨Òå
 
 
 
-void flexio_camera(FLEXIO_PIN_enum dat_pin_start, FLEXIO_PIN_enum pclk_pin, FLEXIO_PIN_enum href_pin);
+void flexio_camera(FLEXIO_PIN_enum dat_pin_start, FLEXIO_PIN_enum pclk_pin, FLEXIO_PIN_enum href_pin, uint16 col, uint16 row);
 void flexio_enable(uint8 enable);
 void flexio_enable_rxdma(void);
 void flexio_flag_clear(void);

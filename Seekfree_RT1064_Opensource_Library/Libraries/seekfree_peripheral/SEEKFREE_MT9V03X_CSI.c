@@ -11,7 +11,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-02-18
  * @note		
@@ -45,8 +45,8 @@
 
 
 //图像缓冲区  如果用户需要访问图像数据 最好通过mt9v03x_csi_image来访问数据，最好不要直接访问缓冲区
-ALIGN(64) uint8 mt9v03x_csi1_image[MT9V03X_CSI_H][MT9V03X_CSI_W];
-ALIGN(64) uint8 mt9v03x_csi2_image[MT9V03X_CSI_H][MT9V03X_CSI_W];
+AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_csi1_image[MT9V03X_CSI_H][MT9V03X_CSI_W], 64);
+AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_csi2_image[MT9V03X_CSI_H][MT9V03X_CSI_W], 64);
 
 //用户访问图像数据直接访问这个指针变量就可以
 //访问方式非常简单，可以直接使用下标的方式访问

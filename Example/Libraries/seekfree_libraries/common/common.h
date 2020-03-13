@@ -11,7 +11,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Target core		NXP RT1064DVL6A
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-04-30
@@ -126,82 +126,101 @@ typedef enum //枚举端口电平
 
 
 
-//定义将代码放在ITCM的方式
+
 #if (defined(__ICCARM__))
+	//定义将代码放在ITCM的方式
     #define AT_ITCM_SECTION_INIT(var) var @"ITCM_NonCacheable.init"
-
-#elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-    #define AT_ITCM_SECTION_INIT(var) __attribute__((section("ITCM_NonCacheable.init"))) var
-#endif
-
-//定义将代码或者变量放在DTCM的方式
-#if (defined(__ICCARM__))
-    #if ((!(defined(FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION) && FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION)) && defined(FSL_FEATURE_L1ICACHE_LINESIZE_BYTE))
+	//定义将代码或者变量放在DTCM的方式
+	#if ((!(defined(FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION) && FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION)) && defined(FSL_FEATURE_L1ICACHE_LINESIZE_BYTE))
         #define AT_DTCM_SECTION(var) var @"NonCacheable"
         #define AT_DTCM_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"NonCacheable"
         #define AT_DTCM_SECTION_INIT(var) var @"NonCacheable.init"
         #define AT_DTCM_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"NonCacheable.init"
     #endif 
-
+	//定义将代码或者变量放在OCRAM的方式
+	#define AT_OCRAM_SECTION(var) var @"OCRAM_CACHE"
+    #define AT_OCRAM_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"OCRAM_CACHE"
+    #define AT_OCRAM_SECTION_INIT(var) var @"OCRAM_CACHE.init"
+    #define AT_OCRAM_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"OCRAM_CACHE.init"
+	//定义将代码或者变量放在SDRAM的方式
+	#define AT_SDRAM_SECTION(var) var @"SDRAM_CACHE"
+    #define AT_SDRAM_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_CACHE"
+    #define AT_SDRAM_SECTION_INIT(var) var @"SDRAM_CACHE.init"
+    #define AT_SDRAM_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_CACHE.init"
+	//定义将代码或者变量放在SDRAM_NONCACHE的方式
+	#define AT_SDRAM_NONCACHE_SECTION(var) var @"SDRAM_NonCacheable"
+    #define AT_SDRAM_NONCACHE_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_NonCacheable"
+    #define AT_SDRAM_NONCACHE_SECTION_INIT(var) var @"SDRAM_NonCacheable.init"
+    #define AT_SDRAM_NONCACHE_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_NonCacheable.init"
+	
+	
 #elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-    #if ((!(defined(FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION) && FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION)) && defined(FSL_FEATURE_L1ICACHE_LINESIZE_BYTE))
-        #define AT_DTCM_SECTION(var) __attribute__((section("NonCacheable"), zero_init)) var
-        #define AT_DTCM_SECTION_ALIGN(var, alignbytes) \
-            __attribute__((section("NonCacheable"), zero_init)) __attribute__((aligned(alignbytes))) var
+	//定义将代码放在ITCM的方式
+    #define AT_ITCM_SECTION_INIT(var) __attribute__((section("ITCM_NonCacheable.init"))) var
+	//定义将代码或者变量放在DTCM的方式
+	#if ((!(defined(FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION) && FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION)) && defined(FSL_FEATURE_L1ICACHE_LINESIZE_BYTE))
+        #if(defined(__CC_ARM))
+			#define AT_DTCM_SECTION(var) __attribute__((section("NonCacheable"), zero_init)) var
+			#define AT_DTCM_SECTION_ALIGN(var, alignbytes) \
+				__attribute__((section("NonCacheable"), zero_init)) __attribute__((aligned(alignbytes))) var
+		#else
+			#define AT_DTCM_SECTION(var) __attribute__((section(".bss.NonCacheable"))) var
+			#define AT_DTCM_SECTION_ALIGN(var, alignbytes) \
+				__attribute__((section(".bss.NonCacheable"))) __attribute__((aligned(alignbytes))) var
+		#endif
+
         #define AT_DTCM_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
         #define AT_DTCM_SECTION_ALIGN_INIT(var, alignbytes) \
             __attribute__((section("NonCacheable.init"))) __attribute__((aligned(alignbytes))) var
     #endif
-#endif
-        
-//定义将代码或者变量放在OCRAM的方式
-#if (defined(__ICCARM__))
-    #define AT_OCRAM_SECTION(var) var @"OCRAM_CACHE"
-    #define AT_OCRAM_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"OCRAM_CACHE"
-    #define AT_OCRAM_SECTION_INIT(var) var @"OCRAM_CACHE.init"
-    #define AT_OCRAM_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"OCRAM_CACHE.init"
+	
+	//定义将代码或者变量放在OCRAM的方式
+    #if(defined(__CC_ARM))
+		#define AT_OCRAM_SECTION(var) __attribute__((section("OCRAM_CACHE"), zero_init)) var
+		#define AT_OCRAM_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section("OCRAM_CACHE"), zero_init)) __attribute__((aligned(alignbytes))) var
+	#else
+		#define AT_OCRAM_SECTION(var) __attribute__((section(".bss.OCRAM_CACHE"))) var
+		#define AT_OCRAM_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section(".bss.OCRAM_CACHE"))) __attribute__((aligned(alignbytes))) var
+	#endif
 
-#elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-    #define AT_OCRAM_SECTION(var) __attribute__((section("OCRAM_CACHE"), zero_init)) var
-    #define AT_OCRAM_SECTION_ALIGN(var, alignbytes) \
-        __attribute__((section("OCRAM_CACHE"), zero_init)) __attribute__((aligned(alignbytes))) var
     #define AT_OCRAM_SECTION_INIT(var) __attribute__((section("OCRAM_CACHE.init"))) var
     #define AT_OCRAM_SECTION_ALIGN_INIT(var, alignbytes) \
         __attribute__((section("OCRAM_CACHE.init"))) __attribute__((aligned(alignbytes))) var
-#endif
-            
-//定义将代码或者变量放在SDRAM的方式
-#if (defined(__ICCARM__))
-    #define AT_SDRAM_SECTION(var) var @"SDRAM_CACHE"
-    #define AT_SDRAM_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_CACHE"
-    #define AT_SDRAM_SECTION_INIT(var) var @"SDRAM_CACHE.init"
-    #define AT_SDRAM_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_CACHE.init"
-
-#elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-    #define AT_SDRAM_SECTION(var) __attribute__((section("SDRAM_CACHE"), zero_init)) var
-    #define AT_SDRAM_SECTION_ALIGN(var, alignbytes) \
-        __attribute__((section("SDRAM_CACHE"), zero_init)) __attribute__((aligned(alignbytes))) var
+	
+	
+	//定义将代码或者变量放在SDRAM的方式
+	#if(defined(__CC_ARM))
+		#define AT_SDRAM_SECTION(var) __attribute__((section("SDRAM_CACHE"), zero_init)) var
+		#define AT_SDRAM_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section("SDRAM_CACHE"), zero_init)) __attribute__((aligned(alignbytes))) var
+	#else
+		#define AT_SDRAM_SECTION(var) __attribute__((section(".bss.SDRAM_CACHE"))) var
+		#define AT_SDRAM_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section(".bss.SDRAM_CACHE"))) __attribute__((aligned(alignbytes))) var
+	#endif
+	
     #define AT_SDRAM_SECTION_INIT(var) __attribute__((section("SDRAM_CACHE.init"))) var
     #define AT_SDRAM_SECTION_ALIGN_INIT(var, alignbytes) \
         __attribute__((section("SDRAM_CACHE.init"))) __attribute__((aligned(alignbytes))) var
-#endif
-
-            
-//定义将代码或者变量放在SDRAM_NONCACHE的方式
-#if (defined(__ICCARM__))
-    #define AT_SDRAM_NONCACHE_SECTION(var) var @"SDRAM_NonCacheable"
-    #define AT_SDRAM_NONCACHE_SECTION_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_NonCacheable"
-    #define AT_SDRAM_NONCACHE_SECTION_INIT(var) var @"SDRAM_NonCacheable.init"
-    #define AT_SDRAM_NONCACHE_SECTION_ALIGN_INIT(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"SDRAM_NonCacheable.init"
-
-#elif(defined(__CC_ARM) || defined(__ARMCC_VERSION))
-    #define AT_SDRAM_NONCACHE_SECTION(var) __attribute__((section("SDRAM_NonCacheable"), zero_init)) var
-    #define AT_SDRAM_NONCACHE_SECTION_ALIGN(var, alignbytes) \
-        __attribute__((section("SDRAM_NonCacheable"), zero_init)) __attribute__((aligned(alignbytes))) var
+	//定义将代码或者变量放在SDRAM_NONCACHE的方式
+	#if(defined(__CC_ARM))
+		#define AT_SDRAM_NONCACHE_SECTION(var) __attribute__((section("SDRAM_NonCacheable"), zero_init)) var
+		#define AT_SDRAM_NONCACHE_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section("SDRAM_NonCacheable"), zero_init)) __attribute__((aligned(alignbytes))) var
+	#else
+		#define AT_SDRAM_NONCACHE_SECTION(var) __attribute__((section(".bss.SDRAM_NonCacheable"))) var
+		#define AT_SDRAM_NONCACHE_SECTION_ALIGN(var, alignbytes) \
+			__attribute__((section(".bss.SDRAM_NonCacheable"))) __attribute__((aligned(alignbytes))) var
+	#endif
+	
     #define AT_SDRAM_NONCACHE_SECTION_INIT(var) __attribute__((section("SDRAM_NonCacheable.init"))) var
     #define AT_SDRAM_NONCACHE_SECTION_ALIGN_INIT(var, alignbytes) \
         __attribute__((section("SDRAM_NonCacheable.init"))) __attribute__((aligned(alignbytes))) var
+	
 #endif
+
 
 
 

@@ -1,8 +1,13 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - Configuration file
+/  FatFs Functional Configurations
 /---------------------------------------------------------------------------*/
 
-#define FFCONF_DEF 63463	/* Revision ID */
+#define FFCONF_DEF	86604	/* Revision ID */
+
+/*---------------------------------------------------------------------------/
+/ MSDK adaptation configuration
+/---------------------------------------------------------------------------*/
+#define SD_DISK_ENABLE
 
 /*---------------------------------------------------------------------------/
 / Function Configurations
@@ -25,7 +30,7 @@
 /   3: f_lseek() function is removed in addition to 2. */
 
 
-#define FF_USE_STRFUNC	0
+#define FF_USE_STRFUNC	1
 /* This option switches string functions, f_gets(), f_putc(), f_puts() and f_printf().
 /
 /  0: Disable string functions.
@@ -38,7 +43,7 @@
 /  f_findnext(). (0:Disable, 1:Enable 2:Enable with matching altname[] too) */
 
 
-#define FF_USE_MKFS		0
+#define FF_USE_MKFS		1
 /* This option switches f_mkfs() function. (0:Disable or 1:Enable) */
 
 
@@ -68,7 +73,7 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_CODE_PAGE	932
+#define FF_CODE_PAGE	936//932
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect code page setting can cause a file open failure.
 /
@@ -150,7 +155,7 @@
 */
 
 
-#define FF_FS_RPATH		0
+#define FF_FS_RPATH		2
 /* This option configures support for relative path.
 /
 /   0: Disable relative path and remove related functions.
@@ -163,7 +168,7 @@
 / Drive/Volume Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_VOLUMES		1
+#define FF_VOLUMES		3
 /* Number of volumes (logical drives) to be used. (1-10) */
 
 
@@ -232,7 +237,7 @@
 
 #define FF_FS_EXFAT		0
 /* This option switches support for exFAT filesystem. (0:Disable or 1:Enable)
-/  To enable exFAT, also LFN needs to be enabled.
+/  To enable exFAT, also LFN needs to be enabled. (FF_USE_LFN >= 1)
 /  Note that enabling exFAT discards ANSI C (C89) compatibility. */
 
 
@@ -262,6 +267,7 @@
 /      lock control is independent of re-entrancy. */
 
 
+/* #include <somertos.h>	// O/S definitions */
 #define FF_FS_REENTRANT	0
 #define FF_FS_TIMEOUT	1000
 #define FF_SYNC_t		HANDLE
@@ -281,8 +287,6 @@
 /  The FF_SYNC_t defines O/S dependent sync object type. e.g. HANDLE, ID, OS_EVENT*,
 /  SemaphoreHandle_t and etc. A header file for O/S definitions needs to be
 /  included somewhere in the scope of ff.h. */
-
-/* #include <windows.h>	// O/S definitions  */
 
 
 

@@ -41,17 +41,7 @@
 
 
 
-//默认图像分辨率为160*120，若更改图像分辨率比默认分辨率大，请在.c文件内更改图像缓冲区保存位置为SDRAM。避免编译出错。
-
-//------------ 请仔细阅读以上注释后再更改分辨率 ------------
-//------------ 请仔细阅读以上注释后再更改分辨率 ------------
-//------------ 请仔细阅读以上注释后再更改分辨率 ------------
-
-
-
 //使用flexio采集时主要推荐两个分辨率一个是160*120 另一个是320*240
-
-
 #define SCC8660_PIC_W           160		            //实际图像分辨率宽度	可选参数为：160 320。
 #define SCC8660_PIC_H           120		            //实际图像分辨率高度	可选参数为：120 240。
 
@@ -75,9 +65,11 @@
 
 
 
-
-extern uint16 scc8660_image[SCC8660_PIC_H][SCC8660_PIC_W];
+extern uint16 scc8660_flexio1_image[SCC8660_PIC_H][SCC8660_PIC_W];
+extern uint16 scc8660_flexio2_image[SCC8660_PIC_H][SCC8660_PIC_W];
+extern uint16 (*scc8660_image)[SCC8660_PIC_W];
 extern uint8  scc8660_finish_flag;                  //一场图像采集完成标志位
+
 
 
 void scc8660_init(void);

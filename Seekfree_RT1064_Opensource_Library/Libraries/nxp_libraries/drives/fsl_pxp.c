@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, NXP Semiconductors, Inc.
+ * Copyright 2017-2019 NXP
  * All rights reserved.
  *
  *
@@ -36,6 +36,12 @@ typedef union _u32_f32
     float f32;
     uint32_t u32;
 } u32_f32_t;
+
+typedef union _pxp_pvoid_u32
+{
+    void *pvoid;
+    uint32_t u32;
+} pxp_pvoid_u32_t;
 
 /*******************************************************************************
  * Prototypes
@@ -122,9 +128,9 @@ static uint32_t PXP_ConvertFloat(float floatValue, uint8_t intBits, uint8_t frac
     u32_f32_t u32_f32;
     uint32_t ret;
 
-    u32_f32.f32 = floatValue;
+    u32_f32.f32        = floatValue;
     uint32_t floatBits = u32_f32.u32;
-    int32_t expValue = (int32_t)((floatBits & 0x7F800000U) >> 23U) - 127;
+    int32_t expValue   = (int32_t)((floatBits & 0x7F800000U) >> 23U) - 127;
 
     ret = (floatBits & 0x007FFFFFU) | 0x00800000U;
     expValue += fracBits;
@@ -158,23 +164,23 @@ static void PXP_GetScalerParam(uint16_t inputDimension, uint16_t outputDimension
 {
     uint32_t scaleFact = ((uint32_t)inputDimension << 12U) / outputDimension;
 
-    if (scaleFact >= (16U << 12U))
+    if (scaleFact >= (16UL << 12U))
     {
         /* Desired fact is two large, use the largest support value. */
-        *dec = 3U;
+        *dec   = 3U;
         *scale = 0x2000U;
     }
     else
     {
-        if (scaleFact > (8U << 12U))
+        if (scaleFact > (8UL << 12U))
         {
             *dec = 3U;
         }
-        else if (scaleFact > (4U << 12U))
+        else if (scaleFact > (4UL << 12U))
         {
             *dec = 2U;
         }
-        else if (scaleFact > (2U << 12U))
+        else if (scaleFact > (2UL << 12U))
         {
             *dec = 1U;
         }
@@ -266,11 +272,11 @@ void PXP_Reset(PXP_Type *base)
  */
 void PXP_SetAlphaSurfaceBufferConfig(PXP_Type *base, const pxp_as_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->AS_CTRL = (base->AS_CTRL & ~PXP_AS_CTRL_FORMAT_MASK) | PXP_AS_CTRL_FORMAT(config->pixelFormat);
 
-    base->AS_BUF = config->bufferAddr;
+    base->AS_BUF   = config->bufferAddr;
     base->AS_PITCH = config->pitchBytes;
 }
 
@@ -282,7 +288,7 @@ void PXP_SetAlphaSurfaceBufferConfig(PXP_Type *base, const pxp_as_buffer_config_
  */
 void PXP_SetAlphaSurfaceBlendConfig(PXP_Type *base, const pxp_as_blend_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
     uint32_t reg;
 
     reg = base->AS_CTRL;
@@ -331,7 +337,7 @@ void PXP_SetAlphaSurfacePosition(
  */
 void PXP_SetAlphaSurfaceOverlayColorKey(PXP_Type *base, uint32_t colorKeyLow, uint32_t colorKeyHigh)
 {
-    base->AS_CLRKEYLOW = colorKeyLow;
+    base->AS_CLRKEYLOW  = colorKeyLow;
     base->AS_CLRKEYHIGH = colorKeyHigh;
 }
 
@@ -343,14 +349,14 @@ void PXP_SetAlphaSurfaceOverlayColorKey(PXP_Type *base, uint32_t colorKeyLow, ui
  */
 void PXP_SetProcessSurfaceBufferConfig(PXP_Type *base, const pxp_ps_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->PS_CTRL = ((base->PS_CTRL & ~(PXP_PS_CTRL_FORMAT_MASK | PXP_PS_CTRL_WB_SWAP_MASK)) |
                      PXP_PS_CTRL_FORMAT(config->pixelFormat) | PXP_PS_CTRL_WB_SWAP(config->swapByte));
 
-    base->PS_BUF = config->bufferAddr;
-    base->PS_UBUF = config->bufferAddrU;
-    base->PS_VBUF = config->bufferAddrV;
+    base->PS_BUF   = config->bufferAddr;
+    base->PS_UBUF  = config->bufferAddrU;
+    base->PS_VBUF  = config->bufferAddrV;
     base->PS_PITCH = config->pitchBytes;
 }
 
@@ -408,7 +414,7 @@ void PXP_SetProcessSurfacePosition(
  */
 void PXP_SetProcessSurfaceColorKey(PXP_Type *base, uint32_t colorKeyLow, uint32_t colorKeyHigh)
 {
-    base->PS_CLRKEYLOW = colorKeyLow;
+    base->PS_CLRKEYLOW  = colorKeyLow;
     base->PS_CLRKEYHIGH = colorKeyHigh;
 }
 
@@ -420,16 +426,16 @@ void PXP_SetProcessSurfaceColorKey(PXP_Type *base, uint32_t colorKeyLow, uint32_
  */
 void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->OUT_CTRL = (base->OUT_CTRL & ~(PXP_OUT_CTRL_FORMAT_MASK | PXP_OUT_CTRL_INTERLACED_OUTPUT_MASK)) |
                      PXP_OUT_CTRL_FORMAT(config->pixelFormat) | PXP_OUT_CTRL_INTERLACED_OUTPUT(config->interlacedMode);
 
-    base->OUT_BUF = config->buffer0Addr;
+    base->OUT_BUF  = config->buffer0Addr;
     base->OUT_BUF2 = config->buffer1Addr;
 
     base->OUT_PITCH = config->pitchBytes;
-    base->OUT_LRC = PXP_OUT_LRC_Y(config->height - 1U) | PXP_OUT_LRC_X(config->width - 1U);
+    base->OUT_LRC   = PXP_OUT_LRC_Y((uint32_t)config->height - 1U) | PXP_OUT_LRC_X((uint32_t)config->width - 1U);
 
 /*
  * The dither store size must be set to the same with the output buffer size,
@@ -439,6 +445,38 @@ void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t 
     base->DITHER_STORE_SIZE_CH0 = PXP_DITHER_STORE_SIZE_CH0_OUT_WIDTH(config->width - 1U) |
                                   PXP_DITHER_STORE_SIZE_CH0_OUT_HEIGHT(config->height - 1U);
 #endif
+}
+
+/*!
+ * brief Set the next command.
+ *
+ * The PXP supports a primitive ability to queue up one operation while the current
+ * operation is running. Workflow:
+ *
+ * 1. Prepare the PXP register values except STAT, CSCCOEFn, NEXT in the memory
+ * in the order they appear in the register map.
+ * 2. Call this function sets the new operation to PXP.
+ * 3. There are two methods to check whether the PXP has loaded the new operation.
+ * The first method is using ref PXP_IsNextCommandPending. If there is new operation
+ * not loaded by the PXP, this function returns true. The second method is checking
+ * the flag ref kPXP_CommandLoadFlag, if command loaded, this flag asserts. User
+ * could enable interrupt ref kPXP_CommandLoadInterruptEnable to get the loaded
+ * signal in interrupt way.
+ * 4. When command loaded by PXP, a new command could be set using this function.
+ *
+ * param base PXP peripheral base address.
+ * param commandAddr Address of the new command.
+ */
+void PXP_SetNextCommand(PXP_Type *base, void *commandAddr)
+{
+    pxp_pvoid_u32_t addr;
+
+    /* Make sure commands have been saved to memory. */
+    __DSB();
+
+    addr.pvoid = commandAddr;
+
+    base->NEXT = addr.u32 & PXP_NEXT_POINTER_MASK;
 }
 
 #if !(defined(FSL_FEATURE_PXP_HAS_NO_CSC2) && FSL_FEATURE_PXP_HAS_NO_CSC2)
@@ -454,7 +492,7 @@ void PXP_SetOutputBufferConfig(PXP_Type *base, const pxp_output_buffer_config_t 
  */
 void PXP_SetCsc2Config(PXP_Type *base, const pxp_csc2_config_t *config)
 {
-    assert(config);
+    assert(NULL != config);
 
     base->CSC2_CTRL = (base->CSC2_CTRL & ~PXP_CSC2_CTRL_CSC_MODE_MASK) | PXP_CSC2_CTRL_CSC_MODE(config->mode);
 
@@ -504,9 +542,8 @@ void PXP_SetCsc1Mode(PXP_Type *base, pxp_csc1_mode_t mode)
 
     if (kPXP_Csc1YUV2RGB == mode)
     {
-        base->CSC1_COEF0 = (base->CSC1_COEF0 &
-                            ~(PXP_CSC1_COEF0_C0_MASK | PXP_CSC1_COEF0_Y_OFFSET_MASK | PXP_CSC1_COEF0_UV_OFFSET_MASK |
-                              PXP_CSC1_COEF0_YCBCR_MODE_MASK)) |
+        base->CSC1_COEF0 = (base->CSC1_COEF0 & ~(PXP_CSC1_COEF0_C0_MASK | PXP_CSC1_COEF0_Y_OFFSET_MASK |
+                                                 PXP_CSC1_COEF0_UV_OFFSET_MASK | PXP_CSC1_COEF0_YCBCR_MODE_MASK)) |
                            PXP_CSC1_COEF0_C0(0x100U)         /* 1.00. */
                            | PXP_CSC1_COEF0_Y_OFFSET(0x0U)   /* 0. */
                            | PXP_CSC1_COEF0_UV_OFFSET(0x0U); /* 0. */
@@ -599,7 +636,7 @@ status_t PXP_LoadLutTable(
         }
 
         base->LUT_EXTMEM = memAddr;
-        base->LUT_ADDR = PXP_LUT_ADDR_ADDR(lutStartAddr) | PXP_LUT_ADDR_NUM_BYTES(bytesNum);
+        base->LUT_ADDR   = PXP_LUT_ADDR_ADDR(lutStartAddr) | PXP_LUT_ADDR_NUM_BYTES(bytesNum);
 
         base->STAT_CLR = PXP_STAT_LUT_DMA_LOAD_DONE_IRQ_MASK;
 

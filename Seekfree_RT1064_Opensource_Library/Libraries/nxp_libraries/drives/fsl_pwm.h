@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 #ifndef _FSL_PWM_H_
@@ -15,14 +15,13 @@
  * @{
  */
 
-
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
 
 /*! @name Driver version */
 /*@{*/
-#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 0, 0)) /*!< Version 2.0.0 */
+#define FSL_PWM_DRIVER_VERSION (MAKE_VERSION(2, 1, 0)) /*!< Version 2.1.0 */
 /*@}*/
 
 /*! Number of bits per submodule for software output control */
@@ -183,18 +182,18 @@ typedef enum _pwm_interrupt_enable
     kPWM_CompareVal3InterruptEnable = (1U << 3),  /*!< PWM VAL3 compare interrupt */
     kPWM_CompareVal4InterruptEnable = (1U << 4),  /*!< PWM VAL4 compare interrupt */
     kPWM_CompareVal5InterruptEnable = (1U << 5),  /*!< PWM VAL5 compare interrupt */
-    kPWM_CaptureX0InterruptEnable = (1U << 6),    /*!< PWM capture X0 interrupt */
-    kPWM_CaptureX1InterruptEnable = (1U << 7),    /*!< PWM capture X1 interrupt */
-    kPWM_CaptureB0InterruptEnable = (1U << 8),    /*!< PWM capture B0 interrupt */
-    kPWM_CaptureB1InterruptEnable = (1U << 9),    /*!< PWM capture B1 interrupt */
-    kPWM_CaptureA0InterruptEnable = (1U << 10),   /*!< PWM capture A0 interrupt */
-    kPWM_CaptureA1InterruptEnable = (1U << 11),   /*!< PWM capture A1 interrupt */
-    kPWM_ReloadInterruptEnable = (1U << 12),      /*!< PWM reload interrupt */
+    kPWM_CaptureX0InterruptEnable   = (1U << 6),  /*!< PWM capture X0 interrupt */
+    kPWM_CaptureX1InterruptEnable   = (1U << 7),  /*!< PWM capture X1 interrupt */
+    kPWM_CaptureB0InterruptEnable   = (1U << 8),  /*!< PWM capture B0 interrupt */
+    kPWM_CaptureB1InterruptEnable   = (1U << 9),  /*!< PWM capture B1 interrupt */
+    kPWM_CaptureA0InterruptEnable   = (1U << 10), /*!< PWM capture A0 interrupt */
+    kPWM_CaptureA1InterruptEnable   = (1U << 11), /*!< PWM capture A1 interrupt */
+    kPWM_ReloadInterruptEnable      = (1U << 12), /*!< PWM reload interrupt */
     kPWM_ReloadErrorInterruptEnable = (1U << 13), /*!< PWM reload error interrupt */
-    kPWM_Fault0InterruptEnable = (1U << 16),      /*!< PWM fault 0 interrupt */
-    kPWM_Fault1InterruptEnable = (1U << 17),      /*!< PWM fault 1 interrupt */
-    kPWM_Fault2InterruptEnable = (1U << 18),      /*!< PWM fault 2 interrupt */
-    kPWM_Fault3InterruptEnable = (1U << 19)       /*!< PWM fault 3 interrupt */
+    kPWM_Fault0InterruptEnable      = (1U << 16), /*!< PWM fault 0 interrupt */
+    kPWM_Fault1InterruptEnable      = (1U << 17), /*!< PWM fault 1 interrupt */
+    kPWM_Fault2InterruptEnable      = (1U << 18), /*!< PWM fault 2 interrupt */
+    kPWM_Fault3InterruptEnable      = (1U << 19)  /*!< PWM fault 3 interrupt */
 } pwm_interrupt_enable_t;
 
 /*! @brief List of PWM status flags */
@@ -206,19 +205,19 @@ typedef enum _pwm_status_flags
     kPWM_CompareVal3Flag = (1U << 3),  /*!< PWM VAL3 compare flag */
     kPWM_CompareVal4Flag = (1U << 4),  /*!< PWM VAL4 compare flag */
     kPWM_CompareVal5Flag = (1U << 5),  /*!< PWM VAL5 compare flag */
-    kPWM_CaptureX0Flag = (1U << 6),    /*!< PWM capture X0 flag */
-    kPWM_CaptureX1Flag = (1U << 7),    /*!< PWM capture X1 flag */
-    kPWM_CaptureB0Flag = (1U << 8),    /*!< PWM capture B0 flag */
-    kPWM_CaptureB1Flag = (1U << 9),    /*!< PWM capture B1 flag */
-    kPWM_CaptureA0Flag = (1U << 10),   /*!< PWM capture A0 flag */
-    kPWM_CaptureA1Flag = (1U << 11),   /*!< PWM capture A1 flag */
-    kPWM_ReloadFlag = (1U << 12),      /*!< PWM reload flag */
+    kPWM_CaptureX0Flag   = (1U << 6),  /*!< PWM capture X0 flag */
+    kPWM_CaptureX1Flag   = (1U << 7),  /*!< PWM capture X1 flag */
+    kPWM_CaptureB0Flag   = (1U << 8),  /*!< PWM capture B0 flag */
+    kPWM_CaptureB1Flag   = (1U << 9),  /*!< PWM capture B1 flag */
+    kPWM_CaptureA0Flag   = (1U << 10), /*!< PWM capture A0 flag */
+    kPWM_CaptureA1Flag   = (1U << 11), /*!< PWM capture A1 flag */
+    kPWM_ReloadFlag      = (1U << 12), /*!< PWM reload flag */
     kPWM_ReloadErrorFlag = (1U << 13), /*!< PWM reload error flag */
-    kPWM_RegUpdatedFlag = (1U << 14),  /*!< PWM registers updated flag */
-    kPWM_Fault0Flag = (1U << 16),      /*!< PWM fault 0 flag */
-    kPWM_Fault1Flag = (1U << 17),      /*!< PWM fault 1 flag */
-    kPWM_Fault2Flag = (1U << 18),      /*!< PWM fault 2 flag */
-    kPWM_Fault3Flag = (1U << 19)       /*!< PWM fault 3 flag */
+    kPWM_RegUpdatedFlag  = (1U << 14), /*!< PWM registers updated flag */
+    kPWM_Fault0Flag      = (1U << 16), /*!< PWM fault 0 flag */
+    kPWM_Fault1Flag      = (1U << 17), /*!< PWM fault 1 flag */
+    kPWM_Fault2Flag      = (1U << 18), /*!< PWM fault 2 flag */
+    kPWM_Fault3Flag      = (1U << 19)  /*!< PWM fault 3 flag */
 } pwm_status_flags_t;
 
 /*! @brief PWM operation mode */
@@ -262,6 +261,7 @@ typedef enum _pwm_module_control
 } pwm_module_control_t;
 
 #define PWM_DUTY_MAX    50000
+
 /*! @brief Structure for the user to define the PWM signal characteristics */
 typedef struct _pwm_signal_param
 {
@@ -288,8 +288,6 @@ typedef struct _pwm_config
                                                   false: PWM is paused in debug mode */
     bool enableWait;                         /*!< true: PWM continues to run in WAIT mode;
                                                   false: PWM is paused in WAIT mode */
-    uint8_t faultFilterCount;                /*!< Fault filter count */
-    uint8_t faultFilterPeriod;               /*!< Fault filter period;value of 0 will bypass the filter */
     pwm_init_source_t initializationControl; /*!< Option to initialize the counter */
     pwm_clock_source_t clockSource;          /*!< Clock source for the counter */
     pwm_clock_prescale_t prescale;           /*!< Pre-scaler to divide down the clock */
@@ -300,6 +298,15 @@ typedef struct _pwm_config
                                                   is not immediate reload */
     pwm_force_output_trigger_t forceTrigger; /*!< Specify which signal will trigger a FORCE_OUT */
 } pwm_config_t;
+
+/*! @brief Structure for the user to configure the fault input filter. */
+typedef struct _pwm_fault_input_filter_param
+{
+    uint8_t faultFilterCount;  /*!< Fault filter count */
+    uint8_t faultFilterPeriod; /*!< Fault filter period;value of 0 will bypass the filter */
+    bool faultGlitchStretch;   /*!< Fault Glitch Stretch Enable: A logic 1 means that input
+                                    fault signals will be stretched to at least 2 IPBus clock cycles */
+} pwm_fault_input_filter_param_t;
 
 /*! @brief Structure is used to hold the parameters to configure a PWM fault */
 typedef struct _pwm_fault_param
@@ -371,8 +378,6 @@ void PWM_Deinit(PWM_Type *base, pwm_submodule_t subModule);
  *   config->enableDebugMode = false;
  *   config->enableWait = false;
  *   config->reloadSelect = kPWM_LocalReload;
- *   config->faultFilterCount = 0;
- *   config->faultFilterPeriod = 0;
  *   config->clockSource = kPWM_BusClock;
  *   config->prescale = kPWM_Prescale_Divide_1;
  *   config->initializationControl = kPWM_Initialize_LocalSync;
@@ -456,6 +461,14 @@ void PWM_SetupInputCapture(PWM_Type *base,
                            pwm_submodule_t subModule,
                            pwm_channels_t pwmChannel,
                            const pwm_input_capture_param_t *inputCaptureParams);
+
+/*!
+ * @brief Sets up the PWM fault input filter.
+ *
+ * @param base                   PWM peripheral base address
+ * @param faultInputFilterParams Parameters passed in to set up the fault input filter.
+ */
+void PWM_SetupFaultInputFilter(PWM_Type *base, const pwm_fault_input_filter_param_t *faultInputFilterParams);
 
 /*!
  * @brief Sets up the PWM fault protection.
@@ -606,11 +619,11 @@ static inline void PWM_OutputTriggerEnable(PWM_Type *base,
 {
     if (activate)
     {
-        base->SM[subModule].TCTRL |= (1U << valueRegister);
+        base->SM[subModule].TCTRL |= ((uint16_t)1U << (uint16_t)valueRegister);
     }
     else
     {
-        base->SM[subModule].TCTRL &= ~(1U << valueRegister);
+        base->SM[subModule].TCTRL &= ~((uint16_t)1U << (uint16_t)valueRegister);
     }
 }
 
@@ -629,11 +642,13 @@ static inline void PWM_SetupSwCtrlOut(PWM_Type *base, pwm_submodule_t subModule,
 {
     if (value)
     {
-        base->SWCOUT |= (1U << ((subModule * PWM_SUBMODULE_SWCONTROL_WIDTH) + pwmChannel));
+        base->SWCOUT |=
+            ((uint16_t)1U << (((uint16_t)subModule * (uint16_t)PWM_SUBMODULE_SWCONTROL_WIDTH) + (uint16_t)pwmChannel));
     }
     else
     {
-        base->SWCOUT &= ~(1U << ((subModule * PWM_SUBMODULE_SWCONTROL_WIDTH) + pwmChannel));
+        base->SWCOUT &=
+            ~((uint16_t)1U << (((uint16_t)subModule * (uint16_t)PWM_SUBMODULE_SWCONTROL_WIDTH) + (uint16_t)pwmChannel));
     }
 }
 

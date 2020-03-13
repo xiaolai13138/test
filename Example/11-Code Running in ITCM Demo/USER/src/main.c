@@ -48,7 +48,7 @@ AT_ITCM_SECTION_INIT(void test(long t))
 //}
 
 //使用AT_OCRAM_SECTION_INIT可以将函数放到OCRAM内运行
-//放在DTCM内的代码不能调用没有放在OCRAM内的代码
+//放在OCRAM内的代码不能调用没有放在OCRAM内的代码
 //AT_OCRAM_SECTION_INIT(void test(long t))
 //{
 //    while(t--);

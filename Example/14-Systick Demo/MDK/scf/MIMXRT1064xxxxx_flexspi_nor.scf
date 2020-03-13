@@ -1,4 +1,5 @@
-#! armcc -E
+#!armclang --target=arm-arm-none-eabi -mcpu=cortex-m7 -E -x c
+//#! armcc -E
 /*
 ** ###################################################################
 **     Processors:          MIMXRT1062CVL5B
@@ -149,7 +150,7 @@ LR_m_text m_interrupts_start m_text_start+m_text_size-m_interrupts_size {   ; lo
   ER_m_ram_text m_ram_text_start m_ram_text_size { ;execution address
     .ANY (+RO)
 	* (SDRAM_CACHE.init)
-    * (SDRAM_CACHE)
+    * (*SDRAM_CACHE)
   }  
   
   ;DTCM
@@ -159,7 +160,7 @@ LR_m_text m_interrupts_start m_text_start+m_text_size-m_interrupts_size {   ; lo
     *(m_usb_dma_init_data)
     *(m_usb_dma_noninit_data)
 	* (NonCacheable.init)
-    * (NonCacheable)
+    * (*NonCacheable)
   }
   ARM_LIB_HEAP +0 EMPTY Heap_Size {    ; Heap region growing up
   }
@@ -170,18 +171,18 @@ LR_m_text m_interrupts_start m_text_start+m_text_size-m_interrupts_size {   ; lo
   ;ITCM
   ITCM_ncache m_data3_start m_data3_size { ; 
     * (ITCM_NonCacheable.init)
-    * (ITCM_NonCacheable)
+    * (*ITCM_NonCacheable)
   }
   
   ;OCRAM
   OCRAM_cache m_data2_start m_data2_size { ; 
     * (OCRAM_CACHE.init)
-    * (OCRAM_CACHE)
+    * (*OCRAM_CACHE)
   }
   
   ;SDRAM NONCACHE
   SDRAM_ncache m_ncache_start m_ncache_size { ; 
     * (SDRAM_NonCacheable.init)
-    * (SDRAM_NonCacheable)
+    * (*SDRAM_NonCacheable)
   }
 }

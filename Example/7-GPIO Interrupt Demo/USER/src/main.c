@@ -43,6 +43,11 @@ int main(void)
     
     //初始化GPIO C16 中断模式 使用默认引脚配置GPIO_INT_CONFIG
     gpio_interrupt_init(C16,RISING,GPIO_INT_CONFIG);
+    
+    //GPIO_DisableInterrupts(GPIO2,1<<17);//禁用C17中断   GPIO1：端口B  GPIO2：端口C  GPIO3：端口D  
+    //GPIO_DisableInterrupts(GPIO2,1<<16);//禁用C16中断   GPIO1：端口B  GPIO2：端口C  GPIO3：端口D  
+    //GPIO_DisableInterrupts(GPIO2,1<<15);//禁用C15中断   GPIO1：端口B  GPIO2：端口C  GPIO3：端口D  
+    
     NVIC_SetPriority(GPIO2_Combined_16_31_IRQn,15);         //设置中断优先级 范围0-15 越小优先级越高
     
     EnableGlobalIRQ(0);

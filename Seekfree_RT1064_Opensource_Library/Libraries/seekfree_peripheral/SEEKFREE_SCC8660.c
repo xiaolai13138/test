@@ -46,14 +46,16 @@
 #include "SEEKFREE_SCC8660.h"
 
 
-//定义图像缓冲区  如果用户需要访问图像数据 最好通过user_image来访问数据，最好不要直接访问缓冲区
-//由于默认分辨率160*120数据量较小，所以默认将图像数组放置于DTCM区域，访问速度更快。
-//以下注释的两句是将图像数组定义在SDRAM内，如果图像分辨率超过160*120，请将这两句解注并注释掉位于DTCM的两句。
-//AT_SDRAM_SECTION_ALIGN(uint16 scc8660_image[SCC8660_PIC_H][SCC8660_PIC_W],4);
-AT_DTCM_SECTION_ALIGN(uint16 scc8660_image[SCC8660_PIC_H][SCC8660_PIC_W],4);
+//定义图像缓冲区  如果用户需要访问图像数据 最好通过scc8660_image来访问数据，最好不要直接访问缓冲区
+//AT_DTCM_SECTION_ALIGN(uint16 scc8660_flexio1_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
+//AT_DTCM_SECTION_ALIGN(uint16 scc8660_flexio2_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
+AT_OCRAM_SECTION_ALIGN(uint16 scc8660_flexio1_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
+AT_OCRAM_SECTION_ALIGN(uint16 scc8660_flexio2_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
 
-
-
+//用户访问图像数据直接访问这个指针变量就可以
+//访问方式非常简单，可以直接使用下标的方式访问
+//例如访问第10行 50列的点，scc8660_image[10][50]就可以了
+uint16 (*scc8660_image)[SCC8660_PIC_W];
 
 
 //需要配置到摄像头的数据
@@ -184,6 +186,8 @@ void scc8660_init(void)
 	//关总中断
     DisableGlobalIRQ();
 
+    scc8660_image = scc8660_flexio2_image;//设置双缓冲首地址
+    
     dma_mux_init();
     flexio_camera(SCC8660_DATA_PIN, SCC8660_PCLK_PIN, SCC8660_HREF_PIN, SCC8660_W, SCC8660_H);
     flexio_dma_init((uint8 *)scc8660_image[0], SCC8660_W*SCC8660_H, scc8660_dma);
@@ -208,6 +212,15 @@ uint8 scc8660_finish_flag;       //一场图像采集完成标志位
 void scc8660_vsync(void)
 {
     CLEAR_GPIO_FLAG(SCC8660_VSYNC_PIN);
+    
+    if(scc8660_image==scc8660_flexio1_image)
+    {
+        scc8660_image = scc8660_flexio2_image;
+    }
+    else if(scc8660_image==scc8660_flexio2_image)
+    {
+        scc8660_image = scc8660_flexio1_image;
+    }
     dma_restart((uint8 *)scc8660_image[0]);
 
 }
@@ -221,6 +234,13 @@ void scc8660_vsync(void)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_dma(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
+    if(scc8660_image==scc8660_flexio1_image)
+    {
+        L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_flexio1_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
+    }
+    else if(scc8660_image==scc8660_flexio2_image)
+    {
+        L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_flexio2_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
+    }
 	scc8660_finish_flag = 1;//一副图像从采集开始到采集结束耗时18MS左右(50FPS)
-    L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
 }

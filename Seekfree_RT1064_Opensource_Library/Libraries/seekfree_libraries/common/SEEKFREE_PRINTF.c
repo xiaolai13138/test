@@ -9,7 +9,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Target core		NXP RT1064DVL6A
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-04-30

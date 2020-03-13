@@ -11,7 +11,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-04-30
  * @note		
@@ -144,7 +144,7 @@ void lcd_clear(int color)
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_init(void)
 {	
-    spi_init(TFT_SPIN, TFT_SCL, TFT_SDA, TFT_SDA_IN, TFT_CS, 0, 30*1000*1000);//硬件SPI初始化
+    spi_init(TFT_SPIN, TFT_SCL, TFT_SDA, TFT_SDA_IN, TFT_CS, 0, 5*1000*1000);//硬件SPI初始化
     
     gpio_init(BL_PIN,GPO,1,GPIO_PIN_CONFIG);
     gpio_init(DC_PIN,GPO,0,GPIO_PIN_CONFIG);

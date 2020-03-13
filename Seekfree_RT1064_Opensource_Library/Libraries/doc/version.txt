@@ -94,3 +94,9 @@ V1.1.13
     flexio接口自动识别所连接的摄像头，从而实现场中断内自动调用对应摄像头vsync函数
     将zf_camera内的FLEXIO_SHIFT_COUNT宏定义删除，取而代之的是flexio_shift_count变量，以便于程序根据分辨率自动选择环移器的数量
 	
+V1.1.14
+    将flexio采集凌瞳的缓冲区改为双buffer，默认将buffer放在OCRAM中
+    
+V1.1.15
+    将nxp相关驱动文件替换为最新的SDK2.7版本
+    增加MDK V6编译器的支持

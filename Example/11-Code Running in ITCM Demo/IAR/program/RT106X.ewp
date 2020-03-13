@@ -355,37 +355,38 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
+                    <state>$PROJ_DIR$\..\..\CODE</state>
                     <state>$PROJ_DIR$\..\..\USER\inc</state>
                     <state>$PROJ_DIR$\..\..\USER\src</state>
-                    <state>$PROJ_DIR$\..\..\CODE</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\CMSIS\Include</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\cmsis_drivers</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\drives</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\startup</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\startup\IAR-ARM</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\startup\MDK-ARM</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\utilities</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\utilities\debug_console</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\utilities\str</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\xip</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\deceive</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\uart</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\lists</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\deceive</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\common</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\board</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\phy</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\include</state>
-                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\osa</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\osa</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\include</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\phy</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\inc</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\sdmmc\src</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source</state>
                     <state>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\fatfs\source\fsl_sd_disk</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\common</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_libraries\board</state>
+                    <state>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1838,70 +1839,61 @@
     <group>
         <name>usb</name>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\include\usb.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\include\usb.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device\usb_device.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_cdc_acm.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_cdc_acm.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_cdc_acm.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_cdc_acm.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_ch9.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_ch9.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_ch9.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_ch9.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_class.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_class.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_class.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_class.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_config.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_config.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_dci.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device\usb_device_dci.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_dci.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device\usb_device_dci.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_descriptor.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_descriptor.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_descriptor.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter\usb_device_descriptor.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_ehci.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device\usb_device_ehci.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\device\usb_device_ehci.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\device\usb_device_ehci.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\include\usb_misc.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\include\usb_misc.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\osa\usb_osa.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\phy\usb_phy.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\osa\usb_osa_bm.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\phy\usb_phy.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\osa\usb_osa_bm.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\phy\usb_phy.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\phy\usb_phy.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\usb\include\usb_spec.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\middleware\usb\include\usb_spec.h</name>
         </file>
     </group>
     <group>

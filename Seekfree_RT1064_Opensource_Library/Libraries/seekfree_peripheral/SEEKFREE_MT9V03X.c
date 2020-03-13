@@ -11,7 +11,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-02-18
  * @note		
@@ -44,7 +44,7 @@
 
 
 //必须4字节对齐
-ALIGN(4) uint8 mt9v03x_image[MT9V03X_H][MT9V03X_W];
+AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_image[MT9V03X_H][MT9V03X_W], 4);
 
 uint8   receive[3];
 uint8   receive_num = 0;

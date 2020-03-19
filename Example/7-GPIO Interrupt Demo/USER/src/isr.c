@@ -53,12 +53,13 @@ void PIT_IRQHandler(void)
     __DSB();
 }
 
-
+uint32 gpio_int_test;
 void GPIO2_Combined_16_31_IRQHandler(void)
 {
     if(GET_GPIO_FLAG(C16))
     {
         CLEAR_GPIO_FLAG(C16);//清除中断标志位
+		gpio_int_test++;
     }
     
     

@@ -83,6 +83,17 @@ void GPIO2_Combined_0_15_IRQHandler(void)
 
 
 /*
+GPIO3_Combined_0_15_IRQHandler
+此中断函数默认被SD卡检测插入功能占用，如果需要gpio中断建议使用其他IO
+或者不使用SD的卡可以将fsl_sdmmc_host.c中的 SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_HANDLER函数注释掉即可
+
+*/
+
+
+
+
+
+/*
 中断函数名称，用于设置对应功能的中断函数
 Sample usage:当前启用了周期定时器中断
 void PIT_IRQHandler(void)

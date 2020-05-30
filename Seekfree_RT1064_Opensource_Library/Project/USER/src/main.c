@@ -29,7 +29,6 @@
 
 #include "headfile.h"
 
-
 int main(void)
 {
 	DisableGlobalIRQ();

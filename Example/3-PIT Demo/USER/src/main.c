@@ -32,7 +32,7 @@
 
 
 //实验现象说明：
-//板载LED会闪烁起来
+//核心板LED会闪烁起来
 int main(void)
 {
 	DisableGlobalIRQ();

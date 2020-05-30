@@ -67,6 +67,7 @@ V1.1.8
     添加fatfs文件系统驱动
     对zf_systick文件添加  定时器选择功能，当其他程序需要占用systick时，可以将zf_systick.h文件中的DELAY_TIMER_TYPE宏定义改为1，即可使用GPT定时器作为延时的定时器
     DELAY_TIMER_TYPE库默认使用GPT2作为 systick文件的定时器，因为库里面的文件系统需要占用systick
+	GPIO3_Combined_0_15_IRQHandler中断函数默认被SD卡检测插入功能占用，如果需要gpio中断建议使用其他IO，或者不使用SD的卡可以将fsl_sdmmc_host.c中的 SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_HANDLER函数注释掉即可
 	
 V1.1.8
 	将IPS200_PORT_NUM宏定义默认设置为2，使得2寸屏幕接口与主板对应

@@ -25,7 +25,7 @@
  * of the related <RTE_Components_h> element for all selected software components.
  */
 #ifdef _RTE_
-#include "RTE_Components.h"
+//#include "RTE_Components.h"
 #endif
 
 #include "fsl_device_registers.h"

@@ -196,7 +196,7 @@ uint8 iic_read_reg(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 *data)
 //  @param      num         读取字节数
 //  @return                 返回的状态值 0：成功  1：失败
 //  @since      v2.0
-//  Sample usage:       	iic_read_reg(IIC_2, 0x2D, 0x50, 10, buf);//读取0x50地址的数据存放到buf中，从机地址为0x2D开始的10个字节
+//  Sample usage:       	iic_read_reg(IIC_2, 0x2D, 0x50, buf, 10);//读取0x50地址的数据存放到buf中，从机地址为0x2D开始的10个字节
 //-------------------------------------------------------------------------------------------------------------------
 uint8 iic_read_reg_bytes(IICN_enum iic_n, uint8 slaveid, uint8 reg, uint8 *data, uint8 num)
 {

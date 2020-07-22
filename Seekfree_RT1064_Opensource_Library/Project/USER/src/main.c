@@ -29,30 +29,21 @@
 
 #include "headfile.h"
 
+
 int main(void)
 {
 	DisableGlobalIRQ();
     board_init();//务必保留，本函数用于初始化MPU 时钟 调试串口
-	//由于主板使用了CR引脚控制上电时序，因此这里需要延时一定的时间才能操作外设
-	systick_delay_ms(300);
-	//此处编写用户代码(例如：外设初始化代码等)
-	ips200_init();
-	//这里显示字符串目的是为了测试显示屏是否正常
-	ips200_showstr(0, 0, "camera init");
 	
-	//本例程使用CSI接口采集总钻风，因为需要使用CSI接口的摄像头初始化函数
-	mt9v03x_csi_init();
+	//此处编写用户代码(例如：外设初始化代码等)
 	
 	//总中断最后开启
     EnableGlobalIRQ(0);
     while (1)
     {
         //此处编写需要循环执行的代码
-		if(mt9v03x_csi_finish_flag)
-		{
-			mt9v03x_csi_finish_flag = 0;
-			ips200_displayimage032(mt9v03x_csi_image[0], MT9V03X_CSI_W, MT9V03X_CSI_H);
-		}
+		
+		
     }
 }
 

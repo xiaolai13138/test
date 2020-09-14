@@ -37,6 +37,7 @@
 
 
 #include "common.h"
+#include "fsl_edma.h"
 #include "zf_uart.h"
 
 

@@ -36,6 +36,7 @@
 #define _SEEKFREE_MT9V03X_h
 
 #include "common.h"
+#include "fsl_edma.h"
 #include "zf_uart.h"
 
 //ÅäÖÃÉãÏñÍ·²ÎÊı

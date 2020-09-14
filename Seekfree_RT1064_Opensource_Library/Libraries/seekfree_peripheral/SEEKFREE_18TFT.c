@@ -144,7 +144,7 @@ void lcd_clear(int color)
 //-------------------------------------------------------------------------------------------------------------------
 void lcd_init(void)
 {	
-    spi_init(TFT_SPIN, TFT_SCL, TFT_SDA, TFT_SDA_IN, TFT_CS, 0, 5*1000*1000);//硬件SPI初始化
+    spi_init(TFT_SPIN, TFT_SCL, TFT_SDA, TFT_SDA_IN, TFT_CS, 0, 30*1000*1000);//硬件SPI初始化
     
     gpio_init(BL_PIN,GPO,1,GPIO_PIN_CONFIG);
     gpio_init(DC_PIN,GPO,0,GPIO_PIN_CONFIG);

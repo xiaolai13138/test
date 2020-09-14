@@ -46,7 +46,7 @@ lpuart_handle_t     wireless_g_lpuartHandle;
 //  @return     void					
 //  @since      v1.0
 //  Sample usage:	
-//  @note       该函数在ISR文件 串口3中断程序被调用
+//  @note       该函数在ISR文件 串口8中断程序被调用
 //-------------------------------------------------------------------------------------------------------------------
 void wireless_uart_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData)
 {
@@ -82,7 +82,7 @@ void seekfree_wireless_init(void)
     wireless_receivexfer.data = &wireless_rx_buffer;
     
     uart_set_handle(WIRELESS_UART, &wireless_g_lpuartHandle, wireless_uart_callback, NULL, 0, wireless_receivexfer.data, 1);
-    //NVIC_SetPriority((IRQn_Type)((IRQn_Type)(WIRELESS_UART) + LPUART1_IRQn,0);  //设置中断优先级 范围0-15 越小优先级越高
+    //NVIC_SetPriority((IRQn_Type)((IRQn_Type)(WIRELESS_UART) + LPUART1_IRQn),0);  //设置中断优先级 范围0-15 越小优先级越高
     //EnableGlobalIRQ(0);
     
 }

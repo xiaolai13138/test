@@ -22,6 +22,8 @@
 
 #include "common.h"
 #include "MIMXRT1064.h"
+#include "fsl_gpio.h"
+#include "zf_iomuxc.h"
 
 extern GPIO_Type * PORTPTR[];
 

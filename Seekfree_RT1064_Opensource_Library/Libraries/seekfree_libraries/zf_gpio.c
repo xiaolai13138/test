@@ -18,10 +18,7 @@
  ********************************************************************************************************************/
  
  
-
-#include "fsl_gpio.h"
 #include "fsl_iomuxc.h"
-#include "zf_iomuxc.h"
 #include "zf_gpio.h"
 
 GPIO_Type * PORTPTR[] = GPIO_BASE_PTRS;

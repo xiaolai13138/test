@@ -47,8 +47,6 @@ int main(void)
     
     EnableGlobalIRQ(0);
     
-    
-    
     while(1)
     {
         gpio_set(B9,1);//设置引脚电平为高电平

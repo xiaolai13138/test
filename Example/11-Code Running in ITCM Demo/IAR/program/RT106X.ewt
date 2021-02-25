@@ -1203,6 +1203,18 @@
     <group>
         <name>components</name>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_bm.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_bm.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_config.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\nxp_libraries\components\lists\generic_list.c</name>
         </file>
         <file>

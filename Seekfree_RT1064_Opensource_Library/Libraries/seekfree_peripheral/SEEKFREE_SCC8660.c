@@ -52,6 +52,9 @@
 AT_OCRAM_SECTION_ALIGN(uint16 scc8660_flexio1_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
 AT_OCRAM_SECTION_ALIGN(uint16 scc8660_flexio2_image[SCC8660_PIC_H][SCC8660_PIC_W],64);
 
+uint16 (*flexio_color_camera_buffer_addr1)[SCC8660_PIC_W];//摄像头数组地址
+uint16 (*flexio_color_camera_buffer_addr2)[SCC8660_PIC_W];//摄像头数组地址
+
 //用户访问图像数据直接访问这个指针变量就可以
 //访问方式非常简单，可以直接使用下标的方式访问
 //例如访问第10行 50列的点，scc8660_image[10][50]就可以了
@@ -164,8 +167,9 @@ void scc8660_cof_uart_init(void)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_init(void)
 {
-    flexio_camera_type = 2;//设置flexio接口连接摄像头类型
-    
+    flexio_camera_type = CAMERA_COLOR;//设置flexio接口连接摄像头类型
+    flexio_color_camera_buffer_addr1 = scc8660_flexio1_image;
+    flexio_color_camera_buffer_addr2 = scc8660_flexio2_image;
     //摄像头开始初始化之前务必将场信号拉高
     gpio_init(SCC8660_VSYNC_PIN,GPO,1,GPIO_PIN_CONFIG);
     
@@ -213,15 +217,15 @@ void scc8660_vsync(void)
 {
     CLEAR_GPIO_FLAG(SCC8660_VSYNC_PIN);
     
-    if(scc8660_image==scc8660_flexio1_image)
+    if(scc8660_image==flexio_color_camera_buffer_addr1)
     {
-        scc8660_image = scc8660_flexio2_image;
+        dma_restart((uint8 *)flexio_color_camera_buffer_addr2[0]);
     }
-    else if(scc8660_image==scc8660_flexio2_image)
+    else if(scc8660_image==flexio_color_camera_buffer_addr2)
     {
-        scc8660_image = scc8660_flexio1_image;
+        dma_restart((uint8 *)flexio_color_camera_buffer_addr1[0]);
     }
-    dma_restart((uint8 *)scc8660_image[0]);
+    
 
 }
 
@@ -234,13 +238,14 @@ void scc8660_vsync(void)
 //-------------------------------------------------------------------------------------------------------------------
 void scc8660_dma(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    if(scc8660_image==scc8660_flexio1_image)
+    if(scc8660_image==flexio_color_camera_buffer_addr1)
     {
-        L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_flexio1_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
+        scc8660_image = flexio_color_camera_buffer_addr1;
     }
-    else if(scc8660_image==scc8660_flexio2_image)
+    else if(scc8660_image==flexio_color_camera_buffer_addr2)
     {
-        L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_flexio2_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
+        scc8660_image = flexio_color_camera_buffer_addr2;
     }
+    L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
 	scc8660_finish_flag = 1;//一副图像从采集开始到采集结束耗时18MS左右(50FPS)
 }

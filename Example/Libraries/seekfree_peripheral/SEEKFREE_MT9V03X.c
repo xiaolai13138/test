@@ -288,8 +288,8 @@ uint16 set_mt9v03x_reg(UARTN_enum uartn, uint8 addr, uint16 data)
 void mt9v03x_init(void)
 {
     
-    flexio_camera_type = 1;//设置flexio接口连接摄像头类型
-        
+    flexio_camera_type = CAMERA_GRAYSCALE;//设置flexio接口连接摄像头类型
+    flexio_camera_buffer_addr = mt9v03x_image[0];
     uart_init (MT9V03X_COF_UART, 9600,MT9V03X_COF_UART_TX,MT9V03X_COF_UART_RX);	//初始换串口 配置摄像头    
     uart_rx_irq(MT9V03X_COF_UART,1);
     //配置串口接收的缓冲区及缓冲区长度
@@ -336,7 +336,7 @@ uint8   mt9v03x_finish_flag = 0;    //一场图像采集完成标志位
 void mt9v03x_vsync(void)
 {
     CLEAR_GPIO_FLAG(MT9V03X_VSYNC_PIN);
-    dma_restart(mt9v03x_image[0]);
+    dma_restart(flexio_camera_buffer_addr);
 
 }
 

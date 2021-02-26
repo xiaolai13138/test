@@ -20,8 +20,8 @@
 #include "common.h"
 
 
-uint8 flexio_camera_type;//1：总钻风  2：凌瞳
-
+CAMERA_TYPE_enum flexio_camera_type;     //摄像头型号
+uint8 *flexio_camera_buffer_addr;        //摄像头数组地址
 
 
 void NMI_Handler(void)

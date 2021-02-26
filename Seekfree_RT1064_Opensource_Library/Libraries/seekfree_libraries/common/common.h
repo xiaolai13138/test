@@ -109,7 +109,13 @@ typedef enum //枚举端口电平
 }GPIOLEVEL_enum;
 
 
-
+typedef enum //枚举端口电平
+{
+	CAMERA_BIN=1,		//小钻风
+	CAMERA_BIN_UART,	//小钻风串口版本
+	CAMERA_GRAYSCALE,	//总钻风
+	CAMERA_COLOR,		//凌瞳
+}CAMERA_TYPE_enum;
 
 
 
@@ -229,9 +235,8 @@ typedef enum //枚举端口电平
 
             
             
-            
-extern uint8 flexio_camera_type;//1：总钻风  2：凌瞳
-
+extern CAMERA_TYPE_enum flexio_camera_type;     //摄像头型号
+extern uint8 *flexio_camera_buffer_addr;        //摄像头数组地址
             
 
 void NMI_Handler(void);

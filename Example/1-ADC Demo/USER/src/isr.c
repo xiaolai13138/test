@@ -11,7 +11,7 @@
  * @company	   		成都逐飞科技有限公司
  * @author     		逐飞科技(QQ3184284598)
  * @version    		查看doc内version文件 版本说明
- * @Software 		IAR 8.3 or MDK 5.24
+ * @Software 		IAR 8.3 or MDK 5.28
  * @Target core		NXP RT1064DVL6A
  * @Taobao   		https://seekfree.taobao.com/
  * @date       		2019-04-30
@@ -71,14 +71,25 @@ void GPIO2_Combined_0_15_IRQHandler(void)
     if(GET_GPIO_FLAG(MT9V03X_VSYNC_PIN))
     {
         //不用清除标志位，标志位在mt9v03x_vsync函数内部会清除
-        if(1 == flexio_camera_type)mt9v03x_vsync();
+        if(CAMERA_GRAYSCALE == flexio_camera_type)mt9v03x_vsync();
     }
     if(GET_GPIO_FLAG(SCC8660_VSYNC_PIN))
     {
         //不用清除标志位，标志位在scc8660_vsync函数内部会清除
-        if(2 == flexio_camera_type)scc8660_vsync();
+        if(CAMERA_COLOR == flexio_camera_type)scc8660_vsync();
     }
 }
+
+
+
+/*
+GPIO3_Combined_0_15_IRQHandler
+此中断函数默认被SD卡检测插入功能占用，如果需要gpio中断建议使用其他IO
+或者不使用SD的卡可以将fsl_sdmmc_host.c中的 SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_HANDLER函数注释掉即可
+
+*/
+
+
 
 
 

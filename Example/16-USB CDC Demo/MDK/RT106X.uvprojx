@@ -185,6 +185,7 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -351,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>__STARTUP_INITIALIZE_NONCACHEDATA</Define>
@@ -1653,6 +1654,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
             </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2036,6 +2047,7 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -2202,7 +2214,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>__STARTUP_INITIALIZE_NONCACHEDATA</Define>
@@ -3502,6 +3514,16 @@
               <FileName>SEEKFREE_IPS200_PARALLEL8.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
             </File>
           </Files>
         </Group>

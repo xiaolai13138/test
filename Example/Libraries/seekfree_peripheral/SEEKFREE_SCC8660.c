@@ -240,11 +240,11 @@ void scc8660_dma(edma_handle_t *handle, void *param, bool transferDone, uint32_t
 {
     if(scc8660_image==flexio_color_camera_buffer_addr1)
     {
-        scc8660_image = flexio_color_camera_buffer_addr1;
+        scc8660_image = flexio_color_camera_buffer_addr2;
     }
     else if(scc8660_image==flexio_color_camera_buffer_addr2)
     {
-        scc8660_image = flexio_color_camera_buffer_addr2;
+        scc8660_image = flexio_color_camera_buffer_addr1;
     }
     L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0],SCC8660_W*SCC8660_H);//如果数据存放在TCM则可以不需要这句话
 	scc8660_finish_flag = 1;//一副图像从采集开始到采集结束耗时18MS左右(50FPS)

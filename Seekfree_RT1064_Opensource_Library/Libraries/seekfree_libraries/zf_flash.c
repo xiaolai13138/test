@@ -120,7 +120,7 @@ uint8 flash_page_program(uint32 sector_num, uint32 page_num, const uint32 *buf, 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      编程一页
+//  @brief      读一页
 //  @param      sector_num 		需要读取的扇区编号       参数范围0-1023
 //  @param      page_num 		需要读取的页编号         参数范围0-15
 //  @param      buf 		    需要读取的数据地址       传入的数组类型必须为uint32

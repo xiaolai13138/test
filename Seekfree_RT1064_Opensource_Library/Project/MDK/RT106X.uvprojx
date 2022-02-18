@@ -1654,6 +1654,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
             </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3504,6 +3514,16 @@
               <FileName>SEEKFREE_IPS200_PARALLEL8.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_BLUETOOTH_CH9141.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
             </File>
           </Files>
         </Group>

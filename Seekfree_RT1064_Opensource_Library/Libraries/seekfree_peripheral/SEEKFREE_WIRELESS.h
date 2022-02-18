@@ -31,15 +31,31 @@
 
 #include "common.h"
 
-
 #define WIRELESS_UART        USART_8         //无线转串口模块 所使用到的串口     
 #define WIRELESS_UART_TX     UART8_TX_D16
 #define WIRELESS_UART_RX     UART8_RX_D17
-#define WIRELESS_UART_BAUD   115200
-
-#define RTS_PIN D26 //定义流控位引脚  指示当前模块是否可以接受数据  0可以继续接收  1不可以继续接收
+#define WIRELESS_UART_BAUD   230400//可选参数有9600 57600 115200 230400 460800
 
 
+//0：关闭自动波特率  
+//1：开启自动波特率 自动波特率的作用是修改WIRELESS_UART_BAUD之后不需要对模块进行配置，模块会自动设置为对应的波特率
+
+//注意事项1：无线转串口模块版本是V2.0以下的是无法开启自动波特率的。
+//注意事项2：开启自动波特率务必连接RTS引脚，否则会开启失败。
+//注意事项3：模块自动波特率失败的话，可以尝试断电重启
+#define WIRELESS_AUTO_UART_BAUD 0
+//开启自动波特率务必阅读上面两条 注意事项
+//开启自动波特率务必阅读上面两条 注意事项
+//开启自动波特率务必阅读上面两条 注意事项
+
+//定义流控位引脚  指示当前模块是否可以接受数据  0可以继续接收  1不可以继续接收
+//在无线转串口V2.0以上的版本中也用于控制模块进入自动波特率模式
+#define RTS_PIN D26 
+
+#define WIRELESS_BUFFER_SIZE 16
+
+extern uint8 wireless_send_buffer[WIRELESS_BUFFER_SIZE];
+extern uint16 wireless_rx_index;
 
 void    seekfree_wireless_init(void);
 uint32  seekfree_wireless_send_buff(uint8 *buff, uint32 len);

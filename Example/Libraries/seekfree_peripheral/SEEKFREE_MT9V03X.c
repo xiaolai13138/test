@@ -49,6 +49,7 @@ AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_image[MT9V03X_H][MT9V03X_W], 4);
 uint8   receive[3];
 uint8   receive_num = 0;
 vuint8  uart_receive_flag;
+int16   timeout = MT9V03X_INIT_TIMEOUT;
 
 //需要配置到摄像头的数据
 int16 MT9V03X_CFG[CONFIG_FINISH][2]=
@@ -62,7 +63,8 @@ int16 MT9V03X_CFG[CONFIG_FINISH][2]=
     {LR_OFFSET,         0},   //图像左右偏移量    正值 右偏移   负值 左偏移  列为188 376 752时无法设置偏移    摄像头收偏移数据后会自动计算最大偏移，如果超出则设置计算出来的最大偏移
     {UD_OFFSET,         0},   //图像上下偏移量    正值 上偏移   负值 下偏移  行为120 240 480时无法设置偏移    摄像头收偏移数据后会自动计算最大偏移，如果超出则设置计算出来的最大偏移
     {GAIN,              32},  //图像增益          范围16-64     增益可以在曝光时间固定的情况下改变图像亮暗程度
-
+    {PCLK_MODE,         0},   //仅总钻风MT9V034 V2.0以及以上版本支持该命令，
+                              //像素时钟模式命令 PCLK模式     默认：0     可选参数为：0 1。        0：不输出消隐信号，1：输出消隐信号。(通常都设置为0，如果使用CH32V307的DVP接口或STM32的DCMI接口采集需要设置为1)
     
     {INIT,              0}    //摄像头开始初始化
 };
@@ -141,10 +143,19 @@ void set_config(UARTN_enum uartn, int16 buff[CONFIG_FINISH-1][2])
         uart_putbuff(uartn,send_buffer,4);
         systick_delay_ms(2);
     }
-    //等待摄像头初始化成功
-    while(!uart_receive_flag);
+    timeout = MT9V03X_INIT_TIMEOUT;
+    //等待接受回传数据
+    while(!uart_receive_flag && timeout-- > 0)
+    {
+        systick_delay_ms(1);
+    }
     uart_receive_flag = 0;
-    while((0xff != receive[1]) || (0xff != receive[2]));
+	timeout = MT9V03X_INIT_TIMEOUT;
+	//等待接受回传数据
+	while(((0xff != receive[1]) || (0xff != receive[2])) && timeout-- > 0)
+	{
+		systick_delay_ms(1);
+	}
     //以上部分对摄像头配置的数据全部都会保存在摄像头上51单片机的eeprom中
     //利用set_exposure_time函数单独配置的曝光数据不存储在eeprom中
 }
@@ -173,8 +184,12 @@ void get_config(UARTN_enum uartn, int16 buff[CONFIG_FINISH-1][2])
         
         uart_putbuff(uartn,send_buffer,4);
         
+        timeout = MT9V03X_INIT_TIMEOUT;
         //等待接受回传数据
-        while(!uart_receive_flag);
+        while(!uart_receive_flag && timeout-- > 0)
+        {
+            systick_delay_ms(1);
+        }
         uart_receive_flag = 0;
         
         buff[i][1] = receive[1]<<8 | receive[2];
@@ -200,8 +215,12 @@ uint16 get_version(UARTN_enum uartn)
     
     uart_putbuff(uartn,send_buffer,4);
         
+    timeout = MT9V03X_INIT_TIMEOUT;
     //等待接受回传数据
-    while(!uart_receive_flag);
+    while(!uart_receive_flag && timeout-- > 0)
+    {
+        systick_delay_ms(1);
+    }
     uart_receive_flag = 0;
     
     return ((uint16)(receive[1]<<8) | receive[2]);
@@ -228,8 +247,12 @@ uint16 set_exposure_time(UARTN_enum uartn, uint16 light)
     
     uart_putbuff(uartn,send_buffer,4);
     
+    timeout = MT9V03X_INIT_TIMEOUT;
     //等待接受回传数据
-    while(!uart_receive_flag);
+    while(!uart_receive_flag && timeout-- > 0)
+    {
+        systick_delay_ms(1);
+    }
     uart_receive_flag = 0;
     
     temp = receive[1]<<8 | receive[2];
@@ -269,8 +292,12 @@ uint16 set_mt9v03x_reg(UARTN_enum uartn, uint8 addr, uint16 data)
     
     uart_putbuff(uartn,send_buffer,4);
     
+    timeout = MT9V03X_INIT_TIMEOUT;
     //等待接受回传数据
-    while(!uart_receive_flag);
+    while(!uart_receive_flag && timeout-- > 0)
+    {
+        systick_delay_ms(1);
+    }
     uart_receive_flag = 0;
     
     temp = receive[1]<<8 | receive[2];

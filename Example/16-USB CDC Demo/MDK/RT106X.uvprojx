@@ -1664,6 +1664,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
             </File>
+            <File>
+              <FileName>SEEKFREE_GPS_TAU1201.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_GPS_TAU1201.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1872,7 +1882,7 @@
       <TargetName>nor_sdram_zf_dtcm_v6</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6120000::V6.12::.\ARMCLANG</pCCUsed>
+      <pCCUsed>6150000::V6.15::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -3524,6 +3534,16 @@
               <FileName>SEEKFREE_BLUETOOTH_CH9141.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_GPS_TAU1201.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_GPS_TAU1201.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</FilePath>
             </File>
           </Files>
         </Group>

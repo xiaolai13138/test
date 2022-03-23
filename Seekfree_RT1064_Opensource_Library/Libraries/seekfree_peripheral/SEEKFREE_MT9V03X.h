@@ -61,7 +61,8 @@
 #define MT9V03X_PCLK_PIN        FLEXIO2_D05_C5  //定义像素时钟引脚
 #define MT9V03X_HREF_PIN        FLEXIO2_D06_C6  //定义行信号引脚
 
-             
+     //初始化超时设置
+#define MT9V03X_INIT_TIMEOUT    0x0080
                         
 //摄像头命令枚举
 typedef enum
@@ -75,6 +76,7 @@ typedef enum
     LR_OFFSET,              //图像左右偏移命令
     UD_OFFSET,              //图像上下偏移命令
     GAIN,                   //图像偏移命令
+    PCLK_MODE,              //像素时钟模式
     CONFIG_FINISH,          //非命令位，主要用来占位计数
     
     COLOR_GET_WHO_AM_I = 0xEF,

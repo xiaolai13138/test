@@ -1860,6 +1860,12 @@
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_FUN.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_ICM20602.c</name>
         </file>
         <file>

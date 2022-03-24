@@ -79,7 +79,8 @@ int16 GET_CFG[CONFIG_FINISH-1][2]=
     {SET_ROW,           0},   //图像行数量        
     {LR_OFFSET,         0},   //图像左右偏移量    
     {UD_OFFSET,         0},   //图像上下偏移量    
-    {GAIN,              0},   //图像增益          
+    {GAIN,              0},   //图像增益
+    {PCLK_MODE,         0},   //消隐信号
 };
 
 

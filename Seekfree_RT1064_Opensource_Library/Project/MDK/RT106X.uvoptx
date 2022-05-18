@@ -368,7 +368,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>CMSIS_AGDI</Key>
-          <Name>-X"SEEKFREE CMSIS-DAP V2" -USF-2652601441471 -O718 -S9 -C0 -P00000000 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO11 -FD20000000 -FC8000 -FN1 -FF0MIMXRT1064_QSPI_4KB_SEC.FLM -FS070000000 -FL0400000 -FP0($$Device:MIMXRT1064DVL6A$arm\MIMXRT1064_QSPI_4KB_SEC.FLM)</Name>
+          <Name>-X"SEEKFREE CMSIS-DAP V2" -USF-2667505629341 -O718 -S9 -C0 -P00000000 -N00("") -D00(00000000) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO11 -FD20000000 -FC8000 -FN1 -FF0MIMXRT1064_QSPI_4KB_SEC.FLM -FS070000000 -FL0400000 -FP0($$Device:MIMXRT1064DVL6A$arm\MIMXRT1064_QSPI_4KB_SEC.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -2570,7 +2570,7 @@
 
   <Group>
     <GroupName>seekfree_libraries</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3477,30 +3477,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.c</PathWithFileName>
-      <FilenameWithoutPath>SEEKFREE_IPS200_PARALLEL8.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>246</FileNumber>
-      <FileType>5</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</PathWithFileName>
-      <FilenameWithoutPath>SEEKFREE_IPS200_PARALLEL8.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>247</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</PathWithFileName>
       <FilenameWithoutPath>SEEKFREE_BLUETOOTH_CH9141.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -3508,7 +3484,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>248</FileNumber>
+      <FileNumber>246</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -3520,7 +3496,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>249</FileNumber>
+      <FileNumber>247</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -3532,13 +3508,37 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>250</FileNumber>
+      <FileNumber>248</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</PathWithFileName>
       <FilenameWithoutPath>SEEKFREE_GPS_TAU1201.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>249</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.c</PathWithFileName>
+      <FilenameWithoutPath>SEEKFREE_IPS200.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>250</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</PathWithFileName>
+      <FilenameWithoutPath>SEEKFREE_IPS200.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

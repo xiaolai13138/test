@@ -1776,10 +1776,10 @@
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS114_SPI.h</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.c</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</name>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_L3G4200D.c</name>

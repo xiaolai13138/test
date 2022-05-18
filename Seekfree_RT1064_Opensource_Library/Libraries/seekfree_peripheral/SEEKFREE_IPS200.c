@@ -13,33 +13,32 @@
  * @version    		查看doc内version文件 版本说明
  * @Software 		IAR 8.3 or MDK 5.26
  * @Taobao   		https://seekfree.taobao.com/
- * @date       		2019-09-17
+ * @date       		2020-05-07
  * @note		
-					接线定义：
-					------------------------------------ 
-						模块管脚            单片机管脚
-						D0                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D0_PIN 宏定义
-						D1                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D1_PIN 宏定义
-						D2                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D2_PIN 宏定义
-						D3                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D3_PIN 宏定义
-						D4                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D4_PIN 宏定义
-						D5                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D5_PIN 宏定义
-						D6                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D6_PIN 宏定义
-						D7                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_D7_PIN 宏定义
-                                                                                            
-						BL                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_BL_PIN 宏定义
-						CS                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_CS_PIN 宏定义
-						RD                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_RD_PIN 宏定义
-						WR                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_WR_PIN 宏定义
-						RS                  查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_RS_PIN 宏定义
-						RST                 查看SEEKFREE_IPS200_PARALLEL8.H文件内的IPS200_RST_PIN 宏定义
-
-						电源引脚
-						VCC 3.3V电源
-						GND 电源地
-						最大分辨率240*320
-					------------------------------------ 
-
+             接线定义：
+    ------------------------------------------------------------------------
+*                                                           模块管脚                                             单片机管脚
+*                   // 双排排针 并口两寸屏 硬件引脚
+*                   RD                  查看 SEEKFREE_IPS200.h 中 IPS200_RD_PIN_PARALLEL8     宏定义
+*                   WR                  查看 SEEKFREE_IPS200.h 中 IPS200_WR_PIN_PARALLEL8     宏定义
+*                   RS                  查看 SEEKFREE_IPS200.h 中 IPS200_RS_PIN_PARALLEL8     宏定义
+*                   RST                 查看 SEEKFREE_IPS200.h 中 IPS200_RST_PIN_PARALLEL8    宏定义
+*                   CS                  查看 SEEKFREE_IPS200.h 中 IPS200_CS_PIN_PARALLEL8     宏定义
+*                   BL                  查看 SEEKFREE_IPS200.h 中 IPS200_BL_PIN_PARALLEL8     宏定义
+*                   D0-D7               查看 SEEKFREE_IPS200.h 中 IPS200_Dx_PIN_PARALLEL8     宏定义
+*                   VCC                 3.3V电源
+*                   GND                 电源地
+*                   // 单排排针 SPI 两寸屏 硬件引脚
+*                   SCL                 查看 SEEKFREE_IPS200.h 中 IPS200_SCL_PIN_SPI  宏定义
+*                   SDA                 查看 SEEKFREE_IPS200.h 中 IPS200_SDA_PIN_SPI  宏定义
+*                   RST                 查看 SEEKFREE_IPS200.h 中 IPS200_RST_PIN_SPI  宏定义
+*                   DC                  查看 SEEKFREE_IPS200.h 中 IPS200_DC_PIN_SPI   宏定义
+*                   CS                  查看 SEEKFREE_IPS200.h 中 IPS200_CS_PIN_SPI   宏定义
+*                   BL                  查看 SEEKFREE_IPS200.h 中 IPS200_BL_PIN_SPI  宏定义
+*                   VCC                 3.3V电源
+*                   GND                 电源地
+*                                                           最大分辨率 320 * 240
+*   ------------------------------------------------------------------------
  ********************************************************************************************************************/
 
 #include "stdlib.h"
@@ -48,18 +47,21 @@
 #include "zf_systick.h"
 #include "zf_gpio.h"
 #include "zf_iomuxc.h"
-#include "SEEKFREE_IPS200_PARALLEL8.h"
+#include "SEEKFREE_IPS200.h"
 
+static ips200_type_enum ips200_display_type = IPS200_TYPE_SPI;
+static PIN_enum ips_rst_pin = IPS200_RST_PIN_SPI;
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param      dat     数据
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_w_data(uint8 dat)			//写数据
 {
+    
 #if(1==IPS200_PORT_NUM)
 	IPS200_DATAPORT = (dat << DATA_START_NUM) | (IPS200_DATAPORT & ~((uint32)(0xFF << DATA_START_NUM)) );
 #elif(2==IPS200_PORT_NUM)
@@ -73,67 +75,96 @@ void ips200_w_data(uint8 dat)			//写数据
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param      command     命令
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
 //-------------------------------------------------------------------------------------------------------------------
-void ips200_wr_reg(uint16 command)			//写命令
+void ips200_wr_reg(uint8 command)			//写命令
 {
-	IPS200_CS(0); 
-	IPS200_RS(0);
-	IPS200_RD(1);
-	IPS200_WR(0);
-	ips200_w_data(command);
-	IPS200_WR(1);	
-	IPS200_CS(1); 
+    if(IPS200_TYPE_SPI == ips200_display_type)
+    {
+        IPS200_DC(0);
+        spi_mosi(IPS200_SPIN,IPS200_CS_PIN_SPI,&command,&command,1,1);
+        IPS200_DC(1);
+    }
+    else
+    {
+        IPS200_CS(0); 
+        IPS200_RS(0);
+        IPS200_RD(1);
+        IPS200_WR(0);
+        ips200_w_data(command);
+        IPS200_WR(1);	
+        IPS200_CS(1); 
+    }
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param      dat     8位数据
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_wr_data(uint8 dat)			//向液晶屏写一个8位数据
 {
-	IPS200_CS(0); 
-	IPS200_RS(1);
-	IPS200_RD(1);
-	IPS200_WR(0);
-	ips200_w_data(dat);
-	IPS200_WR(1);
-	IPS200_CS(1); 	
+    if(IPS200_TYPE_SPI == ips200_display_type)
+    {
+        spi_mosi(IPS200_SPIN,IPS200_CS_PIN_SPI,&dat,&dat,1,1);
+    }
+    else
+    {
+        IPS200_CS(0); 
+        IPS200_RS(1);
+        IPS200_RD(1);
+        IPS200_WR(0);
+        ips200_w_data(dat);
+        IPS200_WR(1);
+        IPS200_CS(1); 	
+    }
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param      dat     16位数据
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
 //-------------------------------------------------------------------------------------------------------------------
 void ips200_wr_data16(uint16 dat)		//向液晶屏写一个16位数据
 {
-	IPS200_CS(0); 
-	IPS200_RS(1);
-	IPS200_RD(1);
-	IPS200_WR(0);
-	ips200_w_data(dat>>8);
-	IPS200_WR(1);
-	IPS200_WR(0);
-	ips200_w_data(dat);
-	IPS200_WR(1);
-	IPS200_CS(1); 	 	
+    if(IPS200_TYPE_SPI == ips200_display_type)
+    {
+        uint8 dat1[2];
+        dat1[0] = dat >> 8;
+        dat1[1] = (uint8)dat;
+        
+        IPS200_DC(1);
+        spi_mosi(IPS200_SPIN,IPS200_CS_PIN_SPI,dat1,dat1,2,1); 	//写入数据  高位在前  低位在后
+    }
+    else
+    {
+        IPS200_CS(0); 
+        IPS200_RS(1);
+        IPS200_RD(1);
+        IPS200_WR(0);
+        ips200_w_data(dat>>8);
+        IPS200_WR(1);
+        IPS200_WR(0);
+        ips200_w_data(dat);
+        IPS200_WR(1);
+        IPS200_CS(1);
+    } 	 	
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param       com             命令
+//  @param       dat             数据
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
@@ -148,7 +179,10 @@ void ips200_w_reg(uint8 com,uint8 dat)		//写寄存器
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
-//  @param      void 		    
+//  @param       x1              起始x轴坐标
+//  @param       y1              起始y轴坐标
+//  @param       x2              结束x轴坐标
+//  @param       y2              结束y轴坐标
 //  @return     				
 //  @since      v1.0
 //  Sample usage:               
@@ -169,28 +203,42 @@ void ips200_address_set(uint16 x1,uint16 y1,uint16 x2,uint16 y2)
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      2.0寸 IPS液晶初始化
-//  @return     void
+//  @return     type_select     并口或者串口选择
 //  @since      v1.0
 //  Sample usage:               
 //-------------------------------------------------------------------------------------------------------------------
-void ips200_init(void)
+void ips200_init(ips200_type_enum type_select)
 {
-	fast_gpio_init(IPS200_D0_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN); 
-	fast_gpio_init(IPS200_D1_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D2_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D3_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D4_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D5_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D6_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
-	fast_gpio_init(IPS200_D7_PIN, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN); 
-	
-	fast_gpio_init(IPS200_BL_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	fast_gpio_init(IPS200_CS_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	fast_gpio_init(IPS200_RST_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	fast_gpio_init(IPS200_RS_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	fast_gpio_init(IPS200_WR_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	fast_gpio_init(IPS200_RD_PIN, GPO, 0, GPIO_PIN_CONFIG);
-	
+    if(IPS200_TYPE_SPI == type_select)
+    {
+        ips200_display_type = IPS200_TYPE_SPI;
+        ips_rst_pin = IPS200_RST_PIN_SPI;
+        spi_init(IPS200_SPIN, IPS200_SCL_PIN_SPI, IPS200_SDA_PIN_SPI, IPS200_SDA_IN_PIN_SPI, IPS200_CS_PIN_SPI, 0, 30*1000*1000);//硬件SPI初始化
+        
+        fast_gpio_init(IPS200_BL_PIN_SPI,GPO,1,GPIO_PIN_CONFIG);
+        fast_gpio_init(IPS200_DC_PIN_SPI,GPO,0,GPIO_PIN_CONFIG);
+        fast_gpio_init(ips_rst_pin,GPO,0,GPIO_PIN_CONFIG);
+    }
+    else
+    {
+        ips200_display_type = IPS200_TYPE_PARALLEL8;
+        ips_rst_pin = IPS200_RST_PIN_PARALLEL8;
+        fast_gpio_init(IPS200_D0_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN); 
+        fast_gpio_init(IPS200_D1_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D2_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D3_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D4_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D5_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D6_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN);
+        fast_gpio_init(IPS200_D7_PIN_PARALLEL8, GPO, 0, SPEED_200MHZ | DSE_R0 | PULLUP_47K | PULL_EN); 
+        
+        fast_gpio_init(IPS200_BL_PIN_PARALLEL8, GPO, 0, GPIO_PIN_CONFIG);
+        fast_gpio_init(IPS200_CS_PIN_PARALLEL8, GPO, 0, GPIO_PIN_CONFIG);
+        fast_gpio_init(ips_rst_pin, GPO, 0, GPIO_PIN_CONFIG);
+        fast_gpio_init(IPS200_RS_PIN_PARALLEL8, GPO, 0, GPIO_PIN_CONFIG);
+        fast_gpio_init(IPS200_WR_PIN_PARALLEL8, GPO, 0, GPIO_PIN_CONFIG);
+        fast_gpio_init(IPS200_RD_PIN_PARALLEL8, GPO, 0, GPIO_PIN_CONFIG);
+	}
 	IPS200_BL(1);
 	IPS200_RST(0);	
 	systick_delay_ms(5);		

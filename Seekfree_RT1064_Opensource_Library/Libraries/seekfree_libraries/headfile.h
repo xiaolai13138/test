@@ -65,7 +65,7 @@
 #include "SEEKFREE_FONT.h"
 #include "SEEKFREE_18TFT.h"
 #include "SEEKFREE_IPS114_SPI.h"
-#include "SEEKFREE_IPS200_PARALLEL8.h"
+#include "SEEKFREE_IPS200.h"
 #include "SEEKFREE_IIC.h"
 #include "SEEKFREE_VIRSCO.h"
 #include "SEEKFREE_FUN.h"

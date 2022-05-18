@@ -1,3 +1,6 @@
+V1.2.4
+        删除SEEKFREE_IPS200_PARALLEL8文件，新增SEEKFREE_IPS200，此文件包含原有的2寸屏并口驱动也包含最新的2寸屏串口驱动
+
 V1.2.3
     总钻风底层增加PCLK_MODE获取参数位
 	

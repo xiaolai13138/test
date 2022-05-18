@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>MIMXRT1064DVL6A</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.MIMXRT1064_DFP.12.2.0</PackID>
-          <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
+          <PackID>NXP.MIMXRT1064_DFP.13.0.0</PackID>
+          <PackURL>https://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x020000) IRAM2(0x00000000,0x020000) IROM(0x70000000,0x400000) XRAM(0x20200000,0x0c0000) CPUTYPE("Cortex-M7") FPU3(DFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -185,7 +185,6 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -352,7 +351,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>__STARTUP_INITIALIZE_NONCACHEDATA</Define>
@@ -1645,16 +1644,6 @@
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS114_SPI.h</FilePath>
             </File>
             <File>
-              <FileName>SEEKFREE_IPS200_PARALLEL8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.c</FilePath>
-            </File>
-            <File>
-              <FileName>SEEKFREE_IPS200_PARALLEL8.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
-            </File>
-            <File>
               <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
@@ -1673,6 +1662,16 @@
               <FileName>SEEKFREE_GPS_TAU1201.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IPS200.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IPS200.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1882,14 +1881,14 @@
       <TargetName>nor_sdram_zf_dtcm_v6</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6150000::V6.15::ARMCLANG</pCCUsed>
+      <pCCUsed>6130001::V6.13.1::.\ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>MIMXRT1064DVL6A</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.MIMXRT1064_DFP.12.2.0</PackID>
-          <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
+          <PackID>NXP.MIMXRT1064_DFP.13.0.0</PackID>
+          <PackURL>https://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x020000) IRAM2(0x00000000,0x020000) IROM(0x70000000,0x400000) XRAM(0x20200000,0x0c0000) CPUTYPE("Cortex-M7") FPU3(DFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -2057,7 +2056,6 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -2224,7 +2222,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>__STARTUP_INITIALIZE_NONCACHEDATA</Define>
@@ -3516,16 +3514,6 @@
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS114_SPI.h</FilePath>
             </File>
             <File>
-              <FileName>SEEKFREE_IPS200_PARALLEL8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.c</FilePath>
-            </File>
-            <File>
-              <FileName>SEEKFREE_IPS200_PARALLEL8.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200_PARALLEL8.h</FilePath>
-            </File>
-            <File>
               <FileName>SEEKFREE_BLUETOOTH_CH9141.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_BLUETOOTH_CH9141.c</FilePath>
@@ -3544,6 +3532,16 @@
               <FileName>SEEKFREE_GPS_TAU1201.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_GPS_TAU1201.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IPS200.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IPS200.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</FilePath>
             </File>
           </Files>
         </Group>

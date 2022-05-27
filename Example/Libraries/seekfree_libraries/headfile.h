@@ -83,6 +83,7 @@
 #include "SEEKFREE_SCC8660.h"
 #include "SEEKFREE_BLUETOOTH_CH9141.h"
 #include "SEEKFREE_GPS_TAU1201.h"
+#include "SEEKFREE_IMU963RA.h"
 
 #endif
 

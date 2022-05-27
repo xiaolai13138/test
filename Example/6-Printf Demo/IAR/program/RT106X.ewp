@@ -1770,6 +1770,12 @@
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IIC.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS114_SPI.c</name>
         </file>
         <file>

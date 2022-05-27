@@ -1673,6 +1673,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</FilePath>
             </File>
+            <File>
+              <FileName>SEEKFREE_IMU963RA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IMU963RA.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3542,6 +3552,16 @@
               <FileName>SEEKFREE_IPS200.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IPS200.h</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IMU963RA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEEKFREE_IMU963RA.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IMU963RA.h</FilePath>
             </File>
           </Files>
         </Group>

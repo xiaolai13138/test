@@ -313,12 +313,9 @@ uint8 imu963ra_init (void)
     imu963ra_write_acc_gyro_register(IMU963RA_CTRL3_C, 0x01);            // 复位设备
     systick_delay_ms(2);                             
     imu963ra_write_acc_gyro_register(IMU963RA_FUNC_CFG_ACCESS, 0x00);    // 关闭HUB寄存器访问
-    if(imu963ra_acc_gyro_self_check())                   
-    {                   
-        //zf_log(0, "IMU963RA acc and gyro self check error.");                    
-        //return 1;                   
-    }                   
-                        
+    imu963ra_acc_gyro_self_check();										// 六轴自检                
+             
+              
     imu963ra_write_acc_gyro_register(IMU963RA_INT1_CTRL, 0x03);         // 开启陀螺仪 加速度数据就绪中断
     imu963ra_write_acc_gyro_register(IMU963RA_CTRL1_XL, 0x4C);          // 设置加速度计量程±8G以及数据输出速率104hz 以及加速度信息从第一级滤波器输出
     //IMU963RA_CTRL1_XL寄存器
@@ -353,14 +350,9 @@ uint8 imu963ra_init (void)
     systick_delay_ms(2);
     imu963ra_write_mag_register(IMU963RA_MAG_ADDR, IMU963RA_MAG_CONTROL2, 0x00);
     systick_delay_ms(2);
+	
+    imu963ra_mag_self_check();												// 磁力计自检
     
-    
-    if(imu963ra_mag_self_check())
-    {
-//        zf_log(0, "IMU963RA mag self check error.");
-//        return 1;
-    }
-
     imu963ra_write_mag_register(IMU963RA_MAG_ADDR, IMU963RA_MAG_CONTROL1, 0x19);    // 设置磁力计量程8G 输出速率100hz 连续模式
 	//IMU963RA_MAG_ADDR寄存器
 	//设置为:0x19 磁力计量程为:8G     获取到的加速度计数据 除以3000， 可以转化为带物理单位的数据，单位：G(高斯)

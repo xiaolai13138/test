@@ -149,13 +149,9 @@ static void ips200_write_command (const uint8 command)
 {
     if(IPS200_TYPE_SPI == ips200_display_type)
     {
-        IPS200_CS(1);
-        IPS200_CS(0);
         IPS200_DC(0);
         ips200_write_8bit_data_spi(command);
         IPS200_DC(1);
-        IPS200_CS(1);
-        IPS200_CS(0);
     }
     else
     {
@@ -1021,7 +1017,7 @@ void ips200_init (ips200_type_enum type_select)
 
         fast_gpio_init(IPS200_DC_PIN_SPI,   GPO, GPIO_LOW , FAST_GPO_PUSH_PULL);
         fast_gpio_init(ips_rst_pin,         GPO, GPIO_LOW , FAST_GPO_PUSH_PULL);
-        fast_gpio_init(IPS200_CS_PIN_SPI,   GPO, GPIO_LOW , FAST_GPO_PUSH_PULL);
+        fast_gpio_init(IPS200_CS_PIN_SPI,   GPO, GPIO_HIGH, FAST_GPO_PUSH_PULL);
         fast_gpio_init(ips_bl_pin,          GPO, GPIO_HIGH, FAST_GPO_PUSH_PULL);
     }
     else
@@ -1056,6 +1052,11 @@ void ips200_init (ips200_type_enum type_select)
     system_delay_ms(5);
     IPS200_RST(1);      
     system_delay_ms(5);
+    
+    if(IPS200_TYPE_SPI == ips200_display_type)
+    {
+        IPS200_CS(0);
+    }
     
     ips200_write_command(0x11);
     system_delay_ms(120);

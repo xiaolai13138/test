@@ -114,13 +114,9 @@ static soft_spi_info_struct             ips114_spi;
 //-------------------------------------------------------------------------------------------------------------------
 static void ips114_write_index (const uint8 dat)
 {
-    IPS114_CS(1);
-    IPS114_CS(0);
     IPS114_DC(0);
     ips114_write_8bit_data(dat);
     IPS114_DC(1);
-    IPS114_CS(1);
-    IPS114_CS(0);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -888,9 +884,9 @@ void ips114_init (void)
     spi_init(IPS114_SPI, SPI_MODE0, IPS114_SPI_SPEED, IPS114_SCL_PIN, IPS114_SDA_PIN, SPI_MISO_NULL, SPI_CS_NULL);
 #endif
 
-    gpio_init(IPS114_DC_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
-    gpio_init(IPS114_RST_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
-    gpio_init(IPS114_CS_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
+    gpio_init(IPS114_DC_PIN,  GPO, GPIO_LOW,  GPO_PUSH_PULL);
+    gpio_init(IPS114_RST_PIN, GPO, GPIO_LOW,  GPO_PUSH_PULL);
+    gpio_init(IPS114_CS_PIN,  GPO, GPIO_HIGH, GPO_PUSH_PULL);
     gpio_init(IPS114_BLK_PIN, GPO, GPIO_HIGH, GPO_PUSH_PULL);
 
     ips114_set_dir(ips114_display_dir);

@@ -115,13 +115,9 @@ static soft_spi_info_struct             tft180_spi;
 //-------------------------------------------------------------------------------------------------------------------
 static void tft180_write_index (const uint8 dat)
 {
-    TFT180_CS(1);
-    TFT180_CS(0);
     TFT180_DC(0);
     tft180_write_8bit_data(dat);
-    TFT180_CS(1);
     TFT180_DC(1);
-    TFT180_CS(0);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -853,10 +849,10 @@ void tft180_init (void)
     spi_init(TFT180_SPI, SPI_MODE0, TFT180_SPI_SPEED, TFT180_SCL_PIN, TFT180_SDA_PIN, SPI_MISO_NULL, SPI_CS_NULL);
 #endif
 
-    gpio_init(TFT180_DC_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
-    gpio_init(TFT180_RES_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
-    gpio_init(TFT180_CS_PIN, GPO, GPIO_LOW, GPO_PUSH_PULL);
-    gpio_init(TFT180_BL_PIN, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    gpio_init(TFT180_DC_PIN,  GPO, GPIO_LOW,  GPO_PUSH_PULL);
+    gpio_init(TFT180_RES_PIN, GPO, GPIO_LOW,  GPO_PUSH_PULL);
+    gpio_init(TFT180_CS_PIN,  GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    gpio_init(TFT180_BL_PIN,  GPO, GPIO_HIGH, GPO_PUSH_PULL);
 
     tft180_set_dir(tft180_display_dir);
     tft180_set_color(tft180_pencolor, tft180_bgcolor);

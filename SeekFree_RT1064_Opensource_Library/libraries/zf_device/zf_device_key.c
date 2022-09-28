@@ -138,6 +138,9 @@ key_state_enum key_get_state (key_index_enum key_n)
 void key_init (uint32 period)
 {
     uint8 loop_temp = 0; 
+    
+    zf_assert(period);                                                          // 周期不允许为0
+    
     for(loop_temp = 0; loop_temp < KEY_NUMBER; loop_temp ++)
     {
         gpio_init(key_index[loop_temp], GPI, GPIO_HIGH, GPI_PULL_UP);

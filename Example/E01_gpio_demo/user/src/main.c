@@ -59,7 +59,7 @@ int main(void)
     gpio_init(B9, GPO, 0, GPO_PUSH_PULL);
 
     // 初始化GPIO D0 D1 为输入引脚
-    gpio_init(D0, GPI, 0, GPI_PULL_UP);
+    gpio_init(C4, GPI, 0, GPI_PULL_UP);
     gpio_init(D1, GPI, 0, GPI_PULL_UP);
 
     // 此处编写用户代码 例如外设初始化代码等
@@ -73,7 +73,7 @@ int main(void)
         gpio_toggle_level(B9);              // 翻转引脚电平
         system_delay_ms(100);                  
                                                
-        gpio_status = gpio_get_level(D0);   // 获取引脚电平
+        gpio_status = gpio_get_level(C4);   // 获取引脚电平
         system_delay_ms(100);
     }
 }

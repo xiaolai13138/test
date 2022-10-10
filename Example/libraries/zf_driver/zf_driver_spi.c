@@ -38,6 +38,7 @@
 #include "zf_common_debug.h"
 #include "zf_driver_gpio.h"
 #include "fsl_lpspi.h"
+#include "fsl_iomuxc.h"
 
 #include "zf_driver_spi.h"
 
@@ -56,48 +57,48 @@ void spi_iomuxc(spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enu
     {
         case SPI_1:
         {
-            if      (SPI1_SCK_D12  == sck_pin)  afio_init(D12,GPIO_AF4,LPSPI_PIN_CONF);
-            
-            if      (SPI1_MOSI_D14 == mosi_pin) afio_init(D14,GPIO_AF4,LPSPI_PIN_CONF);
-                                                               
-            if      (SPI1_MISO_D15 == miso_pin) afio_init(D15,GPIO_AF4,LPSPI_PIN_CONF);
-            
-            if      (SPI1_CS0_D13  == cs_pin)   afio_init(D13,GPIO_AF4,LPSPI_PIN_CONF);
-            else if (SPI1_CS2_D26  == cs_pin)   afio_init(D26,GPIO_AF2,LPSPI_PIN_CONF);
-            else if (SPI1_CS3_D27  == cs_pin)   afio_init(D27,GPIO_AF2,LPSPI_PIN_CONF);
-        }break;
-
-        case SPI_3:
-        {
-            if      (SPI3_SCK_B0   == sck_pin)  afio_init(B0 ,GPIO_AF7,LPSPI_PIN_CONF);
-            else if (SPI3_SCK_B31  == sck_pin)  afio_init(B31,GPIO_AF2,LPSPI_PIN_CONF);
-            
-            if      (SPI3_MOSI_B1  == mosi_pin) afio_init(B1 ,GPIO_AF7,LPSPI_PIN_CONF);
-            else if (SPI3_MOSI_B30 == mosi_pin) afio_init(B30,GPIO_AF2,LPSPI_PIN_CONF);
-                                                               
-            if      (SPI3_MISO_B2  == miso_pin) afio_init(B2 ,GPIO_AF7,LPSPI_PIN_CONF);
-            else if (SPI3_MISO_B29 == miso_pin) afio_init(B29,GPIO_AF2,LPSPI_PIN_CONF);
-            
-            if      (SPI3_CS0_B3   == cs_pin)   afio_init(B3 ,GPIO_AF7,LPSPI_PIN_CONF);
-            else if (SPI3_CS0_B28  == cs_pin)   afio_init(B28,GPIO_AF2,LPSPI_PIN_CONF);
-        }break;
-        
-        case SPI_4:
-        {
-            if      (SPI4_SCK_C3   == sck_pin)  afio_init(C3 ,GPIO_AF3,LPSPI_PIN_CONF);
-            else if (SPI4_SCK_C23  == sck_pin)  afio_init(C23,GPIO_AF1,LPSPI_PIN_CONF);
-            
-            if      (SPI4_MOSI_C2  == mosi_pin) afio_init(C2 ,GPIO_AF3,LPSPI_PIN_CONF);
-            else if (SPI4_MOSI_C22 == mosi_pin) afio_init(C22,GPIO_AF1,LPSPI_PIN_CONF);
-                                                               
-            if      (SPI4_MISO_C1  == miso_pin) afio_init(C1 ,GPIO_AF3,LPSPI_PIN_CONF);
-            else if (SPI4_MISO_C21 == miso_pin) afio_init(C21,GPIO_AF1,LPSPI_PIN_CONF);
-            
-            if      (SPI4_CS0_C0   == cs_pin)   afio_init(C0 ,GPIO_AF3,LPSPI_PIN_CONF);
-            else if (SPI4_CS0_C20  == cs_pin)   afio_init(C20,GPIO_AF1,LPSPI_PIN_CONF);
-            else if (SPI4_CS1_C19  == cs_pin)   afio_init(C19,GPIO_AF2,LPSPI_PIN_CONF);
-            else if (SPI4_CS2_C18  == cs_pin)   afio_init(C18,GPIO_AF2,LPSPI_PIN_CONF);
-            else if (SPI4_CS3_C27  == cs_pin)   afio_init(C27,GPIO_AF6,LPSPI_PIN_CONF);
+            if      (SPI1_SCK_D12  == sck_pin)  afio_init(IOMUXC_GPIO_SD_B0_00_LPSPI1_SCK,  0, LPSPI_PIN_CONF);
+                                                                    
+            if      (SPI1_MOSI_D14 == mosi_pin) afio_init(IOMUXC_GPIO_SD_B0_02_LPSPI1_SDO,  0, LPSPI_PIN_CONF);
+                                                                    
+            if      (SPI1_MISO_D15 == miso_pin) afio_init(IOMUXC_GPIO_SD_B0_03_LPSPI1_SDI,  0, LPSPI_PIN_CONF);
+                                                                  
+            if      (SPI1_CS0_D13  == cs_pin)   afio_init(IOMUXC_GPIO_SD_B0_01_LPSPI1_PCS0, 0, LPSPI_PIN_CONF);
+            else if (SPI1_CS2_D26  == cs_pin)   afio_init(IOMUXC_GPIO_EMC_40_LPSPI1_PCS2,   0, LPSPI_PIN_CONF);
+            else if (SPI1_CS3_D27  == cs_pin)   afio_init(IOMUXC_GPIO_EMC_41_LPSPI1_PCS3,   0, LPSPI_PIN_CONF);
+        }break;                                                   
+                                                                  
+        case SPI_3:                                               
+        {                                                         
+            if      (SPI3_SCK_B0   == sck_pin)  afio_init(IOMUXC_GPIO_AD_B0_00_LPSPI3_SCK,  0, LPSPI_PIN_CONF);
+            else if (SPI3_SCK_B31  == sck_pin)  afio_init(IOMUXC_GPIO_AD_B1_15_LPSPI3_SCK,  0, LPSPI_PIN_CONF);
+                                                                    
+            if      (SPI3_MOSI_B1  == mosi_pin) afio_init(IOMUXC_GPIO_AD_B0_01_LPSPI3_SDO,  0, LPSPI_PIN_CONF);
+            else if (SPI3_MOSI_B30 == mosi_pin) afio_init(IOMUXC_GPIO_AD_B1_14_LPSPI3_SDO,  0, LPSPI_PIN_CONF);
+                                                                  
+            if      (SPI3_MISO_B2  == miso_pin) afio_init(IOMUXC_GPIO_AD_B0_02_LPSPI3_SDI,  0, LPSPI_PIN_CONF);
+            else if (SPI3_MISO_B29 == miso_pin) afio_init(IOMUXC_GPIO_AD_B1_13_LPSPI3_SDI,  0, LPSPI_PIN_CONF);
+                                                                  
+            if      (SPI3_CS0_B3   == cs_pin)   afio_init(IOMUXC_GPIO_AD_B0_03_LPSPI3_PCS0, 0, LPSPI_PIN_CONF);
+            else if (SPI3_CS0_B28  == cs_pin)   afio_init(IOMUXC_GPIO_AD_B1_12_LPSPI3_PCS0, 0, LPSPI_PIN_CONF);
+        }break;                                                   
+                                                                  
+        case SPI_4:                                               
+        {                                                         
+            if      (SPI4_SCK_C3   == sck_pin)  afio_init(IOMUXC_GPIO_B0_03_LPSPI4_SCK,     0, LPSPI_PIN_CONF);
+            else if (SPI4_SCK_C23  == sck_pin)  afio_init(IOMUXC_GPIO_B1_07_LPSPI4_SCK,     0, LPSPI_PIN_CONF);
+                                                                    
+            if      (SPI4_MOSI_C2  == mosi_pin) afio_init(IOMUXC_GPIO_B0_02_LPSPI4_SDO,     0, LPSPI_PIN_CONF);
+            else if (SPI4_MOSI_C22 == mosi_pin) afio_init(IOMUXC_GPIO_B1_06_LPSPI4_SDO,     0, LPSPI_PIN_CONF);
+                                                                    
+            if      (SPI4_MISO_C1  == miso_pin) afio_init(IOMUXC_GPIO_B0_01_LPSPI4_SDI,     0, LPSPI_PIN_CONF);
+            else if (SPI4_MISO_C21 == miso_pin) afio_init(IOMUXC_GPIO_B1_05_LPSPI4_SDI,     0, LPSPI_PIN_CONF);
+                                                                  
+            if      (SPI4_CS0_C0   == cs_pin)   afio_init(IOMUXC_GPIO_B0_00_LPSPI4_PCS0,    0, LPSPI_PIN_CONF);
+            else if (SPI4_CS0_C20  == cs_pin)   afio_init(IOMUXC_GPIO_B1_04_LPSPI4_PCS0,    0, LPSPI_PIN_CONF);
+            else if (SPI4_CS1_C19  == cs_pin)   afio_init(IOMUXC_GPIO_B1_03_LPSPI4_PCS1,    0, LPSPI_PIN_CONF);
+            else if (SPI4_CS2_C18  == cs_pin)   afio_init(IOMUXC_GPIO_B1_02_LPSPI4_PCS2,    0, LPSPI_PIN_CONF);
+            else if (SPI4_CS3_C27  == cs_pin)   afio_init(IOMUXC_GPIO_B1_11_LPSPI4_PCS3,    0, LPSPI_PIN_CONF);
         }break;
         
         default:

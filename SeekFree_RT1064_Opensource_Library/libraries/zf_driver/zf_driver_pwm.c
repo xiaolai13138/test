@@ -34,6 +34,7 @@
 ********************************************************************************************************************/
 
 #include "fsl_pwm.h"
+#include "fsl_iomuxc.h"
 #include "zf_common_clock.h"
 #include "zf_common_debug.h"
 #include "zf_driver_gpio.h"
@@ -50,37 +51,37 @@ void pwm_iomuxc(pwm_channel_enum pin)
 {
     switch(pin)
     {
-        case PWM1_MODULE0_CHA_D12:  afio_init(D12, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE0_CHB_D13:  afio_init(D13, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE1_CHA_D14:  afio_init(D14, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE1_CHB_D15:  afio_init(D15, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE2_CHA_D16:  afio_init(D16, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE2_CHB_D17:  afio_init(D17, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHA_B10:  afio_init(B10, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHA_C16:  afio_init(C16, GPIO_AF6, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHA_D0 :  afio_init(D0 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHB_B11:  afio_init(B11, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHB_C17:  afio_init(C17, GPIO_AF6, PWM_PIN_CONF); break;
-        case PWM1_MODULE3_CHB_D1 :  afio_init(D1 , GPIO_AF2, PWM_PIN_CONF); break;
-                                                             
-        case PWM2_MODULE0_CHA_C6 :  afio_init(C6 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE0_CHB_C7 :  afio_init(C7 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE1_CHA_C8 :  afio_init(C8 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE1_CHB_C9 :  afio_init(C9 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE2_CHA_C10:  afio_init(C10, GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE2_CHB_C11:  afio_init(C11, GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHA_B0 :  afio_init(B0 , GPIO_AF0, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHA_C18:  afio_init(C18, GPIO_AF6, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHA_D2 :  afio_init(D2 , GPIO_AF2, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHA_B9 :  afio_init(B9 , GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHB_B1 :  afio_init(B1 , GPIO_AF0, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHB_C19:  afio_init(C19, GPIO_AF6, PWM_PIN_CONF); break;
-        case PWM2_MODULE3_CHB_D3 :  afio_init(D3 , GPIO_AF2, PWM_PIN_CONF); break;
-                                                             
-        case PWM4_MODULE0_CHA_B24:  afio_init(B24, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM4_MODULE1_CHA_B25:  afio_init(B25, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM4_MODULE2_CHA_C30:  afio_init(C30, GPIO_AF1, PWM_PIN_CONF); break;
-        case PWM4_MODULE3_CHA_C31:  afio_init(C31, GPIO_AF1, PWM_PIN_CONF); break;
+        case PWM1_MODULE0_CHA_D12:  afio_init(IOMUXC_GPIO_SD_B0_00_FLEXPWM1_PWMA00, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE0_CHB_D13:  afio_init(IOMUXC_GPIO_SD_B0_01_FLEXPWM1_PWMB00, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE1_CHA_D14:  afio_init(IOMUXC_GPIO_SD_B0_02_FLEXPWM1_PWMA01, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE1_CHB_D15:  afio_init(IOMUXC_GPIO_SD_B0_03_FLEXPWM1_PWMB01, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE2_CHA_D16:  afio_init(IOMUXC_GPIO_SD_B0_04_FLEXPWM1_PWMA02, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE2_CHB_D17:  afio_init(IOMUXC_GPIO_SD_B0_05_FLEXPWM1_PWMB02, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHA_B10:  afio_init(IOMUXC_GPIO_AD_B0_10_FLEXPWM1_PWMA03, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHA_C16:  afio_init(IOMUXC_GPIO_B1_00_FLEXPWM1_PWMA03,    0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHA_D0 :  afio_init(IOMUXC_GPIO_SD_B1_00_FLEXPWM1_PWMA03, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHB_B11:  afio_init(IOMUXC_GPIO_AD_B0_11_FLEXPWM1_PWMB03, 0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHB_C17:  afio_init(IOMUXC_GPIO_B1_01_FLEXPWM1_PWMB03,    0, PWM_PIN_CONF); break;
+        case PWM1_MODULE3_CHB_D1 :  afio_init(IOMUXC_GPIO_SD_B1_01_FLEXPWM1_PWMB03, 0, PWM_PIN_CONF); break;
+                                                   
+        case PWM2_MODULE0_CHA_C6 :  afio_init(IOMUXC_GPIO_B0_06_FLEXPWM2_PWMA00 ,   0, PWM_PIN_CONF); break;
+        case PWM2_MODULE0_CHB_C7 :  afio_init(IOMUXC_GPIO_B0_07_FLEXPWM2_PWMB00 ,   0, PWM_PIN_CONF); break;
+        case PWM2_MODULE1_CHA_C8 :  afio_init(IOMUXC_GPIO_B0_08_FLEXPWM2_PWMA01 ,   0, PWM_PIN_CONF); break;
+        case PWM2_MODULE1_CHB_C9 :  afio_init(IOMUXC_GPIO_B0_09_FLEXPWM2_PWMB01 ,   0, PWM_PIN_CONF); break;
+        case PWM2_MODULE2_CHA_C10:  afio_init(IOMUXC_GPIO_B0_10_FLEXPWM2_PWMA02,    0, PWM_PIN_CONF); break;
+        case PWM2_MODULE2_CHB_C11:  afio_init(IOMUXC_GPIO_B0_11_FLEXPWM2_PWMB02,    0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHA_B0 :  afio_init(IOMUXC_GPIO_AD_B0_00_FLEXPWM2_PWMA03, 0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHA_C18:  afio_init(IOMUXC_GPIO_B1_02_FLEXPWM2_PWMA03,    0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHA_D2 :  afio_init(IOMUXC_GPIO_SD_B1_02_FLEXPWM2_PWMA03, 0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHA_B9 :  afio_init(IOMUXC_GPIO_AD_B0_09_FLEXPWM2_PWMA03, 0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHB_B1 :  afio_init(IOMUXC_GPIO_AD_B0_01_FLEXPWM2_PWMB03, 0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHB_C19:  afio_init(IOMUXC_GPIO_B1_03_FLEXPWM2_PWMB03,    0, PWM_PIN_CONF); break;
+        case PWM2_MODULE3_CHB_D3 :  afio_init(IOMUXC_GPIO_SD_B1_03_FLEXPWM2_PWMB03, 0, PWM_PIN_CONF); break;
+                                                   
+        case PWM4_MODULE0_CHA_B24:  afio_init(IOMUXC_GPIO_AD_B1_08_FLEXPWM4_PWMA00, 0, PWM_PIN_CONF); break;
+        case PWM4_MODULE1_CHA_B25:  afio_init(IOMUXC_GPIO_AD_B1_09_FLEXPWM4_PWMA01, 0, PWM_PIN_CONF); break;
+        case PWM4_MODULE2_CHA_C30:  afio_init(IOMUXC_GPIO_B1_14_FLEXPWM4_PWMA02,    0, PWM_PIN_CONF); break;
+        case PWM4_MODULE3_CHA_C31:  afio_init(IOMUXC_GPIO_B1_15_FLEXPWM4_PWMA03,    0, PWM_PIN_CONF); break;
 
         default :zf_assert(0);break;
     }

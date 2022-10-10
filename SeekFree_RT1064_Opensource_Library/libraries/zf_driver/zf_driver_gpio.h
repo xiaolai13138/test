@@ -151,8 +151,9 @@ typedef enum // 枚举端口电平
 
 
 //引脚复用设置----------------------------------------------------
-void        afio_init                   (gpio_pin_enum pin, gpio_af_enum alt, uint32 pinconf);
-    
+void        afio_init(uint32 muxRegister, uint32 muxMode, uint32 inputRegister, uint32 inputDaisy, uint32 configRegister, uint32 inputOnfield, uint32 pinconf);
+void        gpio_iomuxc(gpio_pin_enum pin, uint32 pinconf);
+
 
 //通用GPIO操作---------------------------------------------------
 void        gpio_set_level              (gpio_pin_enum pin, uint8 dat);

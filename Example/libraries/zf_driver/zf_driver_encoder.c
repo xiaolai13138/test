@@ -36,6 +36,7 @@
 #include "zf_common_clock.h"
 #include "zf_common_debug.h"
 #include "fsl_qtmr.h"
+#include "fsl_iomuxc.h"
 #include "zf_driver_gpio.h"
 
 #include "zf_driver_encoder.h"
@@ -51,56 +52,56 @@ void qtimer_iomuxc(encoder_index_enum qtimern, encoder_channel1_enum ch1_pin, en
     {
         case QTIMER1_ENCOEDER1:
         {
-            if      (QTIMER1_ENCOEDER1_CH1_C0  == ch1_pin)  afio_init(C0 , GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER1_ENCOEDER1_CH2_C1  == ch2_pin)  afio_init(C1 , GPIO_AF1, QTIMER_PIN_CONF);
-        }break;
-        
-        case QTIMER1_ENCOEDER2:
-        {
-            if      (QTIMER1_ENCOEDER2_CH1_C2  == ch1_pin)  afio_init(C2 , GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER1_ENCOEDER2_CH2_C24 == ch2_pin)  afio_init(C24, GPIO_AF1, QTIMER_PIN_CONF);
-        }break;
-        
-        case QTIMER2_ENCOEDER1:
-        {
-            if      (QTIMER2_ENCOEDER1_CH1_C3  == ch1_pin)  afio_init(C3 , GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER2_ENCOEDER1_CH2_C4  == ch2_pin)  afio_init(C4 , GPIO_AF1, QTIMER_PIN_CONF);
-        }break;
-        
-        case QTIMER2_ENCOEDER2:
-        {
-            if      (QTIMER2_ENCOEDER2_CH1_C5  == ch1_pin)  afio_init(C5 , GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER2_ENCOEDER2_CH2_C25 == ch2_pin)  afio_init(C25, GPIO_AF1, QTIMER_PIN_CONF);
+            if      (QTIMER1_ENCOEDER1_CH1_C0  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_00_QTIMER1_TIMER0,     0, QTIMER_PIN_CONF);
+            if      (QTIMER1_ENCOEDER1_CH2_C1  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_01_QTIMER1_TIMER1,     0, QTIMER_PIN_CONF);
+        }break; 
+            
+        case QTIMER1_ENCOEDER2: 
+        {   
+            if      (QTIMER1_ENCOEDER2_CH1_C2  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_02_QTIMER1_TIMER2,     0, QTIMER_PIN_CONF);
+            if      (QTIMER1_ENCOEDER2_CH2_C24 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_08_QTIMER1_TIMER3,     0, QTIMER_PIN_CONF);
+        }break; 
+            
+        case QTIMER2_ENCOEDER1: 
+        {   
+            if      (QTIMER2_ENCOEDER1_CH1_C3  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_03_QTIMER2_TIMER0,     0, QTIMER_PIN_CONF);
+            if      (QTIMER2_ENCOEDER1_CH2_C4  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_04_QTIMER2_TIMER1,     0, QTIMER_PIN_CONF);
+        }break; 
+            
+        case QTIMER2_ENCOEDER2: 
+        {   
+            if      (QTIMER2_ENCOEDER2_CH1_C5  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_05_QTIMER2_TIMER2,     0, QTIMER_PIN_CONF);
+            if      (QTIMER2_ENCOEDER2_CH2_C25 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_09_QTIMER2_TIMER3,     0, QTIMER_PIN_CONF);
         }break;
 
         case QTIMER3_ENCOEDER1:
         {
-            if      (QTIMER3_ENCOEDER1_CH1_B16 == ch1_pin)  afio_init(B16, GPIO_AF1, QTIMER_PIN_CONF);
-            else if (QTIMER3_ENCOEDER1_CH1_C6  == ch1_pin)  afio_init(C6 , GPIO_AF1, QTIMER_PIN_CONF);
+            if      (QTIMER3_ENCOEDER1_CH1_B16 == ch1_pin)  afio_init(IOMUXC_GPIO_AD_B1_00_QTIMER3_TIMER0,  0, QTIMER_PIN_CONF);
+            else if (QTIMER3_ENCOEDER1_CH1_C6  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_06_QTIMER3_TIMER0,     0, QTIMER_PIN_CONF);
             
-            else if (QTIMER3_ENCOEDER1_CH2_B17 == ch2_pin)  afio_init(B17, GPIO_AF1, QTIMER_PIN_CONF);
-            else if (QTIMER3_ENCOEDER1_CH2_C7  == ch2_pin)  afio_init(C7 , GPIO_AF1, QTIMER_PIN_CONF);
+            else if (QTIMER3_ENCOEDER1_CH2_B17 == ch2_pin)  afio_init(IOMUXC_GPIO_AD_B1_01_QTIMER3_TIMER1,  0, QTIMER_PIN_CONF);
+            else if (QTIMER3_ENCOEDER1_CH2_C7  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_07_QTIMER3_TIMER1,     0, QTIMER_PIN_CONF);
         }break;
         
         case QTIMER3_ENCOEDER2:
         {
-            if      (QTIMER3_ENCOEDER2_CH1_B18 == ch1_pin)  afio_init(B18, GPIO_AF1, QTIMER_PIN_CONF);
-            else if (QTIMER3_ENCOEDER2_CH1_C8  == ch1_pin)  afio_init(C8 , GPIO_AF1, QTIMER_PIN_CONF);
+            if      (QTIMER3_ENCOEDER2_CH1_B18 == ch1_pin)  afio_init(IOMUXC_GPIO_AD_B1_02_QTIMER3_TIMER2,  0, QTIMER_PIN_CONF);
+            else if (QTIMER3_ENCOEDER2_CH1_C8  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_08_QTIMER3_TIMER2,     0, QTIMER_PIN_CONF);
             
-            if      (QTIMER3_ENCOEDER2_CH2_B19 == ch2_pin)  afio_init(B19, GPIO_AF1, QTIMER_PIN_CONF);
-            else if (QTIMER3_ENCOEDER2_CH2_C26 == ch2_pin)  afio_init(C26, GPIO_AF1, QTIMER_PIN_CONF);
+            if      (QTIMER3_ENCOEDER2_CH2_B19 == ch2_pin)  afio_init(IOMUXC_GPIO_AD_B1_03_QTIMER3_TIMER3,  0, QTIMER_PIN_CONF);
+            else if (QTIMER3_ENCOEDER2_CH2_C26 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_10_QTIMER3_TIMER3,     0, QTIMER_PIN_CONF);
         }break;
         
         case QTIMER4_ENCOEDER1:
         {
-            if      (QTIMER4_ENCOEDER1_CH1_C9  == ch1_pin)  afio_init(C9 , GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER4_ENCOEDER1_CH2_C10 == ch2_pin)  afio_init(C10, GPIO_AF1, QTIMER_PIN_CONF);
-        }break;
-        
-        case QTIMER4_ENCOEDER2:
-        {
-            if      (QTIMER4_ENCOEDER2_CH1_C11 == ch1_pin)  afio_init(C11, GPIO_AF1, QTIMER_PIN_CONF);
-            if      (QTIMER4_ENCOEDER2_CH2_C27 == ch2_pin)  afio_init(C27, GPIO_AF1, QTIMER_PIN_CONF);
+            if      (QTIMER4_ENCOEDER1_CH1_C9  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_09_QTIMER4_TIMER0,     0, QTIMER_PIN_CONF);
+            if      (QTIMER4_ENCOEDER1_CH2_C10 == ch2_pin)  afio_init(IOMUXC_GPIO_B0_10_QTIMER4_TIMER1,     0, QTIMER_PIN_CONF);
+        }break;     
+                
+        case QTIMER4_ENCOEDER2:     
+        {       
+            if      (QTIMER4_ENCOEDER2_CH1_C11 == ch1_pin)  afio_init(IOMUXC_GPIO_B0_11_QTIMER4_TIMER2,     0, QTIMER_PIN_CONF);
+            if      (QTIMER4_ENCOEDER2_CH2_C27 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_11_QTIMER4_TIMER3,     0, QTIMER_PIN_CONF);
         }break;
         
         default: zf_assert(0);break;

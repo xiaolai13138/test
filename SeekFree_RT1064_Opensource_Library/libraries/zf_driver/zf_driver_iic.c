@@ -38,6 +38,7 @@
 #include "zf_common_debug.h"
 #include "zf_driver_gpio.h"
 #include "fsl_lpi2c.h"
+#include "fsl_iomuxc.h"
 
 #include "zf_driver_iic.h"
 
@@ -54,33 +55,33 @@ void iic_iomuxc(iic_index_enum iic_n, iic_scl_pin_enum scl_pin, iic_sda_pin_enum
     {
         case IIC_1:
         {
-            if      (IIC1_SDA_B17 == sda_pin) afio_init(B17 , GPIO_AF3, IIC_PIN_CONF);                            
+            if      (IIC1_SDA_B17 == sda_pin) afio_init(IOMUXC_GPIO_AD_B1_01_LPI2C1_SDA, 1, IIC_PIN_CONF);                            
                                                              
-            if      (IIC1_SCL_B16 == scl_pin) afio_init(B16 , GPIO_AF3, IIC_PIN_CONF);
-            else if (IIC1_SCL_D4  == scl_pin) afio_init(D4  , GPIO_AF2, IIC_PIN_CONF);                             
+            if      (IIC1_SCL_B16 == scl_pin) afio_init(IOMUXC_GPIO_AD_B1_00_LPI2C1_SCL, 1, IIC_PIN_CONF);
+            else if (IIC1_SCL_D4  == scl_pin) afio_init(IOMUXC_GPIO_SD_B1_04_LPI2C1_SCL, 1, IIC_PIN_CONF);                             
         }break;                                              
                                                              
         case IIC_2:                                          
         {                                                    
-            if      (IIC2_SDA_C5  == sda_pin) afio_init(C5  , GPIO_AF2, IIC_PIN_CONF);
+            if      (IIC2_SDA_C5  == sda_pin) afio_init(IOMUXC_GPIO_B0_05_LPI2C2_SDA,    1, IIC_PIN_CONF);
                                                                 
-            if      (IIC2_SCL_C4  == scl_pin) afio_init(C4  , GPIO_AF2, IIC_PIN_CONF);                          
+            if      (IIC2_SCL_C4  == scl_pin) afio_init(IOMUXC_GPIO_B0_04_LPI2C2_SCL,    1, IIC_PIN_CONF);                          
         }break;                                              
                                                              
         case IIC_3:                                          
         {                                                    
-            if      (IIC3_SDA_B22 == sda_pin) afio_init(B22 , GPIO_AF1, IIC_PIN_CONF);
-            else if (IIC3_SDA_D13 == sda_pin) afio_init(D13 , GPIO_AF2, IIC_PIN_CONF);
+            if      (IIC3_SDA_B22 == sda_pin) afio_init(IOMUXC_GPIO_AD_B1_06_LPI2C3_SDA, 1, IIC_PIN_CONF);
+            else if (IIC3_SDA_D13 == sda_pin) afio_init(IOMUXC_GPIO_SD_B0_01_LPI2C3_SDA, 1, IIC_PIN_CONF);
                                                        
-            if      (IIC3_SCL_B23 == scl_pin) afio_init(B23 , GPIO_AF1, IIC_PIN_CONF);
-            else if (IIC3_SCL_D12 == scl_pin) afio_init(D12 , GPIO_AF2, IIC_PIN_CONF);
+            if      (IIC3_SCL_B23 == scl_pin) afio_init(IOMUXC_GPIO_AD_B1_07_LPI2C3_SCL, 1, IIC_PIN_CONF);
+            else if (IIC3_SCL_D12 == scl_pin) afio_init(IOMUXC_GPIO_SD_B0_00_LPI2C3_SCL, 1, IIC_PIN_CONF);
         }break;                                              
                                                              
         case IIC_4:                                          
         {                                                    
-            if      (IIC4_SDA_B13 == sda_pin) afio_init(B13 , GPIO_AF0, IIC_PIN_CONF);                               
+            if      (IIC4_SDA_B13 == sda_pin) afio_init(IOMUXC_GPIO_AD_B0_13_LPI2C4_SDA, 1, IIC_PIN_CONF);                               
                                                                 
-            if      (IIC4_SCL_B12 == scl_pin) afio_init(B12 , GPIO_AF0, IIC_PIN_CONF);
+            if      (IIC4_SCL_B12 == scl_pin) afio_init(IOMUXC_GPIO_AD_B0_12_LPI2C4_SCL, 1, IIC_PIN_CONF);
         }break;
         
         default:zf_assert(0);break;

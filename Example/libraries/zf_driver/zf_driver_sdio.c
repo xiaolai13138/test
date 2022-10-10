@@ -37,6 +37,7 @@
 #include "fsl_debug_console.h"
 #include "fsl_sd_disk.h"
 #include "fsl_sd.h"
+#include "fsl_iomuxc.h"
 #include "sdmmc_config.h"
 #include "zf_common_clock.h"
 #include "zf_common_debug.h"
@@ -50,16 +51,16 @@
 void sdhc_iomuxc(void)
 {
     
-    afio_init(B23, GPIO_AF5, SPEED_200MHZ | KEEPER_EN | PULLDOWN_100K | DSE_R0_6);  // 电源使能引脚
-    afio_init(C30, GPIO_AF6, SDHC_PIN_CONF);                                        // 电压切换引脚
-    afio_init(D4 , GPIO_AF5, SDHC_PIN_CONF);                                        // 插入检测引脚
-                                                                                    
-    afio_init(D12, GPIO_AF0, SDHC_PIN_CONF);                                        // CMD
-    afio_init(D13, GPIO_AF0, SDHC_PIN_CONF);                                        // CLK
-    afio_init(D14, GPIO_AF0, SDHC_PIN_CONF);                                        // DATA0
-    afio_init(D15, GPIO_AF0, SDHC_PIN_CONF);                                        // DATA1
-    afio_init(D16, GPIO_AF0, SDHC_PIN_CONF);                                        // DATA2
-    afio_init(D17, GPIO_AF0, SDHC_PIN_CONF);                                        // DATA3
+    gpio_iomuxc(B23, SPEED_200MHZ | KEEPER_EN | PULLDOWN_100K | DSE_R0_6);  // 电源使能引脚
+    gpio_iomuxc(D4 , SDHC_PIN_CONF);                                        // 插入检测引脚
+    
+    afio_init(IOMUXC_GPIO_B1_14_USDHC1_VSELECT,  0, SDHC_PIN_CONF);         // 电压切换引脚
+    afio_init(IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,   0, SDHC_PIN_CONF);         // CMD
+    afio_init(IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,   0, SDHC_PIN_CONF);         // CLK
+    afio_init(IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0, 0, SDHC_PIN_CONF);         // DATA0
+    afio_init(IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1, 0, SDHC_PIN_CONF);         // DATA1
+    afio_init(IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2, 0, SDHC_PIN_CONF);         // DATA2
+    afio_init(IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3, 0, SDHC_PIN_CONF);         // DATA3
 }
 
 

@@ -33,8 +33,9 @@
 * 2022-09-21        SeekFree            first version
 ********************************************************************************************************************/
 
-
+#include "fsl_iomuxc.h"
 #include "zf_driver_gpio.h"
+
 #include "zf_driver_csi.h"
 
 #define CSI_PIN_CONF    SPEED_100MHZ | KEEPER_EN | DSE_R0_6 //配置CSI引脚默认配置   
@@ -45,21 +46,21 @@ csi_handle_t            csi_handle;                         //csi事务结构体
 void csi_iomuxc(vsync_pin_enum vsync, pixclk_pin_enum pixclk)
 {
     //数据端口引脚复用设置
-    afio_init(B24,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B25,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B26,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B27,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B28,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B29,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B30,GPIO_AF4,CSI_PIN_CONF);
-    afio_init(B31,GPIO_AF4,CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_08_CSI_DATA09, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_09_CSI_DATA08, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_10_CSI_DATA07, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_11_CSI_DATA06, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_12_CSI_DATA05, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_13_CSI_DATA04, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_14_CSI_DATA03, 0, CSI_PIN_CONF);
+    afio_init(IOMUXC_GPIO_AD_B1_15_CSI_DATA02, 0, CSI_PIN_CONF);
     
-    if      (CSI_VSYNC_B14 == vsync)    afio_init(B14,GPIO_AF4,CSI_PIN_CONF);
-    else if (CSI_VSYNC_B22 == vsync)    afio_init(B22,GPIO_AF4,CSI_PIN_CONF);
-    else if (CSI_VSYNC_C29 == vsync)    afio_init(C29,GPIO_AF2,CSI_PIN_CONF);
-    
-    if      (CSI_PIXCLK_B20 == pixclk)  afio_init(B20,GPIO_AF4,CSI_PIN_CONF);
-    else if (CSI_PIXCLK_C28 == pixclk)  afio_init(C28,GPIO_AF2,CSI_PIN_CONF);
+    if      (CSI_VSYNC_B14 == vsync)    afio_init(IOMUXC_GPIO_AD_B0_14_CSI_VSYNC,   0, CSI_PIN_CONF);
+    else if (CSI_VSYNC_B22 == vsync)    afio_init(IOMUXC_GPIO_AD_B1_06_CSI_VSYNC,   0, CSI_PIN_CONF);
+    else if (CSI_VSYNC_C29 == vsync)    afio_init(IOMUXC_GPIO_B1_13_CSI_VSYNC,      0, CSI_PIN_CONF);
+                                                       
+    if      (CSI_PIXCLK_B20 == pixclk)  afio_init(IOMUXC_GPIO_AD_B1_04_CSI_PIXCLK,  0, CSI_PIN_CONF);
+    else if (CSI_PIXCLK_C28 == pixclk)  afio_init(IOMUXC_GPIO_B1_12_CSI_PIXCLK,     0, CSI_PIN_CONF);
 }
 
 //-------------------------------------------------------------------------------------------------------------------

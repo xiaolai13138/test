@@ -33,12 +33,13 @@
 * 2022-09-21        SeekFree            first version
 ********************************************************************************************************************/
 
-
+#include "fsl_iomuxc.h"
 #include "zf_common_clock.h"
 #include "zf_common_debug.h"
 #include "zf_common_interrupt.h"
 #include "zf_driver_gpio.h"
 #include "board.h"
+
 #include "zf_driver_uart.h"
 
 static  LPUART_Type *uart_index[]            = LPUART_BASE_PTRS;
@@ -52,51 +53,51 @@ void uart_iomuxc(uart_index_enum uartn, uart_tx_pin_enum tx_pin, uart_rx_pin_enu
     {
         case UART_1:
         {
-            if      (UART1_TX_B12 == tx_pin)    afio_init(B12, GPIO_AF2, LPUART_PIN_CONF); 
-            if      (UART1_RX_B13 == rx_pin)    afio_init(B13, GPIO_AF2, LPUART_PIN_CONF); 
-        }break;                                                
-        case UART_2:                                          
-        {                                                      
-            if      (UART2_TX_B18 == tx_pin)    afio_init(B18, GPIO_AF2, LPUART_PIN_CONF); 
-                                                               
-            if      (UART2_RX_B19 == rx_pin)    afio_init(B19, GPIO_AF2, LPUART_PIN_CONF); 
+            if      (UART1_TX_B12 == tx_pin)    afio_init(IOMUXC_GPIO_AD_B0_12_LPUART1_TX,  0, LPUART_PIN_CONF); 
+            if      (UART1_RX_B13 == rx_pin)    afio_init(IOMUXC_GPIO_AD_B0_13_LPUART1_RX,  0, LPUART_PIN_CONF); 
+        }break;                                                 
+        case UART_2:                                            
+        {                                                       
+            if      (UART2_TX_B18 == tx_pin)    afio_init(IOMUXC_GPIO_AD_B1_02_LPUART2_TX,  0, LPUART_PIN_CONF); 
+                                                                
+            if      (UART2_RX_B19 == rx_pin)    afio_init(IOMUXC_GPIO_AD_B1_03_LPUART2_RX,  0, LPUART_PIN_CONF); 
         }break;                                                
         case UART_3:                                          
         {                                                      
-            if      (UART3_TX_B22 == tx_pin)    afio_init(B22, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART3_TX_C8  == tx_pin)    afio_init(C8 , GPIO_AF3, LPUART_PIN_CONF); 
+            if      (UART3_TX_B22 == tx_pin)    afio_init(IOMUXC_GPIO_AD_B1_06_LPUART3_TX,  0, LPUART_PIN_CONF); 
+            else if (UART3_TX_C8  == tx_pin)    afio_init(IOMUXC_GPIO_B0_08_LPUART3_TX,     0, LPUART_PIN_CONF); 
                                                                   
-            if      (UART3_RX_B23 == rx_pin)    afio_init(B23, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART3_RX_C9  == rx_pin)    afio_init(C9 , GPIO_AF3, LPUART_PIN_CONF); 
+            if      (UART3_RX_B23 == rx_pin)    afio_init(IOMUXC_GPIO_AD_B1_07_LPUART3_RX,  0, LPUART_PIN_CONF); 
+            else if (UART3_RX_C9  == rx_pin)    afio_init(IOMUXC_GPIO_B0_09_LPUART3_RX,     0, LPUART_PIN_CONF); 
         }break;                                                
         case UART_4:                                          
         {                                                      
-            if      (UART4_TX_C16 == tx_pin)    afio_init(C16, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART4_TX_D0  == tx_pin)    afio_init(D0 , GPIO_AF4, LPUART_PIN_CONF); 
+            if      (UART4_TX_C16 == tx_pin)    afio_init(IOMUXC_GPIO_B1_00_LPUART4_TX,     0, LPUART_PIN_CONF); 
+            else if (UART4_TX_D0  == tx_pin)    afio_init(IOMUXC_GPIO_SD_B1_00_LPUART4_TX,  0, LPUART_PIN_CONF); 
                                                                   
-            if      (UART4_RX_C17 == rx_pin)    afio_init(C17, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART4_RX_D1  == rx_pin)    afio_init(D1 , GPIO_AF4, LPUART_PIN_CONF); 
+            if      (UART4_RX_C17 == rx_pin)    afio_init(IOMUXC_GPIO_B1_01_LPUART4_RX,     0, LPUART_PIN_CONF); 
+            else if (UART4_RX_D1  == rx_pin)    afio_init(IOMUXC_GPIO_SD_B1_01_LPUART4_RX,  0, LPUART_PIN_CONF); 
         }break;                                                
         case UART_5:                                          
         {                                                      
-            if      (UART5_TX_C28 == tx_pin)    afio_init(C28, GPIO_AF1, LPUART_PIN_CONF); 
+            if      (UART5_TX_C28 == tx_pin)    afio_init(IOMUXC_GPIO_B1_12_LPUART5_TX,     0, LPUART_PIN_CONF); 
                                                                   
-            if      (UART5_RX_C29 == rx_pin)    afio_init(C29, GPIO_AF1, LPUART_PIN_CONF); 
+            if      (UART5_RX_C29 == rx_pin)    afio_init(IOMUXC_GPIO_B1_13_LPUART5_RX,     0, LPUART_PIN_CONF); 
         }break;                                                
         case UART_6:                                          
         {                                                      
-            if      (UART6_TX_B2  == tx_pin)    afio_init(B2 , GPIO_AF2, LPUART_PIN_CONF); 
+            if      (UART6_TX_B2  == tx_pin)    afio_init(IOMUXC_GPIO_AD_B0_02_LPUART6_TX,  0, LPUART_PIN_CONF); 
                                                                   
-            if      (UART6_RX_B3  == rx_pin)    afio_init(B3 , GPIO_AF2, LPUART_PIN_CONF); 
+            if      (UART6_RX_B3  == rx_pin)    afio_init(IOMUXC_GPIO_AD_B0_03_LPUART6_RX,  0, LPUART_PIN_CONF); 
         }break;                                                
                                          
         case UART_8:                                          
         {                                                      
-            if      (UART8_TX_B26 == tx_pin)    afio_init(B26, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART8_TX_D16 == tx_pin)    afio_init(D16, GPIO_AF2, LPUART_PIN_CONF); 
-                                                                  
-            if      (UART8_RX_B27 == rx_pin)    afio_init(B27, GPIO_AF2, LPUART_PIN_CONF); 
-            else if (UART8_RX_D17 == rx_pin)    afio_init(D17, GPIO_AF2, LPUART_PIN_CONF); 
+            if      (UART8_TX_B26 == tx_pin)    afio_init(IOMUXC_GPIO_AD_B1_10_LPUART8_TX,  0, LPUART_PIN_CONF); 
+            else if (UART8_TX_D16 == tx_pin)    afio_init(IOMUXC_GPIO_SD_B0_04_LPUART8_TX,  0, LPUART_PIN_CONF); 
+                                                                    
+            if      (UART8_RX_B27 == rx_pin)    afio_init(IOMUXC_GPIO_AD_B1_11_LPUART8_RX,  0, LPUART_PIN_CONF); 
+            else if (UART8_RX_D17 == rx_pin)    afio_init(IOMUXC_GPIO_SD_B0_05_LPUART8_RX,  0, LPUART_PIN_CONF); 
         }break;
         
         default: zf_assert(0);break;

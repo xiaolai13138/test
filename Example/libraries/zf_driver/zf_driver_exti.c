@@ -74,7 +74,7 @@ void exti_init (gpio_pin_enum pin, exti_trigger_enum trigger)
 {
     gpio_pin_config_t gpio_config;
     
-    afio_init(pin, GPIO_AF5, GPIO_EXTI_CONFIG);
+    gpio_iomuxc(pin, GPIO_EXTI_CONFIG);
     
     gpio_config.direction = kGPIO_DigitalInput;         
     gpio_config.interruptMode = (gpio_interrupt_mode_t)trigger;  

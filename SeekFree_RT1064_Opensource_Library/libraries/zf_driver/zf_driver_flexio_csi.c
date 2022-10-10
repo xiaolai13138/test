@@ -36,9 +36,11 @@
 
 #include "fsl_flexio_camera.h"
 #include "fsl_flexio.h"
+#include "fsl_iomuxc.h"
 #include "fsl_dmamux.h"
 #include "zf_common_debug.h"
 #include "zf_driver_gpio.h"
+
 #include "zf_driver_flexio_csi.h"
 
 #define FLEXIO_PIN_CONF         SPEED_100MHZ | KEEPER_EN | DSE_R0_6             // 配置FLEXIO引脚默认配置
@@ -57,22 +59,20 @@ edma_handle_t g_EDMA_Handle;
 
 void flexio_iomuxc(flexio_pin_enum dat_pin_start, flexio_pin_enum pclk_pin, flexio_pin_enum href_pin)
 {
+    uint8 i;
+    uint32 temp_config[5] = {IOMUXC_GPIO_B0_00_FLEXIO2_FLEXIO00};
     zf_assert(FLEXIO2_D24_C24 >= dat_pin_start);                                // 数据引脚参数错误  起始引脚不得大于24
     zf_assert((pclk_pin < dat_pin_start) || (pclk_pin > (dat_pin_start + 7)));  // 像素时钟引脚不应该在数据引脚范围内
     zf_assert((href_pin < dat_pin_start) || (href_pin > (dat_pin_start + 7)));  // 行信号引脚不应该在数据引脚范围内
     zf_assert(href_pin != pclk_pin);                                            // 行信号引脚不应该与像素时钟引脚一样
     
-    afio_init((gpio_pin_enum)((gpio_pin_enum)pclk_pin + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)href_pin + C0), GPIO_AF4, FLEXIO_PIN_CONF);
+    afio_init(temp_config[0] + pclk_pin * 4, temp_config[1], temp_config[2], temp_config[3], temp_config[4] + pclk_pin * 4, 0, FLEXIO_PIN_CONF);
+    afio_init(temp_config[0] + href_pin * 4, temp_config[1], temp_config[2], temp_config[3], temp_config[4] + href_pin * 4, 0, FLEXIO_PIN_CONF);
     
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 0) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 1) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 2) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 3) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 4) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 5) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 6) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
-    afio_init((gpio_pin_enum)((gpio_pin_enum)(dat_pin_start + 7) + C0), GPIO_AF4, FLEXIO_PIN_CONF);
+    for(i=0; i<8; i++)
+    {
+        afio_init(temp_config[0] + (dat_pin_start + i) * 4, temp_config[1], temp_config[2], temp_config[3], temp_config[4] + (dat_pin_start + i) * 4, 0, FLEXIO_PIN_CONF);
+    }
 }
 
 

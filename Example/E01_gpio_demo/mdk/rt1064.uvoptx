@@ -255,6 +255,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>adc_d,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>gpio_status</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>

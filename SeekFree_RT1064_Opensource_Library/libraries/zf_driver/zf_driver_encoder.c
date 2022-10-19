@@ -66,6 +66,7 @@ void qtimer_iomuxc(encoder_index_enum qtimern, encoder_channel1_enum ch1_pin, en
         {   
             if      (QTIMER2_ENCOEDER1_CH1_C3  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_03_QTIMER2_TIMER0,     0, QTIMER_PIN_CONF);
             if      (QTIMER2_ENCOEDER1_CH2_C4  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_04_QTIMER2_TIMER1,     0, QTIMER_PIN_CONF);
+            else if (QTIMER2_ENCOEDER1_CH1_C25 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_09_QTIMER2_TIMER3,     0, QTIMER_PIN_CONF);
         }break; 
             
         case QTIMER2_ENCOEDER2: 
@@ -118,7 +119,7 @@ void qtimer_iomuxc(encoder_index_enum qtimern, encoder_channel1_enum ch1_pin, en
 int16 encoder_get_count (encoder_index_enum encoder_n)
 {
     uint8 qtimer_cha;
-    qtimer_cha = (encoder_n % 2) * 2;//计算A通道
+    qtimer_cha = (encoder_n % 2) * 2;                                                           // 计算A通道
     return QTMR_GetCurrentTimerCount(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha));
 }
 
@@ -132,7 +133,7 @@ int16 encoder_get_count (encoder_index_enum encoder_n)
 void encoder_clear_count (encoder_index_enum encoder_n)
 {
     uint8 qtimer_cha;
-    qtimer_cha = (encoder_n % 2) * 2;//计算A通道
+    qtimer_cha = (encoder_n % 2) * 2;                                                           // 计算A通道
     qtimer_index[encoder_n / 2]->CHANNEL[qtimer_cha].CNTR = 0;
 }
 
@@ -150,21 +151,30 @@ void encoder_clear_count (encoder_index_enum encoder_n)
 void encoder_quad_init (encoder_index_enum encoder_n, encoder_channel1_enum ch1_pin, encoder_channel2_enum ch2_pin)
 {
     uint8 qtimer_cha;
+    uint8 qtimer_chb;
     qtmr_config_t qtmrConfig;
     
-    zf_assert(encoder_n == ((ch1_pin / 12) + (ch1_pin % 12 / 2) + 1));                          // ch1_pin 必须与 encoder_n 匹配
-    zf_assert(encoder_n == ((ch2_pin / 12) + (ch2_pin % 12 / 2) + 1));                          // ch2_pin 必须与 encoder_n 匹配
+    zf_assert(encoder_n == (ch1_pin / 2));                                                      // ch1_pin 必须与 encoder_n 匹配
+    zf_assert(encoder_n == (ch2_pin / 2));                                                      // ch2_pin 必须与 encoder_n 匹配
     
     qtimer_iomuxc(encoder_n, ch1_pin, ch2_pin);
 
-    qtimer_cha = (encoder_n % 2) * 2;//计算A通道
+    qtimer_cha = (encoder_n % 2) * 2;                                                           // 计算A通道
+    if(QTIMER2_ENCOEDER1_CH1_C25 == ch2_pin)
+    {
+        qtimer_chb = 3;
+    }
+    else
+    {
+        qtimer_chb = qtimer_cha + 1;
+    }
     
     QTMR_GetDefaultConfig(&qtmrConfig);
     qtmrConfig.primarySource = (qtmr_primary_count_source_t)(qtimer_cha);
-    qtmrConfig.secondarySource = (qtmr_input_source_t)(qtimer_cha + 1);
-    QTMR_Init(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha), &qtmrConfig);//第一次初始化便于打开时钟
-    QTMR_Deinit(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha));           //复位外设
-    QTMR_Init(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha), &qtmrConfig);//重新初始化设置正确的参数
+    qtmrConfig.secondarySource = (qtmr_input_source_t)(qtimer_chb);
+    QTMR_Init(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha), &qtmrConfig);// 第一次初始化便于打开时钟
+    QTMR_Deinit(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha));           // 复位外设
+    QTMR_Init(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha), &qtmrConfig);// 重新初始化设置正确的参数
     
     QTMR_StartTimer(qtimer_index[encoder_n / 2], (qtmr_channel_selection_t)(qtimer_cha), kQTMR_PriSrcRiseEdgeSecDir);
 }

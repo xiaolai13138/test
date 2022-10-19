@@ -40,32 +40,32 @@
 
 typedef enum
 {
-    QTIMER1_ENCOEDER1_CH1_C0  = 1 * 12 + 2 * 0,
-    QTIMER1_ENCOEDER2_CH1_C2  = 1 * 12 + 2 * 1,
+    QTIMER1_ENCOEDER1_CH1_C0  = 2 * 2, 
+    QTIMER1_ENCOEDER2_CH1_C2  = 3 * 2,
+                                    
+    QTIMER2_ENCOEDER1_CH1_C3  = 4 * 2,                                            
+    QTIMER2_ENCOEDER2_CH1_C5  = 5 * 2, 
+                                    
+    QTIMER3_ENCOEDER1_CH1_B16 = 6 * 2, QTIMER3_ENCOEDER1_CH1_C6,                        
+    QTIMER3_ENCOEDER2_CH1_B18 = 7 * 2, QTIMER3_ENCOEDER2_CH1_C8,                         
+                                    
+    QTIMER4_ENCOEDER1_CH1_C9  = 8 * 2,
+    QTIMER4_ENCOEDER2_CH1_C11 = 9 * 2,
+}encoder_channel1_enum;             
+                                    
+typedef enum                        
+{                                   
+    QTIMER1_ENCOEDER1_CH2_C1  = 2 * 2,
+    QTIMER1_ENCOEDER2_CH2_C24 = 3 * 2,
                                              
-    QTIMER2_ENCOEDER1_CH1_C3  = 2 * 12 + 2 * 0,                                            
-    QTIMER2_ENCOEDER2_CH1_C5  = 2 * 12 + 2 * 1,                                          
+    QTIMER2_ENCOEDER1_CH2_C4  = 4 * 2, QTIMER2_ENCOEDER1_CH1_C25,
+    QTIMER2_ENCOEDER2_CH2_C25 = 5 * 2,
+                                    
+    QTIMER3_ENCOEDER1_CH2_B17 = 6 * 2, QTIMER3_ENCOEDER1_CH2_C7,                         
+    QTIMER3_ENCOEDER2_CH2_B19 = 7 * 2, QTIMER3_ENCOEDER2_CH2_C26,  
                                              
-    QTIMER3_ENCOEDER1_CH1_B16 = 3 * 12 + 2 * 0, QTIMER3_ENCOEDER1_CH1_C6,                        
-    QTIMER3_ENCOEDER2_CH1_B18 = 3 * 12 + 2 * 1, QTIMER3_ENCOEDER2_CH1_C8,                         
-                                             
-    QTIMER4_ENCOEDER1_CH1_C9  = 4 * 12 + 2 * 0,
-    QTIMER4_ENCOEDER2_CH1_C11 = 4 * 12 + 2 * 1,
-}encoder_channel1_enum;                      
-                                             
-typedef enum                                 
-{                                            
-    QTIMER1_ENCOEDER1_CH2_C1  = 1 * 12 + 2 * 0,
-    QTIMER1_ENCOEDER2_CH2_C24 = 1 * 12 + 2 * 1,
-                                                       
-    QTIMER2_ENCOEDER1_CH2_C4  = 2 * 12 + 2 * 0,                                           
-    QTIMER2_ENCOEDER2_CH2_C25 = 2 * 12 + 2 * 1,    
-                                             
-    QTIMER3_ENCOEDER1_CH2_B17 = 3 * 12 + 2 * 0, QTIMER3_ENCOEDER1_CH2_C7,                         
-    QTIMER3_ENCOEDER2_CH2_B19 = 3 * 12 + 2 * 1, QTIMER3_ENCOEDER2_CH2_C26,  
-                                                       
-    QTIMER4_ENCOEDER1_CH2_C10 = 4 * 12 + 2 * 0,
-    QTIMER4_ENCOEDER2_CH2_C27 = 4 * 12 + 2 * 1,
+    QTIMER4_ENCOEDER1_CH2_C10 = 8 * 2,
+    QTIMER4_ENCOEDER2_CH2_C27 = 9 * 2,
 }encoder_channel2_enum;
 
 typedef enum

@@ -59,7 +59,7 @@
 
 #include "zf_device_mt9v03x_flexio.h"
 
-uint8   mt9v03x_flexio_finish_flag = 0;                                                   // 一场图像采集完成标志位
+vuint8  mt9v03x_flexio_finish_flag = 0;                                               	// 一场图像采集完成标志位
 
 AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_flexio_image[MT9V03X_FLEXIO_H][MT9V03X_FLEXIO_W], 4);
 

@@ -58,7 +58,7 @@
 
 #include "zf_device_mt9v03x.h"
 
-uint8 mt9v03x_finish_flag = 0;                                                  // 一场图像采集完成标志位
+vuint8 mt9v03x_finish_flag = 0;                                                  // 一场图像采集完成标志位
 // 图像缓冲区  如果用户需要访问图像数据 最好通过mt9v03x_csi_image来访问数据，最好不要直接访问缓冲区
 AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_image1[MT9V03X_H][MT9V03X_W], 64);
 AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_image2[MT9V03X_H][MT9V03X_W], 64);

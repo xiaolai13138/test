@@ -178,7 +178,7 @@ void GPIO1_Combined_16_31_IRQHandler(void)
 void GPIO2_Combined_0_15_IRQHandler(void)
 {
     flexio_camera_vsync_handler();
-    
+    wireless_module_spi_handler();
     
     if(exti_flag_get(C0))
     {

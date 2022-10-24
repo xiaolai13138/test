@@ -256,7 +256,7 @@ typedef enum
     OV7725_SET_DATA             = 0xFF,
 }ov7725_cmd_enum;
 
-extern uint8        ov7725_finish_flag;                     // 一场图像采集完成标志位
+extern vuint8       ov7725_finish_flag;                     // 一场图像采集完成标志位
 extern uint8        (*ov7725_image_binary)[OV7725_W / 8];
 
 uint16      ov7725_uart_get_id      (void);

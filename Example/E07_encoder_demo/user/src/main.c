@@ -90,9 +90,9 @@
 #define ENCODER_QUADDEC_A               (QTIMER1_ENCOEDER1_CH1_C0)              // A 相对应的引脚
 #define ENCODER_QUADDEC_B               (QTIMER1_ENCOEDER1_CH2_C1)              // B 相对应的引脚
     
-#define ENCODER_DIR		                (QTIMER1_ENCOEDER2)                     // 带方向编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER2
-#define ENCODER_DIR_PULSE               (QTIMER1_ENCOEDER2_CH1_C2)              // PULSE 对应的引脚
-#define ENCODER_DIR_DIR                 (QTIMER1_ENCOEDER2_CH2_C24)             // DIR 对应的引脚
+#define ENCODER_DIR		                (QTIMER2_ENCOEDER1)                     // 带方向编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER2
+#define ENCODER_DIR_PULSE               (QTIMER2_ENCOEDER1_CH1_C3)              // PULSE 对应的引脚
+#define ENCODER_DIR_DIR                 (QTIMER2_ENCOEDER1_CH2_C25)             // DIR 对应的引脚
 
 int16 encoder_data_quaddec = 0;
 int16 encoder_data_dir = 0;

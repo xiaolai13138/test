@@ -66,7 +66,7 @@ void qtimer_iomuxc(encoder_index_enum qtimern, encoder_channel1_enum ch1_pin, en
         {   
             if      (QTIMER2_ENCOEDER1_CH1_C3  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_03_QTIMER2_TIMER0,     0, QTIMER_PIN_CONF);
             if      (QTIMER2_ENCOEDER1_CH2_C4  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_04_QTIMER2_TIMER1,     0, QTIMER_PIN_CONF);
-            else if (QTIMER2_ENCOEDER1_CH1_C25 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_09_QTIMER2_TIMER3,     0, QTIMER_PIN_CONF);
+            else if (QTIMER2_ENCOEDER1_CH2_C25 == ch2_pin)  afio_init(IOMUXC_GPIO_B1_09_QTIMER2_TIMER3,     0, QTIMER_PIN_CONF);
         }break; 
             
         case QTIMER2_ENCOEDER2: 
@@ -160,7 +160,7 @@ void encoder_quad_init (encoder_index_enum encoder_n, encoder_channel1_enum ch1_
     qtimer_iomuxc(encoder_n, ch1_pin, ch2_pin);
 
     qtimer_cha = (encoder_n % 2) * 2;                                                           // º∆À„AÕ®µ¿
-    if(QTIMER2_ENCOEDER1_CH1_C25 == ch2_pin)
+    if(QTIMER2_ENCOEDER1_CH2_C25 == ch2_pin)
     {
         qtimer_chb = 3;
     }

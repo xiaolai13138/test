@@ -1,3 +1,11 @@
+V3.1.2
+	修复spi底层可能出现不发送数据及spi_transfer_16bit与spi_transfer_8bit发送数量不对的问题
+	修改无线转串口的引脚以及串口的宏定义名称
+	修复fifo读取函数可能不按照指定长度读取数据
+	修改QTIMER2_ENCOEDER1_CH1_C25为QTIMER2_ENCOEDER1_CH2_C25
+	修改wifi_uart_information_struct结构体
+	摄像头的标志都类型修改为vuint8
+	
 V3.1.1
 	修复无法使用C3 C25进行编码器采集的问题
 

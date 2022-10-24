@@ -112,7 +112,7 @@ typedef enum
     SCC8660_SET_REG_DATA        = 0xFF, 
 }scc8660_cmd_enum;
 
-extern uint8        scc8660_finish_flag;                                        // 一场图像采集完成标志位
+extern vuint8       scc8660_finish_flag;                                        // 一场图像采集完成标志位
 extern uint16       (*scc8660_image)[SCC8660_W];
 
 

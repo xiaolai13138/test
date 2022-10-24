@@ -59,7 +59,7 @@
 
 #include "zf_device_scc8660_flexio.h"
 
-uint8 scc8660_flexio_finish_flag = 0;                                                   // 一场图像采集完成标志位
+vuint8 scc8660_flexio_finish_flag = 0;                                                  // 一场图像采集完成标志位
 
 AT_DTCM_SECTION_ALIGN(uint16 scc8660_flexio_image[SCC8660_FLEXIO_H][SCC8660_FLEXIO_W], 4);
 

@@ -108,18 +108,23 @@ void spi_iomuxc(spi_index_enum spi_n, spi_sck_pin_enum sck_pin, spi_mosi_pin_enu
     }
 }
 
+
 void spi_write(spi_index_enum spi_n, const uint8 *txdata, uint8 *rxdata, uint32 length, uint8 continuous)
 {
+    uint32 transfer_status;
     lpspi_transfer_t transfer;
 
-    assert(0 != length);               //断言字节数不为0
+    zf_assert(length);               // 断言字节数不为0
     
     if(continuous)  transfer.configFlags = ((spi_cs_index[spi_n]%16/2)<<LPSPI_MASTER_PCS_SHIFT) | kLPSPI_MasterPcsContinuous;
     else            transfer.configFlags = ((spi_cs_index[spi_n]%16/2)<<LPSPI_MASTER_PCS_SHIFT);
     transfer.txData = (uint8 *)txdata;
     transfer.rxData = rxdata;
     transfer.dataSize = length;
-    LPSPI_MasterTransferBlocking(spi_index[spi_n], &transfer);
+    do
+    {
+        transfer_status = LPSPI_MasterTransferBlocking(spi_index[spi_n], &transfer);
+    }while(transfer_status == kStatus_LPSPI_Busy);
 }
 
 
@@ -536,7 +541,7 @@ void spi_read_16bit_registers (spi_index_enum spi_n, const uint16 register_name,
 void spi_transfer_8bit (spi_index_enum spi_n, const uint8 *write_buffer, uint8 *read_buffer, uint32 length)
 {
 #ifdef SPI_SPEED_PRIORITY
-    spi_write(spi_n, write_buffer, read_buffer, 1, 1);
+    spi_write(spi_n, write_buffer, read_buffer, length, 1);
 #else
     while(length --)
     {
@@ -560,7 +565,16 @@ void spi_transfer_8bit (spi_index_enum spi_n, const uint8 *write_buffer, uint8 *
 void spi_transfer_16bit (spi_index_enum spi_n, const uint16 *write_buffer, uint16 *read_buffer, uint32 length)
 {
 #ifdef SPI_SPEED_PRIORITY
-    spi_write(spi_n, (const uint8 *)write_buffer, (uint8 *)read_buffer, 2, 1);
+    uint16 temp;
+    while(length --)
+    {
+        temp = *write_buffer;
+        temp = (temp << 8) | (temp >> 8);
+        spi_write(spi_n, (const uint8 *)&temp, (uint8 *)read_buffer, 2, 1);
+        write_buffer ++;
+        read_buffer ++;
+    }
+    
 #else
     while(length --)
     {

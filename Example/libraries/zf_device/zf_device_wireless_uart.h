@@ -21,7 +21,7 @@
 * 许可证副本在 libraries 文件夹下 即该文件夹下的 LICENSE 文件
 * 欢迎各位使用并传播本程序 但修改内容时必须保留逐飞科技的版权声明（即本声明）
 * 
-* 文件名称          zf_device_wrieless_uart
+* 文件名称          zf_device_wireless_uart
 * 公司名称          成都逐飞科技有限公司
 * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
 * 开发环境          IAR 8.32.4 or MDK 5.33
@@ -36,25 +36,25 @@
 * 接线定义：
 *                   ------------------------------------
 *                   模块管脚            单片机管脚
-*                   RX                  查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_RX_PINx 宏定义
-*                   TX                  查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_TX_PINx 宏定义
-*                   RTS                 查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_RTS_PINx 宏定义
+*                   RX                  查看 zf_device_wireless_uart.h 中 WIRELESS_UART_RX_PINx 宏定义
+*                   TX                  查看 zf_device_wireless_uart.h 中 WIRELESS_UART_TX_PINx 宏定义
+*                   RTS                 查看 zf_device_wireless_uart.h 中 WIRELESS_UART_RTS_PINx 宏定义
 *                   VCC                 3.3V电源
 *                   GND                 电源地
 *                   其余引脚悬空
 *                   ------------------------------------
 ********************************************************************************************************************/
 
-#ifndef _zf_device_wrieless_uart_h_
-#define _zf_device_wrieless_uart_h_
+#ifndef _zf_device_wireless_uart_h_
+#define _zf_device_wireless_uart_h_
 
 #include "zf_common_typedef.h"
 
-#define WRIELESS_UART_INDEX         (UART_8)                                    // 无线串口对应使用的串口号
-#define WRIELESS_UART_BUAD_RATE     (115200)                                    // 无线串口对应使用的串口波特率
-#define WRIELESS_UART_TX_PIN        (UART8_RX_D17)                              // 无线串口对应模块的 TX 要接到单片机的 RX
-#define WRIELESS_UART_RX_PIN        (UART8_TX_D16)                              // 无线串口对应模块的 RX 要接到单片机的 TX
-#define WRIELESS_UART_RTS_PIN       (D26)                                       // 无线串口对应模块的 RTS 引脚
+#define WIRELESS_UART_INDEX         (UART_8)                                    // 无线串口对应使用的串口号
+#define WIRELESS_UART_BUAD_RATE     (115200)                                    // 无线串口对应使用的串口波特率
+#define WIRELESS_UART_TX_PIN        (UART8_RX_D17)                              // 无线串口对应模块的 TX 要接到单片机的 RX
+#define WIRELESS_UART_RX_PIN        (UART8_TX_D16)                              // 无线串口对应模块的 RX 要接到单片机的 TX
+#define WIRELESS_UART_RTS_PIN       (D26)                                       // 无线串口对应模块的 RTS 引脚
 
 // ------------------------------------ 自动波特率 ------------------------------------
 // 注意事项1：无线转串口模块版本是V2.0以下的是无法开启自动波特率的。

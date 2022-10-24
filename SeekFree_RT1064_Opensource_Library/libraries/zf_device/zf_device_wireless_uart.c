@@ -36,9 +36,9 @@
 * 接线定义：
 *                   ------------------------------------
 *                   模块管脚            单片机管脚
-*                   RX                  查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_RX_PINx 宏定义
-*                   TX                  查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_TX_PINx 宏定义
-*                   RTS                 查看 zf_device_wrieless_uart.h 中 WRIELESS_UART_RTS_PINx 宏定义
+*                   RX                  查看 zf_device_wireless_uart.h 中 WIRELESS_UART_RX_PINx 宏定义
+*                   TX                  查看 zf_device_wireless_uart.h 中 WIRELESS_UART_TX_PINx 宏定义
+*                   RTS                 查看 zf_device_wireless_uart.h 中 WIRELESS_UART_RTS_PINx 宏定义
 *                   VCC                 3.3V电源
 *                   GND                 电源地
 *                   其余引脚悬空
@@ -74,9 +74,9 @@ uint32 wireless_uart_send_byte (const uint8 data)
     uint16 time_count = WIRELESS_UART_TIMEOUT_COUNT;
     while(time_count)
     {
-        if(!gpio_get_level(WRIELESS_UART_RTS_PIN))
+        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))
         {
-            uart_write_byte(WRIELESS_UART_INDEX, data);                         // 发送数据
+            uart_write_byte(WIRELESS_UART_INDEX, data);                         // 发送数据
             break;
         }
         time_count --;
@@ -98,18 +98,18 @@ uint32 wireless_uart_send_buff (const uint8 *buff, uint32 len)
     uint16 time_count = 0;
     while(0 != len)
     {
-        if(!gpio_get_level(WRIELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
+        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
         {
             if(30 <= len)                                                       // 数据分 30byte 每包发送
             {
-                uart_write_buffer(WRIELESS_UART_INDEX, buff, 30);                    // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, buff, 30);                    // 发送数据
                 buff += 30;                                                     // 地址偏移
                 len -= 30;                                                      // 数量
                 time_count = 0;
             }
             else                                                                // 不足 30byte 的数据一次性发送完毕
             {
-                uart_write_buffer(WRIELESS_UART_INDEX, buff, len);                   // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, buff, len);                   // 发送数据
                 len = 0;
                 break;
             }
@@ -139,18 +139,18 @@ uint32 wireless_uart_send_string (const char *str)
     uint32 len = strlen(str);
     while(0 != len)
     {
-        if(!gpio_get_level(WRIELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
+        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
         {
             if(30 <= len)                                                       // 数据分 30byte 每包发送
             {
-                uart_write_buffer(WRIELESS_UART_INDEX, (const uint8 *)str, 30);      // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, 30);      // 发送数据
                 str += 30;                                                      // 地址偏移
                 len -= 30;                                                      // 数量
                 time_count = 0;
             }
             else                                                                // 不足 30byte 的数据一次性发送完毕
             {
-                uart_write_buffer(WRIELESS_UART_INDEX, (const uint8 *)str, len);     // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, len);     // 发送数据
                 len = 0;
                 break;
             }
@@ -208,7 +208,7 @@ uint32 wireless_uart_read_buff (uint8 *buff, uint32 len)
 //-------------------------------------------------------------------------------------------------------------------
 void wireless_uart_callback (void)
 {
-    uart_query_byte(WRIELESS_UART_INDEX, &wireless_uart_data);
+    uart_query_byte(WIRELESS_UART_INDEX, &wireless_uart_data);
     fifo_write_buffer(&wireless_uart_fifo, &wireless_uart_data, 1);
 #if WIRELESS_UART_AUTO_BAUD_RATE                                                // 开启自动波特率
     if(wireless_auto_baud_flag == 1 && fifo_used(&wireless_uart_fifo) == 3)
@@ -232,11 +232,11 @@ uint8 wireless_uart_init (void)
     set_wireless_type(WIRELESS_UART, wireless_uart_callback);
 
     fifo_init(&wireless_uart_fifo, FIFO_DATA_8BIT, wireless_uart_buffer, WIRELESS_UART_BUFFER_SIZE);
-    gpio_init(WRIELESS_UART_RTS_PIN, GPI, GPIO_HIGH, GPI_PULL_UP);
+    gpio_init(WIRELESS_UART_RTS_PIN, GPI, GPIO_HIGH, GPI_PULL_UP);
 #if(0 == WIRELESS_UART_AUTO_BAUD_RATE)                                          // 关闭自动波特率
     // 本函数使用的波特率为115200 为无线转串口模块的默认波特率 如需其他波特率请自行配置模块并修改串口的波特率
-    uart_init (WRIELESS_UART_INDEX, WRIELESS_UART_BUAD_RATE, WRIELESS_UART_RX_PIN, WRIELESS_UART_TX_PIN);   // 初始化串口
-    uart_rx_interrupt(WRIELESS_UART_INDEX, 1);
+    uart_init (WIRELESS_UART_INDEX, WIRELESS_UART_BUAD_RATE, WIRELESS_UART_RX_PIN, WIRELESS_UART_TX_PIN);   // 初始化串口
+    uart_rx_interrupt(WIRELESS_UART_INDEX, 1);
 #elif(1 == WIRELESS_UART_AUTO_BAUD_RATE)                                        // 开启自动波特率
     uint8 rts_init_status;
     uint16 time_count = 0;
@@ -246,22 +246,22 @@ uint8 wireless_uart_init (void)
     wireless_auto_baud_data[1] = 1;
     wireless_auto_baud_data[2] = 3;
 
-    rts_init_status = gpio_get_level(WRIELESS_UART_RTS_PIN);
-    gpio_init(WRIELESS_UART_RTS_PIN, GPO, rts_init_status, GPO_PUSH_PULL);      // 初始化流控引脚
+    rts_init_status = gpio_get_level(WIRELESS_UART_RTS_PIN);
+    gpio_init(WIRELESS_UART_RTS_PIN, GPO, rts_init_status, GPO_PUSH_PULL);      // 初始化流控引脚
 
-    uart_init (WRIELESS_UART_INDEX, WRIELESS_UART_BUAD_RATE, WRIELESS_UART_RX_PIN, WRIELESS_UART_TX_PIN);   // 初始化串口
-    uart_rx_irq(WRIELESS_UART_INDEX, 1);
+    uart_init (WIRELESS_UART_INDEX, WIRELESS_UART_BUAD_RATE, WIRELESS_UART_RX_PIN, WIRELESS_UART_TX_PIN);   // 初始化串口
+    uart_rx_irq(WIRELESS_UART_INDEX, 1);
 
     system_delay_ms(5);                                                         // 模块上电之后需要延时等待
-    gpio_set(WRIELESS_UART_RTS_PIN, !rts_init_status);                          // RTS引脚拉高，进入自动波特率模式
+    gpio_set(WIRELESS_UART_RTS_PIN, !rts_init_status);                          // RTS引脚拉高，进入自动波特率模式
     system_delay_ms(100);                                                       // RTS拉高之后必须延时20ms
-    gpio_toggle(WRIELESS_UART_RTS_PIN);                                         // RTS引脚取反
+    gpio_toggle(WIRELESS_UART_RTS_PIN);                                         // RTS引脚取反
 
     wireless_auto_baud_flag = 1;
 
-    uart_putchar(WRIELESS_UART_INDEX, wireless_auto_baud_data[0]);              // 发送特定数据 用于模块自动判断波特率
-    uart_putchar(WRIELESS_UART_INDEX, wireless_auto_baud_data[1]);              // 发送特定数据 用于模块自动判断波特率
-    uart_putchar(WRIELESS_UART_INDEX, wireless_auto_baud_data[2]);              // 发送特定数据 用于模块自动判断波特率
+    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[0]);              // 发送特定数据 用于模块自动判断波特率
+    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[1]);              // 发送特定数据 用于模块自动判断波特率
+    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[2]);              // 发送特定数据 用于模块自动判断波特率
     system_delay_ms(20);
 
     time_count = 0;
@@ -293,7 +293,7 @@ uint8 wireless_uart_init (void)
         }
         wireless_auto_baud_flag = 0;
 
-        gpio_init(WRIELESS_UART_RTS_PIN, GPI, 0, GPI_PULL_UP);                  // 初始化流控引脚
+        gpio_init(WIRELESS_UART_RTS_PIN, GPI, 0, GPI_PULL_UP);                  // 初始化流控引脚
         system_delay_ms(10);                                                    // 延时等待 模块准备就绪
     }while(0);
 #endif

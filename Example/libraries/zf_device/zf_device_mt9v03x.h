@@ -114,7 +114,7 @@ typedef enum
     MT9V03X_SET_DATA                                                            // 寄存器数据命令
 }m9v03x_cmd_enum;
 
-extern uint8    mt9v03x_finish_flag;                                            // 一场图像采集完成标志位
+extern vuint8   mt9v03x_finish_flag;                                            // 一场图像采集完成标志位
 extern uint8    (*mt9v03x_image)[MT9V03X_W];
 
 uint16      mt9v03x_get_version         (void);

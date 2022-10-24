@@ -59,7 +59,7 @@
 
 #include "zf_device_ov7725.h"
 
-uint8 ov7725_finish_flag = 0;
+vuint8 ov7725_finish_flag = 0;
 
 // 图像缓冲区  如果用户需要访问图像数据 最好通过mt9v03x_csi_image来访问数据，最好不要直接访问缓冲区
 AT_DTCM_SECTION_ALIGN(uint8 ov7725_image_binary1[OV7725_H][OV7725_W / 8], 64);

@@ -109,11 +109,11 @@ typedef enum
 
 typedef struct
 {
-    uint8                           wifi_uart_version[10];                      // 固件版本         字符串形式
-    uint8                           wifi_uart_mac[18];                          // 本机 MAC 地址    字符串形式
-    uint8                           wifi_uart_local_ip[15];                     // 本机 IP 地址     字符串形式
-    uint8                           wifi_uart_local_port[8];                    // 本机端口号       字符串形式
-    uint8                           wifi_uart_remote_ip[5][15];                 // 远端 IP 地址     字符串形式
+    uint8                           wifi_uart_version[12];                      // 固件版本         字符串形式
+    uint8                           wifi_uart_mac[20];                          // 本机 MAC 地址    字符串形式
+    uint8                           wifi_uart_local_ip[17];                     // 本机 IP 地址     字符串形式
+    uint8                           wifi_uart_local_port[10];                   // 本机端口号       字符串形式
+    uint8                           wifi_uart_remote_ip[5][17];                 // 远端 IP 地址     字符串形式
     wifi_uart_mode_enum             wifi_uart_mode;                             // WIFI 模式
     wifi_uart_transfer_mode_enum    wifi_uart_transfer_mode;                    // 当前传输模式
     wifi_uart_connect_mode_enum     wifi_uart_connect_mode;                     // 网络连接模式
@@ -136,8 +136,8 @@ uint8   wifi_uart_entry_tcp_servers         (char *port);                       
 uint8   wifi_uart_exit_tcp_servers          (void);                                                                         // 关闭 TCP 服务器
 uint8   wifi_uart_tcp_servers_check_link    (void);                                                                         // TCP Server 模式下检查当前链接数量 并获取 IP
 
-uint16  wifi_uart_send_buffer               (uint8 *buff, uint16 len);                                                      // WIFI 模块数据发送函数
-uint16  wifi_uart_tcp_servers_send_buffer   (uint8 *buff, uint16 len, wifi_uart_link_id_enum id);                           // WIFI 模块作为 TCP Server 指定目标设备发送函数
+uint32  wifi_uart_send_buffer               (uint8 *buff, uint32 len);                                                      // WIFI 模块数据发送函数
+uint32  wifi_uart_tcp_servers_send_buffer   (uint8 *buff, uint32 len, wifi_uart_link_id_enum id);                           // WIFI 模块作为 TCP Server 指定目标设备发送函数
 uint16  wifi_uart_read_buffer               (uint8 *buff, uint16 len);                                                      // WIFI 模块数据接收函数
 
 void    wifi_uart_callback                  (void);                                                                         // WIFI 模块串口回调函数

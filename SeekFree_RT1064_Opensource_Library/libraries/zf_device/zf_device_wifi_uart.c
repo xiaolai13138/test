@@ -36,10 +36,10 @@
 * 接线定义：
 *                   ------------------------------------
 *                   模块管脚            单片机管脚
-*                   RX                  查看 zf_device_wifi_uart.h 中 WRIELESS_UART_RX_PINx 宏定义
-*                   TX                  查看 zf_device_wifi_uart.h 中 WRIELESS_UART_TX_PINx 宏定义
-*                   RTS                 查看 zf_device_wifi_uart.h 中 WRIELESS_UART_RTS_PINx 宏定义
-*                   RST                 查看 zf_device_wifi_uart.h 中 WRIELESS_UART_RST_PINx 宏定义
+*                   RX                  查看 zf_device_wifi_uart.h 中 WIFI_UART_RX_PIN 宏定义
+*                   TX                  查看 zf_device_wifi_uart.h 中 WIFI_UART_TX_PIN 宏定义
+*                   RTS                 查看 zf_device_wifi_uart.h 中 WIFI_UART_RTS_PIN 宏定义
+*                   RST                 查看 zf_device_wifi_uart.h 中 WIFI_UART_RST_PIN 宏定义
 *                   VCC                 5V 电源
 *                   GND                 电源地
 *                   其余引脚悬空
@@ -191,7 +191,7 @@ static uint8 wifi_uart_get_version (void)
 // 函数简介     模块回显设置
 // 参数说明     model           0:关闭模块的回写功能  其他：开启模块回写
 // 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_uart_writeback_set("1");//开启模块回写功能
+// 使用示例     wifi_uart_echo_set("1");//开启模块回写功能
 // 备注信息     内部调用
 //--------------------------------------------------------------------------------------------------
 static uint8 wifi_uart_echo_set (char *model)
@@ -574,7 +574,7 @@ uint8 wifi_uart_entry_serianet (void)
 // 函数简介     退出透传模式
 // 参数说明     model           0:关闭透传模式   其他：开启透传模式
 // 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_uart_open_or_close_serianet(1);
+// 使用示例     wifi_uart_exit_serianet();
 // 备注信息     
 //--------------------------------------------------------------------------------------------------
 uint8 wifi_uart_exit_serianet (void)
@@ -635,20 +635,11 @@ uint8 wifi_uart_connect_tcp_servers (char *ip, char *port, wifi_uart_transfer_mo
         }
 
         wifi_uart_clear_receive_buffer(); // 清空WiFi接收缓冲区
-        if(mode == WIFI_UART_SERIANET)// 透传模式下直接开启透传
-        {
-            if(wifi_uart_entry_serianet())
-            {
-                return_state = 1;
-                break;
-            }
-        }
-
-        wifi_uart_clear_receive_buffer(); // 清空WiFi接收缓冲区
         uart_write_string(WIFI_UART_INDEX, "AT+CIPSTATE?\r\n");
         if(wifi_uart_wait_ack("OK", WAIT_TIME_OUT))
         {
             return_state = 1;
+            break;
         }
         else
         {
@@ -670,6 +661,16 @@ uint8 wifi_uart_connect_tcp_servers (char *ip, char *port, wifi_uart_transfer_mo
         wifi_uart_information.wifi_uart_connect_state = WIFI_UART_SERVER_ON;
         wifi_uart_information.wifi_uart_connect_mode = WIFI_UART_TCP_CLIENT;
         wifi_uart_information.wifi_uart_transfer_mode = mode;
+
+        wifi_uart_clear_receive_buffer(); // 清空WiFi接收缓冲区
+        if(mode == WIFI_UART_SERIANET)// 透传模式下直接开启透传
+        {
+            if(wifi_uart_entry_serianet())
+            {
+                return_state = 1;
+                break;
+            }
+        }
 
     }while(0);
     wifi_uart_clear_receive_buffer(); // 清空WiFi接收缓冲区
@@ -944,7 +945,7 @@ uint8 wifi_uart_tcp_servers_check_link (void)
 // 使用示例     wifi_uart_send_buffer("123", 3);
 // 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
 //-------------------------------------------------------------------------------------------------------------------
-uint16 wifi_uart_send_buffer (uint8 *buff, uint16 len)
+uint32 wifi_uart_send_buffer (uint8 *buff, uint32 len)
 {
     int32 timeout = WAIT_TIME_OUT;
 
@@ -1011,7 +1012,7 @@ uint16 wifi_uart_send_buffer (uint8 *buff, uint16 len)
 // 使用示例     wifi_uart_tcp_servers_send_buffer("123", 3, WIFI_UART_LINK_0);
 // 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
 //-------------------------------------------------------------------------------------------------------------------
-uint16 wifi_uart_tcp_servers_send_buffer (uint8 *buff, uint16 len, wifi_uart_link_id_enum id)
+uint32 wifi_uart_tcp_servers_send_buffer (uint8 *buff, uint32 len, wifi_uart_link_id_enum id)
 {
     char lenth[32] = {0};
 
@@ -1062,8 +1063,7 @@ uint16 wifi_uart_tcp_servers_send_buffer (uint8 *buff, uint16 len, wifi_uart_lin
 uint16 wifi_uart_read_buffer (uint8 *buffer, uint16 len)
 {
     uint32 read_len = len;
-    fifo_read_buffer(&wifi_uart_fifo, buffer, &read_len, FIFO_READ_ONLY);
-    wifi_uart_clear_receive_buffer();                                       // 清空WiFi接收缓冲区
+    fifo_read_buffer(&wifi_uart_fifo, buffer, &read_len, FIFO_READ_AND_CLEAN);
     return read_len;
 }
 
@@ -1086,11 +1086,11 @@ void wifi_uart_callback (void)
 // 函数简介     WiFi 模块初始化
 // 参数说明     *wifi_ssid      目标连接的 WiFi 的名称 字符串形式
 // 参数说明     *pass_word      目标连接的 WiFi 的密码 字符串形式
-// 参数说明     wifi_mode       模块的工作模式 参照 zf_device_wrieless_uart.h 中 wifi_uart_mode_enum 枚举
+// 参数说明     wifi_mode       模块的工作模式 参照 zf_device_wireless_uart.h 中 wifi_uart_mode_enum 枚举
 // 返回参数     uint8           模块初始化状态 0-成功 1-错误
 // 使用示例     wifi_uart_init("SEEKFREE_2.4G", "SEEKFREEV2", WIFI_UART_STATION);
 // 备注信息     初始化会首先设置串口配置，之后会对模块进行基本参数配置
-//              具体的配置信息可以在 zf_device_wrieless_uart.h 文件中修改
+//              具体的配置信息可以在 zf_device_wireless_uart.h 文件中修改
 //-------------------------------------------------------------------------------------------------------------------
 uint8 wifi_uart_init (char *wifi_ssid, char *pass_word, wifi_uart_mode_enum wifi_mode)
 {
@@ -1167,7 +1167,7 @@ uint8 wifi_uart_init (char *wifi_ssid, char *pass_word, wifi_uart_mode_enum wifi
         }
         // zf_log(0, "seekfree wifi uart init succeed");
 #if WIFI_UART_AUTO_CONNECT == 1
-        if(wifi_uart_connect_tcp_servers(WIFI_UART_TARGET_IP, WIFI_UART_TARGET_PORT,WIFI_UART_COMMAND))                         // 连接TCP服务器
+        if(wifi_uart_connect_tcp_servers(WIFI_UART_TARGET_IP, WIFI_UART_TARGET_PORT, WIFI_UART_COMMAND))                        // 连接TCP服务器
         {
             zf_log(0, "connect TCP server failed");
             return_state = 1;

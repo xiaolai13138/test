@@ -38,15 +38,16 @@
 #include "zf_device_type.h"
 
 
-camera_type_enum    camera_type                 = NO_CAMERE;                    // 摄像头类型变量
-callback_function camera_uart_handler           = type_default_callback;        // 串口通讯中断函数指针，根据初始化时设置的函数进行跳转
+camera_type_enum    camera_type                     = NO_CAMERE;                    // 摄像头类型变量
+callback_function   camera_uart_handler             = type_default_callback;        // 串口通讯中断函数指针，根据初始化时设置的函数进行跳转
 
-camera_type_enum    flexio_camera_type          = NO_CAMERE;                    // FLEXIO接口摄像头类型变量
-callback_function flexio_camera_vsync_handler   = type_default_callback;        // 场中断函数指针，根据初始化时设置的函数进行跳转
-callback_function flexio_camera_uart_handler    = type_default_callback;        // 串口通讯中断函数指针，根据初始化时设置的函数进行跳转
+camera_type_enum    flexio_camera_type              = NO_CAMERE;                    // FLEXIO接口摄像头类型变量
+callback_function   flexio_camera_vsync_handler     = type_default_callback;        // 场中断函数指针，根据初始化时设置的函数进行跳转
+callback_function   flexio_camera_uart_handler      = type_default_callback;        // 串口通讯中断函数指针，根据初始化时设置的函数进行跳转
 
-wireless_type_enum  wireless_type               = NO_WIRELESS;
-callback_function wireless_module_uart_handler  = type_default_callback;        // 无线串口接收中断函数指针，根据初始化时设置的函数进行跳转
+wireless_type_enum  wireless_type                   = NO_WIRELESS;
+callback_function   wireless_module_uart_handler    = type_default_callback;        // 无线串口接收中断函数指针，根据初始化时设置的函数进行跳转
+callback_function   wireless_module_spi_handler     = type_default_callback;        // WIFI SPI GPIO中断函数指针，根据初始化时设置的函数进行跳转
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     空回调函数
@@ -102,12 +103,19 @@ void set_flexio_camera_type (camera_type_enum type_set, callback_function vsync_
 // 使用示例     set_wireless_type(WIRELESS_UART);
 // 备注信息     一般由各摄像头初始化内部调用
 //-------------------------------------------------------------------------------------------------------------------
-void set_wireless_type (wireless_type_enum type_set, callback_function uart_callback)
+void set_wireless_type (wireless_type_enum type_set, callback_function wireless_callback)
 {
     wireless_type = type_set;
-    if(uart_callback)
+    if(wireless_callback)
     {
-        wireless_module_uart_handler = uart_callback;
+        if(WIFI_SPI == wireless_type)
+        {
+            wireless_module_spi_handler = wireless_callback;
+        }
+        else
+        {
+            wireless_module_uart_handler = wireless_callback;
+        }
     }
 }
 

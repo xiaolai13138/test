@@ -351,6 +351,7 @@ fifo_state_enum fifo_read_element (fifo_struct *fifo, void *dat, fifo_operation_
 fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, fifo_operation_enum flag)
 {
     fifo_state_enum return_state = FIFO_SUCCESS;
+	uint32 fifo_data_length;
     uint32 temp_length;
 
     do
@@ -362,9 +363,10 @@ fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, 
         }
         fifo->execution |= FIFO_READ;
 
-        if(*length > fifo_used(fifo))
+		fifo_data_length = fifo_used(fifo);
+        if(*length > fifo_data_length)
         {
-            *length = (fifo->max - fifo->size);                                 // 纠正读取的长度
+            *length = fifo_data_length;                                         // 纠正读取的长度
             return_state = FIFO_DATA_NO_ENOUGH;                                 // 标志数据不够
         }
 
@@ -436,6 +438,7 @@ fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, 
 fifo_state_enum fifo_read_tail_buffer (fifo_struct *fifo, void *dat, uint32 *length, fifo_operation_enum flag)
 {
     fifo_state_enum return_state = FIFO_SUCCESS;
+    uint32 fifo_data_length;
     uint32 temp_length;
 
     do
@@ -446,10 +449,11 @@ fifo_state_enum fifo_read_tail_buffer (fifo_struct *fifo, void *dat, uint32 *len
             break;
         }
         fifo->execution |= FIFO_READ;
-
-        if(*length > fifo_used(fifo))
+        
+        fifo_data_length = fifo_used(fifo);
+        if(*length > fifo_data_length)
         {
-            *length = (fifo->max - fifo->size);                                 // 纠正读取的长度
+            *length = fifo_data_length;                                         // 纠正读取的长度
             return_state = FIFO_DATA_NO_ENOUGH;                                 // 标志数据不够
         }
 

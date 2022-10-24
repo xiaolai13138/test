@@ -58,7 +58,7 @@ typedef enum
     QTIMER1_ENCOEDER1_CH2_C1  = 2 * 2,
     QTIMER1_ENCOEDER2_CH2_C24 = 3 * 2,
                                              
-    QTIMER2_ENCOEDER1_CH2_C4  = 4 * 2, QTIMER2_ENCOEDER1_CH1_C25,
+    QTIMER2_ENCOEDER1_CH2_C4  = 4 * 2, QTIMER2_ENCOEDER1_CH2_C25,
     QTIMER2_ENCOEDER2_CH2_C25 = 5 * 2,
                                     
     QTIMER3_ENCOEDER1_CH2_B17 = 6 * 2, QTIMER3_ENCOEDER1_CH2_C7,                         

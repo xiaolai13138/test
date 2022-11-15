@@ -70,10 +70,7 @@ void type_default_callback(void)
 void  set_camera_type (camera_type_enum type_set, callback_function vsync_callback, callback_function dma_callback, callback_function uart_callback)
 {
     camera_type = type_set;
-    if(uart_callback)
-    {
-        camera_uart_handler = uart_callback;
-    }
+    camera_uart_handler = ((uart_callback == NULL) ? (type_default_callback) : (uart_callback));
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -86,14 +83,8 @@ void  set_camera_type (camera_type_enum type_set, callback_function vsync_callba
 void set_flexio_camera_type (camera_type_enum type_set, callback_function vsync_callback, callback_function dma_callback, callback_function uart_callback)
 {
     flexio_camera_type = type_set;
-    if(vsync_callback)
-    {
-        flexio_camera_vsync_handler = vsync_callback;
-    }
-    if(uart_callback)
-    {
-        flexio_camera_uart_handler = uart_callback;
-    }
+    flexio_camera_uart_handler = ((uart_callback == NULL) ? (type_default_callback) : (uart_callback));
+    flexio_camera_vsync_handler = ((vsync_callback == NULL) ? (type_default_callback) : (vsync_callback));
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -106,17 +97,7 @@ void set_flexio_camera_type (camera_type_enum type_set, callback_function vsync_
 void set_wireless_type (wireless_type_enum type_set, callback_function wireless_callback)
 {
     wireless_type = type_set;
-    if(wireless_callback)
-    {
-        if(WIFI_SPI == wireless_type)
-        {
-            wireless_module_spi_handler = wireless_callback;
-        }
-        else
-        {
-            wireless_module_uart_handler = wireless_callback;
-        }
-    }
+    wireless_module_uart_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
 }
 
 

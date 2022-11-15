@@ -206,6 +206,48 @@ void icm20602_get_gyro (void)
 }
 
 //-------------------------------------------------------------------------------------------------------------------
+// 函数简介     将 ICM20602 加速度计数据转换为实际物理数据
+// 参数说明     gyro_value              // 任意轴的加速度计数据
+// 返回参数     void
+// 使用示例     float data = icm20602_acc_transition(imu660ra_acc_x);  //单位为 g(m/s^2)
+// 备注信息
+//-------------------------------------------------------------------------------------------------------------------
+float icm20602_acc_transition (int16 acc_value)
+{
+    float acc_data = 0;
+    switch(ICM20602_ACC_SAMPLE)
+    {
+        case 0x00: acc_data = (float)acc_value / 16384; break;      // 0x00 加速度计量程为:±2g          获取到的加速度计数据 除以16384      可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x08: acc_data = (float)acc_value / 8192;  break;      // 0x08 加速度计量程为:±4g          获取到的加速度计数据 除以8192       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x10: acc_data = (float)acc_value / 4096;  break;      // 0x10 加速度计量程为:±8g          获取到的加速度计数据 除以4096       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x18: acc_data = (float)acc_value / 2048;  break;      // 0x18 加速度计量程为:±16g         获取到的加速度计数据 除以2048       可以转化为带物理单位的数据，单位：g(m/s^2)
+        default: break;
+    }
+    return acc_data;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     将 ICM20602 陀螺仪数据转换为实际物理数据
+// 参数说明     gyro_value              // 任意轴的陀螺仪数据
+// 返回参数     void
+// 使用示例     float data = icm20602_gyro_transition(imu660ra_gyro_x);  // 单位为°/s
+// 备注信息
+//-------------------------------------------------------------------------------------------------------------------
+float icm20602_gyro_transition (int16 gyro_value)
+{
+    float gyro_data = 0;
+    switch(ICM20602_GYR_SAMPLE)
+    {
+        case 0x00: gyro_data = (float)gyro_value / 131.2f;  break;  //  0x00 陀螺仪量程为:±250 dps     获取到的陀螺仪数据除以131           可以转化为带物理单位的数据，单位为：°/s
+        case 0x08: gyro_data = (float)gyro_value / 65.6f;   break;  //  0x08 陀螺仪量程为:±500 dps     获取到的陀螺仪数据除以65.5          可以转化为带物理单位的数据，单位为：°/s
+        case 0x10: gyro_data = (float)gyro_value / 32.8f;   break;  //  0x10 陀螺仪量程为:±1000dps     获取到的陀螺仪数据除以32.8          可以转化为带物理单位的数据，单位为：°/s
+        case 0x18: gyro_data = (float)gyro_value / 16.4f;   break;  //  0x18 陀螺仪量程为:±2000dps     获取到的陀螺仪数据除以16.4          可以转化为带物理单位的数据，单位为：°/s
+        default: break;
+    }
+    return gyro_data;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 // 函数简介     初始化 ICM20602
 // 参数说明     void
 // 返回参数     uint8           1-初始化失败 0-初始化成功
@@ -263,8 +305,8 @@ uint8 icm20602_init (void)
         icm20602_write_register(ICM20602_PWR_MGMT_2,     0x00);                 // 开启陀螺仪和加速度计
         icm20602_write_register(ICM20602_CONFIG,         0x01);                 // 176HZ 1KHZ
         icm20602_write_register(ICM20602_SMPLRT_DIV,     0x07);                 // 采样速率 SAMPLE_RATE = INTERNAL_SAMPLE_RATE / (1 + SMPLRT_DIV)
-        icm20602_write_register(ICM20602_GYRO_CONFIG,    0x18);                 // ±2000 dps
-        icm20602_write_register(ICM20602_ACCEL_CONFIG,   0x10);                 // ±8g
+        icm20602_write_register(ICM20602_GYRO_CONFIG,    ICM20602_GYR_SAMPLE);  // ±2000 dps
+        icm20602_write_register(ICM20602_ACCEL_CONFIG,   ICM20602_ACC_SAMPLE);  // ±8g
         icm20602_write_register(ICM20602_ACCEL_CONFIG_2, 0x03);                 // Average 4 samples   44.8HZ   //0x23 Average 16 samples
         // ICM20602_GYRO_CONFIG寄存器
         // 设置为:0x00 陀螺仪量程为:±250 dps     获取到的陀螺仪数据除以131           可以转化为带物理单位的数据，单位为：°/s

@@ -1,3 +1,16 @@
+V3.2.0
+	修改所有屏幕显示总钻风图像函数名称的后缀为03x
+	修复spi_write函数发送长度过长可能出现断言的问题
+	模拟SPI函数名称修改 soft_spi_16bit_transfer改为soft_spi_transfer_16bit、soft_spi_8bit_transfer改为soft_spi_transfer_8bit
+	增加IMU660RA六轴传感器的底层驱动
+	修改imu963ra 加速度与陀螺仪滤波参数
+	修复软件IIC可能出现无法读取MPU6050的问题
+	修复USB只能发送不能接收数据的问题
+	修改MPU6050驱动文件，对寄存器名称以及变量名称都做了调整
+	ICM20602、MPU6050增加转换函数
+	修改function文件的函数名称，规范函数名称
+	总钻风驱动增加对SCCB接口的支持，驱动程序会自动识别摄像头是UART还是SCCB接口，无需用户判断
+	
 V3.1.2
 	修复spi底层可能出现不发送数据及spi_transfer_16bit与spi_transfer_8bit发送数量不对的问题
 	修改无线转串口的引脚以及串口的宏定义名称

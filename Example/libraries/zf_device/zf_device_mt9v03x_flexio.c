@@ -53,9 +53,11 @@
 #include "zf_driver_exti.h"
 #include "zf_driver_gpio.h"
 #include "zf_driver_uart.h"
+#include "zf_driver_soft_iic.h"
 #include "zf_device_camera.h"
 #include "zf_device_type.h"
 #include "zf_driver_flexio_csi.h"
+#include "zf_device_config.h"
 
 #include "zf_device_mt9v03x_flexio.h"
 
@@ -63,6 +65,7 @@ vuint8  mt9v03x_flexio_finish_flag = 0;                                         
 
 AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_flexio_image[MT9V03X_FLEXIO_H][MT9V03X_FLEXIO_W], 4);
 
+static m9v03x_flexio_type_enum mt9v03x_flexio_type;  
 static  uint16    mt9v03x_flexio_version = 0x00;
 
 // 需要配置到摄像头的数据 不允许在这修改参数
@@ -253,33 +256,40 @@ uint16 mt9v03x_flexio_get_version (void)
 uint8 mt9v03x_flexio_set_exposure_time (uint16 light)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = MT9V03X_FLEXIO_SET_EXP_TIME;
-    temp = light;
-    uart_buffer[2] = temp >> 8;
-    uart_buffer[3] = (uint8)temp;
-    uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
-
-    do
+    if(MT9V03X_FLEXIO_UART == mt9v03x_flexio_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = MT9V03X_FLEXIO_SET_EXP_TIME;
+        temp = light;
+        uart_buffer[2] = temp >> 8;
+        uart_buffer[3] = (uint8)temp;
+        uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(MT9V03X_FLEXIO_INIT_TIMEOUT > timeout_count ++);
+        if((temp != light) || (MT9V03X_FLEXIO_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(MT9V03X_FLEXIO_INIT_TIMEOUT > timeout_count ++);
-    if((temp != light) || (MT9V03X_FLEXIO_INIT_TIMEOUT <= timeout_count))
-    {
-        return_state = 1;
     }
+    else
+    {
+        return_state = mt9v03x_set_exposure_time_sccb(light);
+    }   
     return return_state;
 }
 
@@ -294,40 +304,47 @@ uint8 mt9v03x_flexio_set_exposure_time (uint16 light)
 uint8 mt9v03x_flexio_set_reg (uint8 addr, uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = MT9V03X_FLEXIO_SET_ADDR;
-    temp = addr;
-    uart_buffer[2] = temp >> 8;
-    uart_buffer[3] = (uint8)temp;
-    uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
-
-    system_delay_ms(10);
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = MT9V03X_FLEXIO_SET_DATA;
-    temp = data;
-    uart_buffer[2] = temp >> 8;
-    uart_buffer[3] = (uint8)temp;
-    uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
-
-    do
+    if(MT9V03X_FLEXIO_UART == mt9v03x_flexio_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = MT9V03X_FLEXIO_SET_ADDR;
+        temp = addr;
+        uart_buffer[2] = temp >> 8;
+        uart_buffer[3] = (uint8)temp;
+        uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
+
+        system_delay_ms(10);
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = MT9V03X_FLEXIO_SET_DATA;
+        temp = data;
+        uart_buffer[2] = temp >> 8;
+        uart_buffer[3] = (uint8)temp;
+        uart_write_buffer(MT9V03X_FLEXIO_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(MT9V03X_FLEXIO_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (MT9V03X_FLEXIO_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(MT9V03X_FLEXIO_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (MT9V03X_FLEXIO_INIT_TIMEOUT <= timeout_count))
+    }
+    else
     {
-        return_state = 1;
+        return_state = mt9v03x_set_reg_sccb(addr, data);
     }
     return return_state;
 }
@@ -393,41 +410,48 @@ static void mt9v03x_flexio_dma_callback(edma_handle_t *handle, void *param, bool
 uint8 mt9v03x_flexio_init (void)
 {
     uint8 return_state = 0;
+    soft_iic_info_struct mt9v03x_flexio_iic_struct;
     do
     {
-        set_flexio_camera_type(CAMERA_GRAYSCALE, &mt9v03x_flexio_vsync_callback, NULL, &mt9v03x_flexio_uart_callback);            // 设置连接摄像头类型
-        camera_fifo_init();
-        
-        uart_init (MT9V03X_FLEXIO_COF_UART, MT9V03X_FLEXIO_COF_BAUR, MT9V03X_FLEXIO_COF_UART_RX, MT9V03X_FLEXIO_COF_UART_TX);	// 初始换串口 配置摄像头    
-        uart_rx_interrupt(MT9V03X_FLEXIO_COF_UART, 1);
-
         system_delay_ms(200);
-
-        fifo_clear(&camera_receiver_fifo);
-
-        mt9v03x_flexio_version = mt9v03x_flexio_get_version();                                        // 获取配置的方式
-
-        if(mt9v03x_flexio_set_config(mt9v03x_flexio_set_confing_buffer))
-        {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "MT9V03X set config error.");
-            set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
-        }
+        set_flexio_camera_type(CAMERA_GRAYSCALE, &mt9v03x_flexio_vsync_callback, NULL, &mt9v03x_flexio_uart_callback);              // 设置连接摄像头类型
         
-        // 获取配置便于查看配置是否正确
-        if(mt9v03x_flexio_get_config(mt9v03x_flexio_get_confing_buffer))
+        // 首先尝试SCCB通讯
+        mt9v03x_flexio_type = MT9V03X_FLEXIO_SCCB;
+        soft_iic_init(&mt9v03x_flexio_iic_struct, 0, MT9V03X_FLEXIO_COF_IIC_DELAY, MT9V03X_FLEXIO_COF_IIC_SCL, MT9V03X_FLEXIO_COF_IIC_SDA);
+        if(mt9v03x_set_config_sccb(&mt9v03x_flexio_iic_struct, mt9v03x_flexio_set_confing_buffer))
         {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "MT9V03X get config error.");
-            set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
+            // SCCB通讯失败，尝试串口通讯
+            mt9v03x_flexio_type = MT9V03X_FLEXIO_UART;
+            camera_fifo_init();
+            set_camera_type(CAMERA_GRAYSCALE, NULL, NULL, &mt9v03x_flexio_uart_callback);   // 设置连接摄像头类型
+            uart_init (MT9V03X_FLEXIO_COF_UART, MT9V03X_FLEXIO_COF_BAUR, MT9V03X_FLEXIO_COF_UART_RX, MT9V03X_FLEXIO_COF_UART_TX);   //初始换串口 配置摄像头    
+            uart_rx_interrupt(MT9V03X_FLEXIO_COF_UART, 1);
+            fifo_clear(&camera_receiver_fifo);
+            mt9v03x_flexio_version = mt9v03x_flexio_get_version();                          // 获取配置的方式
+            
+            if(mt9v03x_flexio_set_config(mt9v03x_flexio_set_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "MT9V03X FLEXIO set config error.");
+                set_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
+            
+            // 获取配置便于查看配置是否正确
+            if(mt9v03x_flexio_get_config(mt9v03x_flexio_get_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是串口通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "MT9V03X FLEXIO get config error.");
+                set_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
         }
 
         flexio_csi_init(MT9V03X_FLEXIO_DATA_PIN, MT9V03X_FLEXIO_PCLK_PIN, MT9V03X_FLEXIO_HREF_PIN, MT9V03X_FLEXIO_W, MT9V03X_FLEXIO_H, mt9v03x_flexio_image[0], mt9v03x_flexio_dma_callback);

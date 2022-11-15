@@ -9,5 +9,4 @@ del *.ps1 /s
 del *.xcl /s
 del *.reggroups /s
 
-pause
 exit

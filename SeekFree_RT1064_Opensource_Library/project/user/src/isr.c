@@ -167,6 +167,7 @@ void GPIO1_Combined_0_15_IRQHandler(void)
 
 void GPIO1_Combined_16_31_IRQHandler(void)
 {
+    wireless_module_spi_handler();
     if(exti_flag_get(B16))
     {
         exti_flag_clear(B16); // 清除中断标志位
@@ -178,7 +179,6 @@ void GPIO1_Combined_16_31_IRQHandler(void)
 void GPIO2_Combined_0_15_IRQHandler(void)
 {
     flexio_camera_vsync_handler();
-    wireless_module_spi_handler();
     
     if(exti_flag_get(C0))
     {

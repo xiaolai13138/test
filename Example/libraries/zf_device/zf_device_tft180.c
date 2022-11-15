@@ -356,7 +356,7 @@ void tft180_draw_line (uint16 x_start, uint16 y_start, uint16 x_end, uint16 y_en
         return;
     }
     
-    if(myabs(y_start - y_end) > myabs(x_start - x_end))
+    if(func_abs(y_start - y_end) > func_abs(x_start - x_end))
     {
         while(y_start != y_end)
         {
@@ -525,7 +525,7 @@ void tft180_show_int (uint16 x, uint16 y, const int32 dat, uint8 num)
             offset *= 10;
         dat_temp %= offset;
     }
-    int_to_str(data_buffer, dat_temp);
+    func_int_to_str(data_buffer, dat_temp);
     tft180_show_string(x, y, (const char *)&data_buffer);
 }
 
@@ -560,7 +560,7 @@ void tft180_show_uint (uint16 x, uint16 y, const uint32 dat, uint8 num)
             offset *= 10;
         dat_temp %= offset;
     }
-    uint_to_str(data_buffer, dat_temp);
+    func_uint_to_str(data_buffer, dat_temp);
     tft180_show_string(x, y, (const char *)&data_buffer);
 }
 
@@ -601,7 +601,7 @@ void tft180_show_float (uint16 x, uint16 y, const float dat, uint8 num, uint8 po
             offset *= 10;
         dat_temp = dat_temp - ((int)dat_temp / (int)offset) * offset;
     }
-    float_to_str(data_buffer, dat_temp, pointnum);
+    func_float_to_str(data_buffer, dat_temp, pointnum);
     tft180_show_string(x, y, data_buffer);
 }
 

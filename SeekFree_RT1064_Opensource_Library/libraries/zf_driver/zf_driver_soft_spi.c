@@ -481,10 +481,10 @@ void soft_spi_read_16bit_registers (soft_spi_info_struct *soft_spi_obj, const ui
 // 参数说明     read_buffer     发送数据时接收到的数据的存储地址(不需要接收则传 NULL)
 // 参数说明     len             发送的字节数
 // 返回参数     void
-// 使用示例     soft_spi_8bit_transfer(&soft_spi_obj, buf, buf, 1);
+// 使用示例     soft_spi_transfer_8bit(&soft_spi_obj, buf, buf, 1);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void soft_spi_8bit_transfer (soft_spi_info_struct *soft_spi_obj, const uint8 *write_buffer, uint8 *read_buffer, uint32 len)
+void soft_spi_transfer_8bit (soft_spi_info_struct *soft_spi_obj, const uint8 *write_buffer, uint8 *read_buffer, uint32 len)
 {
     while(len --)
     {
@@ -501,10 +501,10 @@ void soft_spi_8bit_transfer (soft_spi_info_struct *soft_spi_obj, const uint8 *wr
 // 参数说明     read_buffer     发送数据时接收到的数据的存储地址(不需要接收则传 NULL)
 // 参数说明     len             发送的字节数
 // 返回参数     void
-// 使用示例     soft_spi_16bit_transfer(&soft_spi_obj, buf, buf, 1);
+// 使用示例     soft_spi_transfer_16bit(&soft_spi_obj, buf, buf, 1);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void soft_spi_16bit_transfer (soft_spi_info_struct *soft_spi_obj, const uint16 *write_buffer, uint16 *read_buffer, uint32 len)
+void soft_spi_transfer_16bit (soft_spi_info_struct *soft_spi_obj, const uint16 *write_buffer, uint16 *read_buffer, uint32 len)
 {
     while(len --)
     {

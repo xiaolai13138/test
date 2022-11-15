@@ -114,7 +114,7 @@ void spi_write(spi_index_enum spi_n, const uint8 *txdata, uint8 *rxdata, uint32 
     uint32 transfer_status;
     lpspi_transfer_t transfer;
 
-    zf_assert(length);               // 断言字节数不为0
+    zf_assert(0 < length);               // 断言字节数不为0
     
     if(continuous)  transfer.configFlags = ((spi_cs_index[spi_n]%16/2)<<LPSPI_MASTER_PCS_SHIFT) | kLPSPI_MasterPcsContinuous;
     else            transfer.configFlags = ((spi_cs_index[spi_n]%16/2)<<LPSPI_MASTER_PCS_SHIFT);

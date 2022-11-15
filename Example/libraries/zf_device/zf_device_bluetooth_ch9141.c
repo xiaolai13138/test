@@ -251,7 +251,7 @@ void bluetooth_ch9141_uart_callback (void)
 uint8 bluetooth_ch9141_init (void)
 {
     uint8 return_state = 0;
-    set_wireless_type(BULETOOTH_CH9141, &bluetooth_ch9141_uart_callback);
+    set_wireless_type(BLUETOOTH_CH9141, &bluetooth_ch9141_uart_callback);
 
     fifo_init(&bluetooth_ch9141_fifo, FIFO_DATA_8BIT, bluetooth_ch9141_buffer, BLUETOOTH_CH9141_BUFFER_SIZE);
     // 本函数使用的波特率为115200 为蓝牙转串口模块的默认波特率 如需其他波特率请使用上位机修改模块参数

@@ -112,8 +112,24 @@ void    oled_show_gray_image            (uint16 x, uint16 y, const uint8 *image,
 void    oled_show_wave                  (uint16 x, uint16 y, const uint16 *image, uint16 width, uint16 value_max, uint16 dis_width, uint16 dis_value_max);
 void    oled_show_chinese               (uint16 x, uint16 y, uint8 size, const uint8 *chinese_buffer, uint8 number);
 
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     OLED 128*64 显示小钻风图像
+// 参数说明     p               图像数组
+// 返回参数     void
+// 使用示例     oled_displayimage7725(ov7725_image_binary[0]);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
 #define oled_displayimage7725(p)        (oled_show_binary_image(0, 0, (p), OV7725_W, OV7725_H, 128, 64))
-#define oled_displayimage032(p,x)       (oled_show_gray_image(0, 0, (p), MT9V03X_W, MT9V03X_H, 128, 64, (x)))
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     OLED 128*64 显示总钻风图像 带二值化
+// 参数说明     p               图像数组
+// 参数说明     x               二值化显示阈值
+// 返回参数     void
+// 使用示例     oled_displayimage03x(mt9v03x_image[0], 127);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
+#define oled_displayimage03x(p,x)       (oled_show_gray_image(0, 0, (p), MT9V03X_W, MT9V03X_H, 128, 64, (x)))
 
 void    oled_init                       (void);
 

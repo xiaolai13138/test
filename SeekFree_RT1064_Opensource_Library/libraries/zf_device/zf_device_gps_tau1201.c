@@ -118,7 +118,7 @@ static int get_int_number (char *s)
     i = i - 1;
     strncpy(buf, s, i);
     buf[i] = 0;
-    return_value = str_to_int(buf);
+    return_value = func_str_to_int(buf);
     return return_value;
 }
                                                 
@@ -139,7 +139,7 @@ static float get_float_number (char *s)
     i = i - 1;
     strncpy(buf, s, i);
     buf[i] = 0;
-    return_value = (float)str_to_double(buf);
+    return_value = (float)func_str_to_double(buf);
     return return_value;    
 }
                                     
@@ -160,7 +160,7 @@ static double get_double_number (char *s)
     i = i - 1;
     strncpy(buf, s, i);
     buf[i] = 0;
-    return_value = str_to_double(buf);
+    return_value = func_str_to_double(buf);
     return return_value;
 }
 
@@ -384,7 +384,7 @@ uint8 gps_data_parse (void)
         {
             gps_rmc_state = GPS_STATE_PARSING;
             strncpy((char *)&check_buffer[2], strchr((const char *)gps_rmc_buffer, '*')+1, 2);
-            bbc_xor_origin = (uint8)str_to_hex((char *)check_buffer);
+            bbc_xor_origin = (uint8)func_str_to_hex((char *)check_buffer);
             for(bbc_xor_calculation = gps_rmc_buffer[1], data_len = 2; gps_rmc_buffer[data_len] != '*'; data_len ++)
             {
                 bbc_xor_calculation ^= gps_rmc_buffer[data_len];
@@ -404,7 +404,7 @@ uint8 gps_data_parse (void)
         {
             gps_gga_state = GPS_STATE_PARSING;
             strncpy((char *)&check_buffer[2], strchr((const char *)gps_gga_buffer, '*')+1, 2);
-            bbc_xor_origin = (uint8)str_to_hex((char *)check_buffer);
+            bbc_xor_origin = (uint8)func_str_to_hex((char *)check_buffer);
             
             for(bbc_xor_calculation = gps_gga_buffer[1], data_len = 2; gps_gga_buffer[data_len] != '*'; data_len ++)
             {

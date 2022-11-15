@@ -139,7 +139,7 @@ void key_init (uint32 period)
 {
     uint8 loop_temp = 0; 
     
-    zf_assert(period);                                                          // 周期不允许为0
+    zf_assert(0 < period);                                                      // 周期不允许为0
     
     for(loop_temp = 0; loop_temp < KEY_NUMBER; loop_temp ++)
     {

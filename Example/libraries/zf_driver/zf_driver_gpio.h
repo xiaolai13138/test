@@ -162,7 +162,22 @@ void        gpio_toggle_level           (gpio_pin_enum pin);
 void        gpio_set_dir                (gpio_pin_enum pin, gpio_dir_enum dir, gpio_mode_enum pinconf);
 void        gpio_init                   (gpio_pin_enum pin, gpio_dir_enum dir, uint8 dat, uint32 pinconf);
 
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     对应 IO 复位为低电平
+// 参数说明     x           选择的引脚 (可选择范围由 zf_driver_gpio.h 内 gpio_pin_enum 枚举值确定)
+// 返回参数     void
+// 使用示例     gpio_low(B5);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
 #define     gpio_low(pin)               GPIO_ClearPinsOutput(PORTPTR[pin >> 5],1 << (pin & 0x1f))
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     对应 IO 置位为高电平
+// 参数说明     x           选择的引脚 (可选择范围由 zf_driver_gpio.h 内 gpio_pin_enum 枚举值确定)
+// 返回参数     void
+// 使用示例     gpio_high(B5);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
 #define     gpio_high(pin)              GPIO_SetPinsOutput(PORTPTR[pin >> 5],1 << (pin & 0x1f))
 
 

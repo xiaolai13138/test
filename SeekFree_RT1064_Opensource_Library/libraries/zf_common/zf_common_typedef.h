@@ -38,6 +38,7 @@
 
 #include "stdio.h"
 #include "stdint.h"
+#include "stdbool.h"
 #include "stdarg.h"
 #include "string.h"
 #include "stdlib.h"
@@ -46,7 +47,7 @@
 
 //=================================================== 类型定义 ===================================================
 
-#define COMPATIBLE_WITH_OLDER_VERSIONS                                       	// 兼容旧版开源库接口
+//#define COMPATIBLE_WITH_OLDER_VERSIONS                                       	// 兼容旧版开源库接口
 #define USE_ZF_TYPEDEF      (1)                                                 // 是否启用类型定义申明
 #if USE_ZF_TYPEDEF
 // 数据类型声明

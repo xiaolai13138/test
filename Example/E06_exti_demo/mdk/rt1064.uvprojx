@@ -772,6 +772,16 @@
               <FilePath>..\..\libraries\zf_device\zf_device_imu963ra.h</FilePath>
             </File>
             <File>
+              <FileName>zf_device_imu660ra.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libraries\zf_device\zf_device_imu660ra.c</FilePath>
+            </File>
+            <File>
+              <FileName>zf_device_imu660ra.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\libraries\zf_device\zf_device_imu660ra.h</FilePath>
+            </File>
+            <File>
               <FileName>zf_device_ips114.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\libraries\zf_device\zf_device_ips114.c</FilePath>
@@ -930,6 +940,16 @@
               <FileName>zf_device_wireless_uart.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\libraries\zf_device\zf_device_wireless_uart.h</FilePath>
+            </File>
+            <File>
+              <FileName>zf_device_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\libraries\zf_device\zf_device_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>zf_device_config.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\libraries\zf_device\zf_device_config.lib</FilePath>
             </File>
           </Files>
         </Group>

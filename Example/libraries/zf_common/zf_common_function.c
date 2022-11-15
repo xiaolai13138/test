@@ -1,10 +1,10 @@
 /*********************************************************************************************************************
-* RT1064DVL6A Opensourec Library 即（RT1064DVL6A 开源库）是一个基于官方 SDK 接口的第三方开源库
+* MM32F527X-E9P Opensourec Library 即（MM32F527X-E9P 开源库）是一个基于官方 SDK 接口的第三方开源库
 * Copyright (c) 2022 SEEKFREE 逐飞科技
 * 
-* 本文件是 RT1064DVL6A 开源库的一部分
+* 本文件是 MM32F527X-E9P 开源库的一部分
 * 
-* RT1064DVL6A 开源库 是免费软件
+* MM32F527X-E9P 开源库 是免费软件
 * 您可以根据自由软件基金会发布的 GPL（GNU General Public License，即 GNU通用公共许可证）的条款
 * 即 GPL 的第3版（即 GPL3.0）或（您选择的）任何后来的版本，重新发布和/或修改它
 * 
@@ -24,13 +24,13 @@
 * 文件名称          zf_common_function
 * 公司名称          成都逐飞科技有限公司
 * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
-* 开发环境          IAR 8.32.4 or MDK 5.33
-* 适用平台          RT1064DVL6A
+* 开发环境          MDK 5.37
+* 适用平台          MM32F527X_E9P
 * 店铺链接          https://seekfree.taobao.com/
 * 
 * 修改记录
 * 日期              作者                备注
-* 2022-09-21        SeekFree            first version
+* 2022-08-10        Teternal            first version
 ********************************************************************************************************************/
 
 #include "zf_common_function.h"
@@ -40,10 +40,10 @@
 // 参数说明     num1            数字1
 // 参数说明     num2            数字2
 // 返回参数     uint32          最大公约数
-// 使用示例     return get_greatest_common_divisor(144, 36);    // 获取 144 与 36 的最大公约数
+// 使用示例     return func_get_greatest_common_divisor(144, 36);               // 获取 144 与 36 的最大公约数
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 get_greatest_common_divisor (uint32 num1, uint32 num2)
+uint32 func_get_greatest_common_divisor (uint32 num1, uint32 num2)
 {
     while(num1 != num2)
     {
@@ -63,10 +63,10 @@ uint32 get_greatest_common_divisor (uint32 num1, uint32 num2)
 // 函数简介     软件延时
 // 参数说明     t               延时时间
 // 返回参数     void
-// 使用示例     my_delay(100);
+// 使用示例     func_soft_delay(100);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void my_delay (volatile long t)
+void func_soft_delay (volatile long t)
 {
     while(t --);
 }
@@ -75,10 +75,10 @@ void my_delay (volatile long t)
 // 函数简介     字符串转整形数字 数据范围是 [-32768,32767]
 // 参数说明     *str            传入字符串 可带符号
 // 返回参数     int32           转换后的数据          
-// 使用示例     int32 dat = str_to_int("-100");
+// 使用示例     int32 dat = func_str_to_int("-100");
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-int32 str_to_int (char *str)
+int32 func_str_to_int (char *str)
 {
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     int32 temp = 0;                                                             // 临时计算变量
@@ -118,10 +118,10 @@ int32 str_to_int (char *str)
 // 参数说明     *str            字符串指针
 // 参数说明     number          传入的数据
 // 返回参数     void
-// 使用示例     int_to_str(data_buffer, -300);
+// 使用示例     func_int_to_str(data_buffer, -300);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void int_to_str (char *str, int32 number)
+void func_int_to_str (char *str, int32 number)
 {
     uint8 data_temp[16];                                                        // 缓冲区
     uint8 bit = 0;                                                              // 数字位数
@@ -148,7 +148,7 @@ void int_to_str (char *str, int32 number)
         while(0 != number)                                                      // 循环直到数值归零
         {
             number_temp = number % 10;
-            data_temp[bit ++] = myabs(number_temp);                             // 倒序将数值提取出来
+            data_temp[bit ++] = func_abs(number_temp);                          // 倒序将数值提取出来
             number /= 10;                                                       // 削减被提取的个位数
         }
         while(0 != bit)                                                         // 提取的数字个数递减处理
@@ -163,10 +163,10 @@ void int_to_str (char *str, int32 number)
 // 函数简介     字符串转整形数字 数据范围是 [0,65535]
 // 参数说明     *str            传入字符串 无符号
 // 返回参数     uint32          转换后的数据          
-// 使用示例     uint32 dat = str_to_uint("100");
+// 使用示例     uint32 dat = func_str_to_uint("100");
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 str_to_uint (char *str)
+uint32 func_str_to_uint (char *str)
 {
     uint32 temp = 0;                                                            // 临时计算变量
 
@@ -192,10 +192,10 @@ uint32 str_to_uint (char *str)
 // 参数说明     *str            字符串指针
 // 参数说明     number          传入的数据
 // 返回参数     void
-// 使用示例     uint_to_str(data_buffer, 300);
+// 使用示例     func_uint_to_str(data_buffer, 300);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void uint_to_str (char *str, uint32 number)
+void func_uint_to_str (char *str, uint32 number)
 {
     int8 data_temp[16];                                                         // 缓冲区
     uint8 bit = 0;                                                              // 数字位数
@@ -230,10 +230,10 @@ void uint_to_str (char *str, uint32 number)
 // 函数简介     字符串转浮点数 有效累计精度为小数点后六位
 // 参数说明     *str            传入字符串 可带符号
 // 返回参数     float           转换后的数据          
-// 使用示例     float dat = str_to_float("-100.2");
+// 使用示例     float dat = func_str_to_float("-100.2");
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-float str_to_float (char *str)
+float func_str_to_float (char *str)
 {
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     float temp = 0.0;                                                           // 临时计算变量 整数部分
@@ -290,10 +290,10 @@ float str_to_float (char *str)
 // 参数说明     number          传入的数据
 // 参数说明     point_bit       小数点精度
 // 返回参数     void
-// 使用示例     float_to_str(data_buffer, 3.1415, 2);           // 结果输出 data_buffer = "3.14"
+// 使用示例     func_float_to_str(data_buffer, 3.1415, 2);                      // 结果输出 data_buffer = "3.14"
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void float_to_str (char *str, float number, uint8 point_bit)
+void func_float_to_str (char *str, float number, uint8 point_bit)
 {
     int data_int = 0;                                                           // 整数部分
     int data_float = 0.0;                                                       // 小数部分
@@ -339,7 +339,7 @@ void float_to_str (char *str, float number, uint8 point_bit)
         }while(0 != data_int);
         while(0 != bit)
         {
-            *str ++ = (myabs(data_temp[bit - 1]) + 0x30);                       // 再倒序将倒序的数值写入字符串 得到正序数值
+            *str ++ = (func_abs(data_temp[bit - 1]) + 0x30);                    // 再倒序将倒序的数值写入字符串 得到正序数值
             bit --;
         }
 
@@ -362,7 +362,7 @@ void float_to_str (char *str, float number, uint8 point_bit)
                 }
                 while(0 != bit)
                 {
-                    *str ++ = (myabs(data_temp_point[bit - 1]) + 0x30);         // 再倒序将倒序的数值写入字符串 得到正序数值
+                    *str ++ = (func_abs(data_temp_point[bit - 1]) + 0x30);      // 再倒序将倒序的数值写入字符串 得到正序数值
                     bit --;
                 }
             }
@@ -374,10 +374,10 @@ void float_to_str (char *str, float number, uint8 point_bit)
 // 函数简介     字符串转浮点数 有效累计精度为小数点后九位
 // 参数说明     str             传入字符串 可带符号
 // 返回参数     double          转换后的数据          
-// 使用示例     double dat = str_to_double("-100.2");
+// 使用示例     double dat = func_str_to_double("-100.2");
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-double str_to_double (char *str)
+double func_str_to_double (char *str)
 {
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     double temp = 0.0;                                                          // 临时计算变量 整数部分
@@ -435,10 +435,10 @@ double str_to_double (char *str)
 // 参数说明     number          传入的数据
 // 参数说明     point_bit       小数点精度
 // 返回参数     void
-// 使用示例     double_to_str(data_buffer, 3.1415, 2);           // 结果输出 data_buffer = "3.14"
+// 使用示例     func_double_to_str(data_buffer, 3.1415, 2);                     // 结果输出 data_buffer = "3.14"
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void double_to_str (char *str, double number, uint8 point_bit)
+void func_double_to_str (char *str, double number, uint8 point_bit)
 {
     int data_int = 0;                                                           // 整数部分
     int data_float = 0.0;                                                       // 小数部分
@@ -484,7 +484,7 @@ void double_to_str (char *str, double number, uint8 point_bit)
         }while(0 != data_int);
         while(0 != bit)
         {
-            *str ++ = (myabs(data_temp[bit - 1]) + 0x30);                       // 再倒序将倒序的数值写入字符串 得到正序数值
+            *str ++ = (func_abs(data_temp[bit - 1]) + 0x30);                    // 再倒序将倒序的数值写入字符串 得到正序数值
             bit --;
         }
 
@@ -505,7 +505,7 @@ void double_to_str (char *str, double number, uint8 point_bit)
                 }
                 while(0 != bit)
                 {
-                    *str ++ = (myabs(data_temp_point[bit - 1]) + 0x30);         // 再倒序将倒序的数值写入字符串 得到正序数值
+                    *str ++ = (func_abs(data_temp_point[bit - 1]) + 0x30);      // 再倒序将倒序的数值写入字符串 得到正序数值
                     bit --;
                 }
             }
@@ -517,10 +517,10 @@ void double_to_str (char *str, double number, uint8 point_bit)
 // 函数简介     字符串转 Hex
 // 参数说明     str             传入字符串 无符号
 // 返回参数     uint32          转换后的数据
-// 使用示例     uint32 dat = str_to_hex("0x11");
+// 使用示例     uint32 dat = func_str_to_hex("0x11");
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 str_to_hex (char *str)
+uint32 func_str_to_hex (char *str)
 {
     uint32 str_len = strlen(str);                                               // 字符串长
     uint32 result_data = 0;                                                     // 结果缓存
@@ -574,10 +574,10 @@ uint32 str_to_hex (char *str)
 // 参数说明     *str            字符串指针
 // 参数说明     number          传入的数据
 // 返回参数     void
-// 使用示例     hex_to_str(data_buffer, 0x11);                  // 结果输出 data_buffer = "0x11"
+// 使用示例     func_hex_to_str(data_buffer, 0x11);                             // 结果输出 data_buffer = "0x11"
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-void hex_to_str (char *str, uint32 number)
+void func_hex_to_str (char *str, uint32 number)
 {
     const char hex_index[16] = {
         '0', '1', '2', '3',

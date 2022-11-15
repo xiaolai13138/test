@@ -60,6 +60,10 @@
 #define MT9V03X_FLEXIO_COF_UART_TX     (UART4_RX_C17)                           // 总钻风 UART-TX 引脚 要接在单片机 RX 上
 #define MT9V03X_FLEXIO_COF_UART_RX     (UART4_TX_C16)                           // 总钻风 UART-RX 引脚 要接在单片机 TX 上
 
+#define MT9V03X_FLEXIO_COF_IIC_DELAY   (800)                                    // 总钻风 IIC 延时
+#define MT9V03X_FLEXIO_COF_IIC_SCL     (C17)                                    // 总钻风 IIC-SCL 引脚
+#define MT9V03X_FLEXIO_COF_IIC_SDA     (C16)                                    // 总钻风 IIC-SDA 引脚
+
 #define MT9V03X_FLEXIO_DMA_CH           (DMA_CH0)                               // 定义摄像头的DMA采集通道
 
 #define MT9V03X_FLEXIO_VSYNC_PIN        C7                                      // 场中断引脚
@@ -117,6 +121,13 @@ typedef enum
     MT9V03X_FLEXIO_SET_ADDR = 0XFE,                                             // 寄存器地址命令
     MT9V03X_FLEXIO_SET_DATA                                                     // 寄存器数据命令
 }m9v03x_flexio_cmd_enum;
+
+// 摄像头接口类型枚举
+typedef enum
+{
+    MT9V03X_FLEXIO_UART,
+    MT9V03X_FLEXIO_SCCB,
+}m9v03x_flexio_type_enum;
 
 extern vuint8   mt9v03x_flexio_finish_flag;                                     // 一场图像采集完成标志位
 extern uint8    mt9v03x_flexio_image[MT9V03X_FLEXIO_H][MT9V03X_FLEXIO_W];

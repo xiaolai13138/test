@@ -120,8 +120,37 @@ void    tft180_show_rgb565_image        (uint16 x, uint16 y, const uint16 *image
 void    tft180_show_wave                (uint16 x, uint16 y, const uint16 *wave, uint16 width, uint16 value_max, uint16 dis_width, uint16 dis_value_max);
 void    tft180_show_chinese             (uint16 x, uint16 y, uint8 size, const uint8 *chinese_buffer, uint8 number, const uint16 color);
 
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     TFT180 显示小钻风图像
+// 参数说明     p               图像数组
+// 参数说明     width           显示宽度
+// 参数说明     height          显示高度
+// 返回参数     void
+// 使用示例     tft180_displayimage7725(ov7725_image_binary[0], 80, 60);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
 #define tft180_displayimage7725(p, width, height)       (tft180_show_binary_image(0, 0, (p), OV7725_W, OV7725_H, (width), (height)))
-#define tft180_displayimage032(p, width, height)        (tft180_show_gray_image(0, 0, (p), MT9V03X_W, MT9V03X_H, (width), (height), 0))
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     TFT180 显示总钻风图像 不带二值化 显示灰度图像
+// 参数说明     p               图像数组
+// 参数说明     width           显示宽度
+// 参数说明     height          显示高度
+// 返回参数     void
+// 使用示例     tft180_displayimage03x(mt9v03x_image[0], 94, 60);
+// 备注信息     如果要显示二值化图像就去调用 tft180_show_gray_image 函数
+//-------------------------------------------------------------------------------------------------------------------
+#define tft180_displayimage03x(p, width, height)        (tft180_show_gray_image(0, 0, (p), MT9V03X_W, MT9V03X_H, (width), (height), 0))
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     TFT180 显示凌瞳图像
+// 参数说明     p               图像数组
+// 参数说明     width           显示宽度
+// 参数说明     height          显示高度
+// 返回参数     void
+// 使用示例     tft180_displayimage8660(scc8660_image[0], 80, 60);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
 #define tft180_displayimage8660(p, width, height)       (tft180_show_rgb565_image(0, 0, (p), SCC8660_W, SCC8660_H, (width), (height), 1))
 
 void    tft180_init                     (void);

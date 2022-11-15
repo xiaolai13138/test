@@ -77,7 +77,9 @@ void LPUART1_IRQHandler(void)
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART1))
     {
         // 接收中断
-        
+    #if DEBUG_UART_USE_INTERRUPT                        // 如果开启 debug 串口中断
+        debug_interrupr_handler();                      // 调用 debug 串口接收处理函数 数据会被 debug 环形缓冲区读取
+    #endif                                              // 如果修改了 DEBUG_UART_INDEX 那这段代码需要放到对应的串口中断去
     }
     LPUART_ClearStatusFlags(LPUART1, kLPUART_RxOverrunFlag);    // 不允许删除
 }
@@ -109,10 +111,7 @@ void LPUART4_IRQHandler(void)
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART4))
     {
         // 接收中断 
-        if(NULL != flexio_camera_uart_handler)
-        {
-            flexio_camera_uart_handler();
-        }
+        flexio_camera_uart_handler();
         
         gps_uart_callback();
     }
@@ -125,10 +124,7 @@ void LPUART5_IRQHandler(void)
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART5))
     {
         // 接收中断
-        if(NULL != camera_uart_handler)
-        {
-            camera_uart_handler();
-        }
+        camera_uart_handler();
     }
         
     LPUART_ClearStatusFlags(LPUART5, kLPUART_RxOverrunFlag);    // 不允许删除
@@ -151,10 +147,7 @@ void LPUART8_IRQHandler(void)
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART8))
     {
         // 接收中断
-        if(NULL != wireless_module_uart_handler)
-        {
-            wireless_module_uart_handler();
-        }
+        wireless_module_uart_handler();
         
     }
         
@@ -174,6 +167,7 @@ void GPIO1_Combined_0_15_IRQHandler(void)
 
 void GPIO1_Combined_16_31_IRQHandler(void)
 {
+    wireless_module_spi_handler();
     if(exti_flag_get(B16))
     {
         exti_flag_clear(B16); // 清除中断标志位
@@ -184,12 +178,7 @@ void GPIO1_Combined_16_31_IRQHandler(void)
 
 void GPIO2_Combined_0_15_IRQHandler(void)
 {
-    // 勿删除此IF语句
-    if(NULL != flexio_camera_vsync_handler)
-    {
-        flexio_camera_vsync_handler();
-    }
-    
+    flexio_camera_vsync_handler();
     
     if(exti_flag_get(C0))
     {

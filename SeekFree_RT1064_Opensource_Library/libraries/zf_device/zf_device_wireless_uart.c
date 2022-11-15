@@ -250,18 +250,18 @@ uint8 wireless_uart_init (void)
     gpio_init(WIRELESS_UART_RTS_PIN, GPO, rts_init_status, GPO_PUSH_PULL);      // 初始化流控引脚
 
     uart_init (WIRELESS_UART_INDEX, WIRELESS_UART_BUAD_RATE, WIRELESS_UART_RX_PIN, WIRELESS_UART_TX_PIN);   // 初始化串口
-    uart_rx_irq(WIRELESS_UART_INDEX, 1);
+    uart_rx_interrupt(WIRELESS_UART_INDEX, 1);
 
     system_delay_ms(5);                                                         // 模块上电之后需要延时等待
-    gpio_set(WIRELESS_UART_RTS_PIN, !rts_init_status);                          // RTS引脚拉高，进入自动波特率模式
+    gpio_set_level(WIRELESS_UART_RTS_PIN, !rts_init_status);                    // RTS引脚拉高，进入自动波特率模式
     system_delay_ms(100);                                                       // RTS拉高之后必须延时20ms
     gpio_toggle(WIRELESS_UART_RTS_PIN);                                         // RTS引脚取反
 
     wireless_auto_baud_flag = 1;
 
-    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[0]);              // 发送特定数据 用于模块自动判断波特率
-    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[1]);              // 发送特定数据 用于模块自动判断波特率
-    uart_putchar(WIRELESS_UART_INDEX, wireless_auto_baud_data[2]);              // 发送特定数据 用于模块自动判断波特率
+    uart_write_byte(WIRELESS_UART_INDEX, wireless_auto_baud_data[0]);           // 发送特定数据 用于模块自动判断波特率
+    uart_write_byte(WIRELESS_UART_INDEX, wireless_auto_baud_data[1]);           // 发送特定数据 用于模块自动判断波特率
+    uart_write_byte(WIRELESS_UART_INDEX, wireless_auto_baud_data[2]);           // 发送特定数据 用于模块自动判断波特率
     system_delay_ms(20);
 
     time_count = 0;

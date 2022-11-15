@@ -352,7 +352,7 @@ void oled_show_int (uint16 x, uint16 y, const int32 dat, uint8 num)
         }
         dat_temp %= offset;
     }
-    int_to_str(data_buffer, dat_temp);
+    func_int_to_str(data_buffer, dat_temp);
     oled_show_string(x, y, (const char *)&data_buffer);
 }
 
@@ -391,7 +391,7 @@ void oled_show_uint (uint16 x,uint16 y,const uint32 dat,uint8 num)
         }
         dat_temp %= offset;
     }
-    uint_to_str(data_buffer, dat_temp);
+    func_uint_to_str(data_buffer, dat_temp);
     oled_show_string(x, y, (const char *)&data_buffer);
 }
 
@@ -436,7 +436,7 @@ void oled_show_float (uint16 x,uint16 y,const float dat,uint8 num,uint8 pointnum
         }
         dat_temp = dat_temp - ((int)dat_temp / (int)offset) * offset;
     }
-    float_to_str(data_buffer, dat_temp, pointnum);
+    func_float_to_str(data_buffer, dat_temp, pointnum);
     oled_show_string(x, y, data_buffer);
 }
 

@@ -111,10 +111,11 @@ static void soft_iic_send_ack (soft_iic_info_struct *soft_iic_obj, uint8 ack)
         gpio_low(soft_iic_obj->sda_pin);                                        // SDA 拉低
     }
 
+    soft_iic_delay(soft_iic_obj->delay);
     gpio_high(soft_iic_obj->scl_pin);                                           // SCL 拉高
     soft_iic_delay(soft_iic_obj->delay);
     gpio_low(soft_iic_obj->scl_pin);                                            // SCL 拉低
-    soft_iic_delay(soft_iic_obj->delay);
+    gpio_high(soft_iic_obj->sda_pin);                                           // SDA 拉高
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -130,20 +131,20 @@ static uint8 soft_iic_wait_ack (soft_iic_info_struct *soft_iic_obj)
     gpio_low(soft_iic_obj->scl_pin);                                            // SCL 低电平
     gpio_high(soft_iic_obj->sda_pin);                                           // SDA 高电平 释放 SDA
 #if SOFT_IIC_SDA_IO_SWITCH
-    gpio_set_dir(soft_iic_obj->sda_pin, GPI, GPI_FLOATING_IN);
+    gpio_set_dir((gpio_pin_enum)soft_iic_obj->sda_pin, GPI, GPI_FLOATING_IN);
 #endif
     soft_iic_delay(soft_iic_obj->delay);
 
     gpio_high(soft_iic_obj->scl_pin);                                           // SCL 高电平
     soft_iic_delay(soft_iic_obj->delay);
 
-    if(gpio_get_level(soft_iic_obj->sda_pin))
+    if((gpio_pin_enum)gpio_get_level((gpio_pin_enum)soft_iic_obj->sda_pin))
     {
         temp = 1;
     }
     gpio_low(soft_iic_obj->scl_pin);                                            // SCL 低电平
 #if SOFT_IIC_SDA_IO_SWITCH
-    gpio_set_dir(soft_iic_obj->sda_pin, GPO, GPO_OPEN_DTAIN);
+    gpio_set_dir((gpio_pin_enum)soft_iic_obj->sda_pin, GPO, GPO_OPEN_DTAIN);
 #endif
     soft_iic_delay(soft_iic_obj->delay);
 
@@ -162,7 +163,7 @@ static uint8 soft_iic_send_data (soft_iic_info_struct *soft_iic_obj, const uint8
     uint8 temp = 0x80;
     while(temp)
     {
-        gpio_set_level(soft_iic_obj->sda_pin, data & temp);
+        gpio_set_level((gpio_pin_enum)soft_iic_obj->sda_pin, data & temp);
         temp >>= 1;
 
         soft_iic_delay(soft_iic_obj->delay);
@@ -188,7 +189,7 @@ static uint8 soft_iic_read_data (soft_iic_info_struct *soft_iic_obj, uint8 ack)
     soft_iic_delay(soft_iic_obj->delay);
     gpio_high(soft_iic_obj->sda_pin);                                           // SDA 高电平 释放 SDA
 #if SOFT_IIC_SDA_IO_SWITCH
-    gpio_set_dir(soft_iic_obj->sda_pin, GPI, GPI_FLOATING_IN);
+    gpio_set_dir((gpio_pin_enum)soft_iic_obj->sda_pin, GPI, GPI_FLOATING_IN);
 #endif
 
     while(temp --)
@@ -197,11 +198,11 @@ static uint8 soft_iic_read_data (soft_iic_info_struct *soft_iic_obj, uint8 ack)
         soft_iic_delay(soft_iic_obj->delay);
         gpio_high(soft_iic_obj->scl_pin);                                       // SCL 拉高
         soft_iic_delay(soft_iic_obj->delay);
-        data = ((data << 1) | gpio_get_level(soft_iic_obj->sda_pin));
+        data = ((data << 1) | gpio_get_level((gpio_pin_enum)soft_iic_obj->sda_pin));
     }
     gpio_low(soft_iic_obj->scl_pin);                                            // SCL 低电平
 #if SOFT_IIC_SDA_IO_SWITCH
-    gpio_set_dir(soft_iic_obj->sda_pin, GPO, GPO_OPEN_DTAIN);
+    gpio_set_dir((gpio_pin_enum)soft_iic_obj->sda_pin, GPO, GPO_OPEN_DTAIN);
 #endif
     soft_iic_delay(soft_iic_obj->delay);
     soft_iic_send_ack(soft_iic_obj, ack);

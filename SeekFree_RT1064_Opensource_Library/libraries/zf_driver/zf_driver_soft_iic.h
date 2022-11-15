@@ -40,8 +40,8 @@
 
 typedef struct
 {
-    gpio_pin_enum       scl_pin;                                                // 用于记录对应的引脚编号
-    gpio_pin_enum       sda_pin;                                                // 用于记录对应的引脚编号
+    uint32       		scl_pin;                                                // 用于记录对应的引脚编号
+    uint32       		sda_pin;                                                // 用于记录对应的引脚编号
     uint8               addr;                                                   // 器件地址 七位地址模式
     uint32              delay;                                                  // 模拟 IIC 软延时时长
 }soft_iic_info_struct;

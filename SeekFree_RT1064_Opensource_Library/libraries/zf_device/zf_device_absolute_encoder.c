@@ -179,7 +179,7 @@ int16 absolute_encoder_get_location (void)
 int16 absolute_encoder_get_offset (void)
 {
     int16 result_data = 0;
-    if(myabs(now_location - last_location) > 2048)
+    if(func_abs(now_location - last_location) > 2048)
     {
         result_data = (now_location > 2048 ? (now_location - 4096 - last_location) : (now_location + 4096 - last_location));
     }

@@ -536,7 +536,7 @@ uint8 wifi_uart_set_model (wifi_uart_mode_enum  mode)
 // 函数简介     断开与wifi的连接
 // 参数说明     void
 // 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_uart_close_ap();
+// 使用示例     wifi_uart_disconnected_wifi();
 // 备注信息     
 //--------------------------------------------------------------------------------------------------
 uint8 wifi_uart_disconnected_wifi (void)
@@ -572,7 +572,7 @@ uint8 wifi_uart_entry_serianet (void)
 
 //--------------------------------------------------------------------------------------------------
 // 函数简介     退出透传模式
-// 参数说明     model           0:关闭透传模式   其他：开启透传模式
+// 参数说明     void
 // 返回参数     uint8           0：成功   1：失败
 // 使用示例     wifi_uart_exit_serianet();
 // 备注信息     
@@ -599,6 +599,8 @@ uint8 wifi_uart_exit_serianet (void)
 //--------------------------------------------------------------------------------------------------
 uint8 wifi_uart_connect_tcp_servers (char *ip, char *port, wifi_uart_transfer_mode_enum mode)
 {
+    zf_assert(ip != NULL);
+    zf_assert(port != NULL);
 
     uint8 return_state = 0;
 
@@ -690,6 +692,9 @@ uint8 wifi_uart_connect_tcp_servers (char *ip, char *port, wifi_uart_transfer_mo
 //--------------------------------------------------------------------------------------------------
 uint8 wifi_uart_connect_udp_client (char *ip, char *port, char *local_port, wifi_uart_transfer_mode_enum mode)
 {
+    zf_assert(ip != NULL);
+    zf_assert(port != NULL);
+    zf_assert(local_port != NULL);
     uint8 return_state = 0;
 
     wifi_uart_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
@@ -826,6 +831,7 @@ uint8 wifi_uart_disconnect_link_with_id (wifi_uart_link_id_enum link_id)
 //--------------------------------------------------------------------------------------------------
 uint8 wifi_uart_entry_tcp_servers (char *port)
 {
+    zf_assert(port != NULL);
     uint8 return_state = 0;
 
     wifi_uart_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
@@ -941,12 +947,13 @@ uint8 wifi_uart_tcp_servers_check_link (void)
 // 函数简介     WiFi 模块 发送函数
 // 参数说明     buff            需要发送的数据地址
 // 参数说明     len             发送长度
-// 返回参数     uint16          剩余未发送数据长度
+// 返回参数     uint32          剩余未发送数据长度
 // 使用示例     wifi_uart_send_buffer("123", 3);
 // 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wifi_uart_send_buffer (uint8 *buff, uint32 len)
 {
+    zf_assert(buff != NULL);
     int32 timeout = WAIT_TIME_OUT;
 
     char lenth[32] = {0};
@@ -1008,12 +1015,13 @@ uint32 wifi_uart_send_buffer (uint8 *buff, uint32 len)
 // 参数说明     buff            需要发送的数据地址
 // 参数说明     len             发送长度
 // 参数说明     id              目标 client id
-// 返回参数     uint16          剩余未发送数据长度
+// 返回参数     uint32          剩余未发送数据长度
 // 使用示例     wifi_uart_tcp_servers_send_buffer("123", 3, WIFI_UART_LINK_0);
 // 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wifi_uart_tcp_servers_send_buffer (uint8 *buff, uint32 len, wifi_uart_link_id_enum id)
 {
+    zf_assert(buff != NULL);
     char lenth[32] = {0};
 
     if( wifi_uart_information.wifi_uart_transfer_mode == WIFI_UART_COMMAND && \
@@ -1062,6 +1070,7 @@ uint32 wifi_uart_tcp_servers_send_buffer (uint8 *buff, uint32 len, wifi_uart_lin
 //-------------------------------------------------------------------------------------------------------------------
 uint16 wifi_uart_read_buffer (uint8 *buffer, uint16 len)
 {
+    zf_assert(buffer != NULL);
     uint32 read_len = len;
     fifo_read_buffer(&wifi_uart_fifo, buffer, &read_len, FIFO_READ_AND_CLEAN);
     return read_len;
@@ -1094,6 +1103,8 @@ void wifi_uart_callback (void)
 //-------------------------------------------------------------------------------------------------------------------
 uint8 wifi_uart_init (char *wifi_ssid, char *pass_word, wifi_uart_mode_enum wifi_mode)
 {
+    zf_assert(wifi_ssid != NULL);
+    zf_assert(pass_word != NULL);
     char uart_baud[32] = {0};
     uint8 return_state = 0;
 

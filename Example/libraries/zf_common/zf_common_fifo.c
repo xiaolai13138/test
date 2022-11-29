@@ -33,6 +33,7 @@
 * 2022-09-21        SeekFree            first version
 ********************************************************************************************************************/
 
+#include "zf_common_debug.h"
 #include "zf_common_fifo.h"
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -80,6 +81,7 @@ static void fifo_end_offset (fifo_struct *fifo, uint32 offset)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_clear (fifo_struct *fifo)
 {
+    zf_assert(fifo != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
     do
     {
@@ -119,6 +121,7 @@ fifo_state_enum fifo_clear (fifo_struct *fifo)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 fifo_used (fifo_struct *fifo)
 {
+    zf_assert(fifo != NULL);
     return (fifo->max - fifo->size);
 }
 
@@ -132,6 +135,7 @@ uint32 fifo_used (fifo_struct *fifo)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_write_element (fifo_struct *fifo, uint32 dat)
 {
+    zf_assert(fifo != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
     
     do
@@ -181,6 +185,7 @@ fifo_state_enum fifo_write_element (fifo_struct *fifo, uint32 dat)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_write_buffer (fifo_struct *fifo, void *dat, uint32 length)
 {
+    zf_assert(fifo != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
     uint32 temp_length = 0;
     
@@ -291,6 +296,7 @@ fifo_state_enum fifo_write_buffer (fifo_struct *fifo, void *dat, uint32 length)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_read_element (fifo_struct *fifo, void *dat, fifo_operation_enum flag)
 {
+    zf_assert(fifo != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
 
     do
@@ -350,9 +356,11 @@ fifo_state_enum fifo_read_element (fifo_struct *fifo, void *dat, fifo_operation_
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, fifo_operation_enum flag)
 {
+    zf_assert(fifo != NULL);
+    zf_assert(length != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
-	uint32 fifo_data_length;
     uint32 temp_length;
+    uint32 fifo_data_length;
 
     do
     {
@@ -363,7 +371,7 @@ fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, 
         }
         fifo->execution |= FIFO_READ;
 
-		fifo_data_length = fifo_used(fifo);
+        fifo_data_length = fifo_used(fifo);
         if(*length > fifo_data_length)
         {
             *length = fifo_data_length;                                         // 纠正读取的长度
@@ -437,9 +445,11 @@ fifo_state_enum fifo_read_buffer (fifo_struct *fifo, void *dat, uint32 *length, 
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_read_tail_buffer (fifo_struct *fifo, void *dat, uint32 *length, fifo_operation_enum flag)
 {
+    zf_assert(fifo != NULL);
+    zf_assert(length != NULL);
     fifo_state_enum return_state = FIFO_SUCCESS;
-    uint32 fifo_data_length;
     uint32 temp_length;
+    uint32 fifo_data_length;
 
     do
     {
@@ -449,7 +459,7 @@ fifo_state_enum fifo_read_tail_buffer (fifo_struct *fifo, void *dat, uint32 *len
             break;
         }
         fifo->execution |= FIFO_READ;
-        
+
         fifo_data_length = fifo_used(fifo);
         if(*length > fifo_data_length)
         {
@@ -522,6 +532,7 @@ fifo_state_enum fifo_read_tail_buffer (fifo_struct *fifo, void *dat, uint32 *len
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_init (fifo_struct *fifo, fifo_data_type_enum type, void *buffer_addr, uint32 size)
 {
+    zf_assert(fifo != NULL);
     fifo_state_enum return_value = FIFO_SUCCESS;
     do
     {

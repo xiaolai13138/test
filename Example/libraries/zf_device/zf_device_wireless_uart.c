@@ -95,21 +95,22 @@ uint32 wireless_uart_send_byte (const uint8 data)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wireless_uart_send_buff (const uint8 *buff, uint32 len)
 {
+    zf_assert(buff != NULL);
     uint16 time_count = 0;
     while(0 != len)
     {
-        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
+        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                              // 如果RTS为低电平 则继续发送数据
         {
             if(30 <= len)                                                       // 数据分 30byte 每包发送
             {
-                uart_write_buffer(WIRELESS_UART_INDEX, buff, 30);                    // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, buff, 30);               // 发送数据
                 buff += 30;                                                     // 地址偏移
                 len -= 30;                                                      // 数量
                 time_count = 0;
             }
             else                                                                // 不足 30byte 的数据一次性发送完毕
             {
-                uart_write_buffer(WIRELESS_UART_INDEX, buff, len);                   // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, buff, len);              // 发送数据
                 len = 0;
                 break;
             }
@@ -135,22 +136,23 @@ uint32 wireless_uart_send_buff (const uint8 *buff, uint32 len)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wireless_uart_send_string (const char *str)
 {
+    zf_assert(str != NULL);
     uint16 time_count = 0;
     uint32 len = strlen(str);
     while(0 != len)
     {
-        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                                    // 如果RTS为低电平 则继续发送数据
+        if(!gpio_get_level(WIRELESS_UART_RTS_PIN))                              // 如果RTS为低电平 则继续发送数据
         {
             if(30 <= len)                                                       // 数据分 30byte 每包发送
             {
-                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, 30);      // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, 30); // 发送数据
                 str += 30;                                                      // 地址偏移
                 len -= 30;                                                      // 数量
                 time_count = 0;
             }
             else                                                                // 不足 30byte 的数据一次性发送完毕
             {
-                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, len);     // 发送数据
+                uart_write_buffer(WIRELESS_UART_INDEX, (const uint8 *)str, len);// 发送数据
                 len = 0;
                 break;
             }
@@ -177,6 +179,7 @@ uint32 wireless_uart_send_string (const char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void wireless_uart_send_image (const uint8 *image_addr, uint32 image_size)
 {
+    zf_assert(image_addr != NULL);
     extern uint8 camera_send_image_frame_header[4];
     wireless_uart_send_buff(camera_send_image_frame_header, 4);
     wireless_uart_send_buff((uint8 *)image_addr, image_size);
@@ -192,6 +195,7 @@ void wireless_uart_send_image (const uint8 *image_addr, uint32 image_size)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wireless_uart_read_buff (uint8 *buff, uint32 len)
 {
+    zf_assert(buff != NULL);
     uint32 data_len = len;
     fifo_read_buffer(&wireless_uart_fifo, buff, &data_len, FIFO_READ_AND_CLEAN);
     return data_len;

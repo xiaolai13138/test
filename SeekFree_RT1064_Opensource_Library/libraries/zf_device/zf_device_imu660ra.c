@@ -130,7 +130,7 @@ static uint8 imu660ra_read_register(uint8 reg)
 //-------------------------------------------------------------------------------------------------------------------
 static void imu660ra_read_registers(uint8 reg, uint8 *data, uint32 len)
 {
-    uint8 temp_data[7];
+    uint8 temp_data[8];
     IMU660RA_CS(0);
     spi_read_8bit_registers(IMU660RA_SPI, reg | IMU660RA_SPI_R, temp_data, len + 1);
     IMU660RA_CS(1);
@@ -265,7 +265,7 @@ uint8 imu660ra_init (void)
         if(imu660ra_self_check())                                           // IMU660RA自检
         {
             // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是 imu660ra 自检出错并超时退出了
+            // 那么就是 IMU660RA 自检出错并超时退出了
             // 检查一下接线有没有问题 如果没问题可能就是坏了
             zf_log(0, "imu660ra self check error.");
             return_state = 1;
@@ -280,7 +280,7 @@ uint8 imu660ra_init (void)
         if(imu660ra_read_register(IMU660RA_INT_STA) == 0)                   // 检查是否配置完成
         {
             // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是 imu660ra 配置初始化文件出错了
+            // 那么就是 IMU660RA 配置初始化文件出错了
             // 检查一下接线有没有问题 如果没问题可能就是坏了
             zf_log(0, "imu660ra init error.");
             return_state = 1;

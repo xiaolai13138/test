@@ -400,7 +400,7 @@ void oled_show_uint (uint16 x,uint16 y,const uint32 dat,uint8 num)
 // 参数说明     x               x 轴坐标设置 0-127
 // 参数说明     y               y 轴坐标设置 0-7
 // 参数说明     dat             需要显示的变量，数据类型float或double
-// 参数说明     num             整数位显示长度   最高10位  
+// 参数说明     num             整数位显示长度   最高8位  
 // 参数说明     pointnum        小数位显示长度   最高6位
 // 返回参数     void
 // 使用示例     oled_show_float(0, 0, x, 2, 3);                 // 显示浮点数   整数显示2位   小数显示三位
@@ -460,6 +460,7 @@ void oled_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 widt
     // 检查一下你的显示调用的函数 自己计算一下哪里超过了屏幕显示范围
     zf_assert(x < 128);
     zf_assert(y < 8);
+    zf_assert(image != NULL);
 
     uint32 i = 0, j = 0, z = 0;
     uint8 dat;
@@ -538,6 +539,7 @@ void oled_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 width,
     // 检查一下你的显示调用的函数 自己计算一下哪里超过了屏幕显示范围
     zf_assert(x < 128);
     zf_assert(y < 8);
+    zf_assert(image != NULL);
 
     int16 i, j;
     uint8 dat;
@@ -611,6 +613,7 @@ void oled_show_wave (uint16 x, uint16 y, const uint16 *wave, uint16 width, uint1
     // 检查一下你的显示调用的函数 自己计算一下哪里超过了屏幕显示范围
     zf_assert(x < 128);
     zf_assert(y < 8);
+    zf_assert(wave != NULL);
 
     uint32 i = 0;
     uint32 width_index = 0, value_max_index = 0;
@@ -657,6 +660,7 @@ void oled_show_chinese (uint16 x, uint16 y, uint8 size, const uint8 *chinese_buf
     // 检查一下你的显示调用的函数 自己计算一下哪里超过了屏幕显示范围
     zf_assert(x < 128);
     zf_assert(y < 8);
+    zf_assert(chinese_buffer != NULL);
 
     int16 i, j, k;
 

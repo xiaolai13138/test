@@ -33,6 +33,7 @@
 * 2022-08-10        Teternal            first version
 ********************************************************************************************************************/
 
+#include "zf_common_debug.h"
 #include "zf_common_function.h"
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -80,6 +81,7 @@ void func_soft_delay (volatile long t)
 //-------------------------------------------------------------------------------------------------------------------
 int32 func_str_to_int (char *str)
 {
+    zf_assert(str != NULL);
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     int32 temp = 0;                                                             // 临时计算变量
     do
@@ -123,6 +125,7 @@ int32 func_str_to_int (char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void func_int_to_str (char *str, int32 number)
 {
+    zf_assert(str != NULL);
     uint8 data_temp[16];                                                        // 缓冲区
     uint8 bit = 0;                                                              // 数字位数
     int32 number_temp = 0;
@@ -168,6 +171,7 @@ void func_int_to_str (char *str, int32 number)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 func_str_to_uint (char *str)
 {
+    zf_assert(str != NULL);
     uint32 temp = 0;                                                            // 临时计算变量
 
     do
@@ -197,6 +201,7 @@ uint32 func_str_to_uint (char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void func_uint_to_str (char *str, uint32 number)
 {
+    zf_assert(str != NULL);
     int8 data_temp[16];                                                         // 缓冲区
     uint8 bit = 0;                                                              // 数字位数
 
@@ -235,6 +240,7 @@ void func_uint_to_str (char *str, uint32 number)
 //-------------------------------------------------------------------------------------------------------------------
 float func_str_to_float (char *str)
 {
+    zf_assert(str != NULL);
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     float temp = 0.0;                                                           // 临时计算变量 整数部分
     float temp_point = 0.0;                                                     // 临时计算变量 小数部分
@@ -295,6 +301,7 @@ float func_str_to_float (char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void func_float_to_str (char *str, float number, uint8 point_bit)
 {
+    zf_assert(str != NULL);
     int data_int = 0;                                                           // 整数部分
     int data_float = 0.0;                                                       // 小数部分
     int data_temp[8];                                                           // 整数字符缓冲
@@ -379,6 +386,7 @@ void func_float_to_str (char *str, float number, uint8 point_bit)
 //-------------------------------------------------------------------------------------------------------------------
 double func_str_to_double (char *str)
 {
+    zf_assert(str != NULL);
     uint8 sign = 0;                                                             // 标记符号 0-正数 1-负数
     double temp = 0.0;                                                          // 临时计算变量 整数部分
     double temp_point = 0.0;                                                    // 临时计算变量 小数部分
@@ -440,6 +448,7 @@ double func_str_to_double (char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void func_double_to_str (char *str, double number, uint8 point_bit)
 {
+    zf_assert(str != NULL);
     int data_int = 0;                                                           // 整数部分
     int data_float = 0.0;                                                       // 小数部分
     int data_temp[12];                                                          // 整数字符缓冲
@@ -522,6 +531,7 @@ void func_double_to_str (char *str, double number, uint8 point_bit)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 func_str_to_hex (char *str)
 {
+    zf_assert(str != NULL);
     uint32 str_len = strlen(str);                                               // 字符串长
     uint32 result_data = 0;                                                     // 结果缓存
     uint8 temp = 0;                                                             // 计算变量
@@ -579,6 +589,7 @@ uint32 func_str_to_hex (char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void func_hex_to_str (char *str, uint32 number)
 {
+    zf_assert(str != NULL);
     const char hex_index[16] = {
         '0', '1', '2', '3',
         '4', '5', '6', '7',

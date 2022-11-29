@@ -167,11 +167,13 @@
 
 //================================================定义 ICM20602 内部地址================================================
 
-extern int16 icm_gyro_x, icm_gyro_y, icm_gyro_z;                                // 三轴陀螺仪数据
-extern int16 icm_acc_x, icm_acc_y, icm_acc_z;                                   // 三轴加速度计数据
+extern int16 icm20602_gyro_x, icm20602_gyro_y, icm20602_gyro_z;                 // 三轴陀螺仪数据
+extern int16 icm20602_acc_x, icm20602_acc_y, icm20602_acc_z;                    // 三轴加速度计数据
 
 void    icm20602_get_acc            (void);
 void    icm20602_get_gyro           (void);
+float   icm20602_acc_transition     (int16 acc_value);                          // 将 ICM20602 加速度计数据转换为实际物理数据
+float   icm20602_gyro_transition    (int16 gyro_value);                         // 将 ICM20602 陀螺仪数据转换为实际物理数据
 uint8   icm20602_init               (void);
 
 #endif

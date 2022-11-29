@@ -193,6 +193,7 @@ void spi_write_8bit_array (spi_index_enum spi_n, const uint8 *data, uint32 lengt
 //-------------------------------------------------------------------------------------------------------------------
 void spi_write_8bit (spi_index_enum spi_n, const uint8 data)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write_8bit_array(spi_n, &data, 1);
 #else
@@ -231,6 +232,7 @@ void spi_write_16bit (spi_index_enum spi_n, const uint16 data)
 //-------------------------------------------------------------------------------------------------------------------
 void spi_write_16bit_array (spi_index_enum spi_n, const uint16 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     uint8 temp_data[2];
     uint32 temp_length = 0;
@@ -294,6 +296,7 @@ void spi_write_8bit_register (spi_index_enum spi_n, const uint8 register_name, c
 //-------------------------------------------------------------------------------------------------------------------
 void spi_write_8bit_registers (spi_index_enum spi_n, const uint8 register_name, const uint8 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, &register_name, NULL, 1, 1);
     spi_write(spi_n, data, NULL, length, 1);
@@ -345,6 +348,7 @@ void spi_write_16bit_register (spi_index_enum spi_n, const uint16 register_name,
 //-------------------------------------------------------------------------------------------------------------------
 void spi_write_16bit_registers (spi_index_enum spi_n, const uint16 register_name, const uint16 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, (const uint8 *)&register_name, NULL, 2, 1);
     spi_write(spi_n, (const uint8 *)&data, NULL, 2 * length, 1);
@@ -387,6 +391,7 @@ uint8 spi_read_8bit (spi_index_enum spi_n)
 //-------------------------------------------------------------------------------------------------------------------
 void spi_read_8bit_array (spi_index_enum spi_n, uint8 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, NULL, data, length, 1);
 #else
@@ -427,6 +432,7 @@ uint16 spi_read_16bit (spi_index_enum spi_n)
 //-------------------------------------------------------------------------------------------------------------------
 void spi_read_16bit_array (spi_index_enum spi_n, uint16 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, NULL, (uint8 *)data, 2 * length, 1);
 #else
@@ -471,6 +477,7 @@ uint8 spi_read_8bit_register (spi_index_enum spi_n, const uint8 register_name)
 //-------------------------------------------------------------------------------------------------------------------
 void spi_read_8bit_registers (spi_index_enum spi_n, const uint8 register_name, uint8 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, (const uint8 *)&register_name, NULL, 1, 1);
     spi_write(spi_n, NULL, (uint8 *)data, length, 1);
@@ -516,6 +523,7 @@ uint16 spi_read_16bit_register (spi_index_enum spi_n, const uint16 register_name
 //-------------------------------------------------------------------------------------------------------------------
 void spi_read_16bit_registers (spi_index_enum spi_n, const uint16 register_name, uint16 *data, uint32 length)
 {
+    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, (const uint8 *)&register_name, NULL, 2, 1);
     spi_write(spi_n, NULL, (uint8 *)data, 2 * length, 1);
@@ -540,6 +548,7 @@ void spi_read_16bit_registers (spi_index_enum spi_n, const uint16 register_name,
 //-------------------------------------------------------------------------------------------------------------------
 void spi_transfer_8bit (spi_index_enum spi_n, const uint8 *write_buffer, uint8 *read_buffer, uint32 length)
 {
+    zf_assert(write_buffer != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write(spi_n, write_buffer, read_buffer, length, 1);
 #else
@@ -564,6 +573,7 @@ void spi_transfer_8bit (spi_index_enum spi_n, const uint8 *write_buffer, uint8 *
 //-------------------------------------------------------------------------------------------------------------------
 void spi_transfer_16bit (spi_index_enum spi_n, const uint16 *write_buffer, uint16 *read_buffer, uint32 length)
 {
+    zf_assert(write_buffer != NULL);
 #ifdef SPI_SPEED_PRIORITY
     uint16 temp;
     while(length --)

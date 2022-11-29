@@ -643,6 +643,7 @@ void ips114_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 wi
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
     zf_assert(x < ips114_x_max);
     zf_assert(y < ips114_y_max);
+    zf_assert(image != NULL);
 
     uint32 i = 0, j = 0;
     uint8 temp = 0;
@@ -691,6 +692,7 @@ void ips114_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 widt
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
     zf_assert(x < ips114_x_max);
     zf_assert(y < ips114_y_max);
+    zf_assert(image != NULL);
 
     uint32 i = 0, j = 0;
     uint16 color = 0,temp = 0;
@@ -737,7 +739,7 @@ void ips114_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 widt
 // 参数说明     dis_height      图像显示高度 参数范围 [0, ips114_y_max]
 // 参数说明     color_mode      色彩模式 0-低位在前 1-高位在前
 // 返回参数     void
-// 使用示例     ips114_show_rgb565_image(0, 0, scc8660_image[0], SCCB8660_W, SCCB8660_H, SCCB8660_W, SCCB8660_H, 1);
+// 使用示例     ips114_show_rgb565_image(0, 0, scc8660_image[0], SCC8660_W, SCC8660_H, SCC8660_W, SCC8660_H, 1);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
 void ips114_show_rgb565_image (uint16 x, uint16 y, const uint16 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height, uint8 color_mode)
@@ -746,6 +748,7 @@ void ips114_show_rgb565_image (uint16 x, uint16 y, const uint16 *image, uint16 w
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
     zf_assert(x < ips114_x_max);
     zf_assert(y < ips114_y_max);
+    zf_assert(image != NULL);
 
     uint32 i = 0, j = 0;
     uint16 color = 0;
@@ -790,6 +793,7 @@ void ips114_show_wave (uint16 x, uint16 y, const uint16 *wave, uint16 width, uin
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
     zf_assert(x < ips114_x_max);
     zf_assert(y < ips114_y_max);
+    zf_assert(wave != NULL);
 
     uint32 i = 0, j = 0;
     uint32 width_index = 0, value_max_index = 0;
@@ -831,6 +835,7 @@ void ips114_show_chinese (uint16 x, uint16 y, uint8 size, const uint8 *chinese_b
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
     zf_assert(x < ips114_x_max);
     zf_assert(y < ips114_y_max);
+    zf_assert(chinese_buffer != NULL);
 
     int i, j, k; 
     uint8 temp, temp1, temp2;

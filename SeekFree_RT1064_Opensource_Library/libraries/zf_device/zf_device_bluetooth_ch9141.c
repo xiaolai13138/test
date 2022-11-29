@@ -93,6 +93,7 @@ uint32 bluetooth_ch9141_send_byte (const uint8 data)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 bluetooth_ch9141_send_buff (const uint8 *buff, uint32 len)
 {
+    zf_assert(buff != NULL);
     uint16 time_count = 0;
     while(0 != len)
     {
@@ -133,6 +134,7 @@ uint32 bluetooth_ch9141_send_buff (const uint8 *buff, uint32 len)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 bluetooth_ch9141_send_string (const char *str)
 {
+    zf_assert(str != NULL);
     uint16 time_count = 0;
     uint32 len = strlen(str);
     while(0 != len)
@@ -175,40 +177,11 @@ uint32 bluetooth_ch9141_send_string (const char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void bluetooth_ch9141_send_image (const uint8 *image_addr, uint32 image_size)
 {
-    uint16 time_count = 0;
+    zf_assert(image_addr != NULL);
 
     extern uint8 camera_send_image_frame_header[4];
     bluetooth_ch9141_send_buff(camera_send_image_frame_header, 4);
     bluetooth_ch9141_send_buff((uint8 *)image_addr, image_size);
-
-    while(0 != image_size)
-    {
-        if(!gpio_get_level(BLUETOOTH_CH9141_RTS_PIN))                                 // 如果RTS为低电平 则继续发送数据
-        {
-//            system_delay_ms(5);
-            if(30 <= image_size)                                                       // 数据分 30byte 每包发送
-            {
-                uart_write_buffer(BLUETOOTH_CH9141_INDEX, image_addr, 30);                 // 发送数据
-                image_addr += 30;                                                     // 地址偏移
-                image_size -= 30;                                                      // 数量
-                time_count = 0;
-            }
-            else                                                                // 不足 30byte 的数据一次性发送完毕
-            {
-                uart_write_buffer(BLUETOOTH_CH9141_INDEX, image_addr, image_size);                // 发送数据
-                image_size = 0;
-                break;
-            }
-        }
-        else                                                                    // 如果RTS为高电平 则模块忙
-        {
-            if(BLUETOOTH_CH9141_TIMEOUT_COUNT <= (++ time_count))               // 超出了最大等待时间
-            {
-                break;                                                          // 退出发送
-            }
-            system_delay_ms(1);
-        }
-    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------

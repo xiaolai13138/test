@@ -84,9 +84,20 @@
 #define MPU6050_ACCEL_CONFIG        (0x1C)                                      // 加速计自检、测量范围及高通滤波频率，典型值：0x01(不自检，2G，5Hz)
 #define MPU6050_INT_PIN_CFG         (0x37)                                      // 设置6050辅助I2C为直通模式寄存器
 #define MPU6050_ACCEL_XOUT_H        (0x3B)
+#define MPU6050_ACCEL_XOUT_L        (0x3C)
+#define MPU6050_ACCEL_YOUT_H        (0x3D)
+#define MPU6050_ACCEL_YOUT_L        (0x3E)
+#define MPU6050_ACCEL_ZOUT_H        (0x3F)
+#define MPU6050_ACCEL_ZOUT_L        (0x40)
 #define MPU6050_GYRO_XOUT_H         (0x43)
+#define MPU6050_GYRO_XOUT_L         (0x44)
+#define MPU6050_GYRO_YOUT_H         (0x45)
+#define MPU6050_GYRO_YOUT_L         (0x46)
+#define MPU6050_GYRO_ZOUT_H         (0x47)
+#define MPU6050_GYRO_ZOUT_L         (0x48)
 #define MPU6050_USER_CONTROL        (0x6A)                                      // 关闭6050对辅助I2C设备的控制
 #define MPU6050_PWR_MGMT_1          (0x6B)                                      // 电源管理，典型值：0x00(正常启用)
+#define MPU6050_WHO_AM_I            (0x75)                                      // IIC地址寄存器(默认数值0x68，只读)
 
 #define MPU6050_ACC_SAMPLE          (0x10)                                      // 加速度计量程
 // 设置为:0x00 陀螺仪量程为:±250 dps     获取到的陀螺仪数据除以131.2         可以转化为带物理单位的数据，单位为：°/s

@@ -291,7 +291,7 @@ uint8 mt9v03x_set_exposure_time (uint16 light)
         if((temp != light) || (MT9V03X_INIT_TIMEOUT <= timeout_count))
         {
             return_state = 1;
-        } 
+        }
     }
     else
     {

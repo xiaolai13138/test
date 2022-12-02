@@ -78,7 +78,7 @@ int main (void)
     clock_init(SYSTEM_CLOCK_600M);                                              // 初始化芯片时钟 工作频率为 600MHz
     debug_init();                                                               // 初始化默认 debug uart
     
-    
+    flash_init();
     
     // 此处编写用户代码 例如外设初始化代码等
     if(flash_check(FLASH_SECTION_INDEX, FLASH_PAGE_INDEX))                      // 判断是否有数据

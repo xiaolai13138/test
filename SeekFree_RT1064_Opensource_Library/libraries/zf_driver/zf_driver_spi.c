@@ -193,7 +193,6 @@ void spi_write_8bit_array (spi_index_enum spi_n, const uint8 *data, uint32 lengt
 //-------------------------------------------------------------------------------------------------------------------
 void spi_write_8bit (spi_index_enum spi_n, const uint8 data)
 {
-    zf_assert(data != NULL);
 #ifdef SPI_SPEED_PRIORITY
     spi_write_8bit_array(spi_n, &data, 1);
 #else

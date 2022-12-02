@@ -861,7 +861,6 @@ void tft180_init (void)
 
     tft180_set_dir(tft180_display_dir);
     tft180_set_color(tft180_pencolor, tft180_bgcolor);
-    tft180_debug_init();
 
     TFT180_RST(0);
     system_delay_ms(10);
@@ -983,4 +982,5 @@ void tft180_init (void)
     TFT180_CS(1);
 
     tft180_clear();
+    tft180_debug_init();
 }

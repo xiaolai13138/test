@@ -86,13 +86,13 @@
 #define PIT_CH                          (PIT_CH0 )                              // 使用的周期中断编号 如果修改 需要同步对应修改周期中断编号与 isr.c 中的调用
 #define PIT_PRIORITY                    (PIT_IRQn)                              // 对应周期中断的中断编号 
     
-#define ENCODER_QUADDEC                 (QTIMER1_ENCOEDER1)                     // 正交编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER1
-#define ENCODER_QUADDEC_A               (QTIMER1_ENCOEDER1_CH1_C0)              // A 相对应的引脚
-#define ENCODER_QUADDEC_B               (QTIMER1_ENCOEDER1_CH2_C1)              // B 相对应的引脚
+#define ENCODER_QUADDEC                 (QTIMER1_ENCODER1)                     // 正交编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER1
+#define ENCODER_QUADDEC_A               (QTIMER1_ENCODER1_CH1_C0)              // A 相对应的引脚
+#define ENCODER_QUADDEC_B               (QTIMER1_ENCODER1_CH2_C1)              // B 相对应的引脚
     
-#define ENCODER_DIR		                (QTIMER2_ENCOEDER1)                     // 带方向编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER2
-#define ENCODER_DIR_PULSE               (QTIMER2_ENCOEDER1_CH1_C3)              // PULSE 对应的引脚
-#define ENCODER_DIR_DIR                 (QTIMER2_ENCOEDER1_CH2_C25)             // DIR 对应的引脚
+#define ENCODER_DIR		                (QTIMER2_ENCODER1)                     // 带方向编码器对应使用的编码器接口 这里使用QTIMER1的ENCOEDER2
+#define ENCODER_DIR_PULSE               (QTIMER2_ENCODER1_CH1_C3)              // PULSE 对应的引脚
+#define ENCODER_DIR_DIR                 (QTIMER2_ENCODER1_CH2_C25)             // DIR 对应的引脚
 
 int16 encoder_data_quaddec = 0;
 int16 encoder_data_dir = 0;

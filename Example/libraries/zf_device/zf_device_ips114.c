@@ -896,7 +896,6 @@ void ips114_init (void)
 
     ips114_set_dir(ips114_display_dir);
     ips114_set_color(ips114_pencolor, ips114_bgcolor);
-    ips114_debug_init();
 
     IPS114_RST(0);
     system_delay_ms(200);
@@ -1000,4 +999,5 @@ void ips114_init (void)
     IPS114_CS(1);
 
     ips114_clear();
+    ips114_debug_init();
 }

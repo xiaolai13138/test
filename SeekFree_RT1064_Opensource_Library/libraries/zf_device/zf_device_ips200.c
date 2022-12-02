@@ -1050,7 +1050,6 @@ void ips200_init (ips200_type_enum type_select)
 
     ips200_set_dir(ips200_display_dir);
     ips200_set_color(ips200_pencolor, ips200_bgcolor);
-    ips200_debug_init();
     
     IPS200_BL(1);
     IPS200_RST(0);  
@@ -1160,4 +1159,5 @@ void ips200_init (ips200_type_enum type_select)
     }
 
     ips200_clear();                                                             // ³õÊ¼»¯Îª°×ÆÁ
+    ips200_debug_init();
 }

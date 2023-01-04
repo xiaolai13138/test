@@ -63,6 +63,9 @@ void type_default_callback(void)
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     设置摄像头类型
 // 参数说明     type_set        选定的摄像头类型
+// 参数说明     vsync_callback  设备的场中断回调函数
+// 参数说明     dma_callback    设备的 DMA 完成中断回调函数
+// 参数说明     uart_callback   设备的串口回调函数
 // 返回参数     void
 // 使用示例     set_camera_type(CAMERA_GRAYSCALE);
 // 备注信息     一般由各摄像头初始化内部调用
@@ -89,10 +92,11 @@ void set_flexio_camera_type (camera_type_enum type_set, callback_function vsync_
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     设置无线模块类型
-// 参数说明     type_set        选定的无线模块类型
+// 参数说明     type_set        	选定的无线模块类型
+// 参数说明     wireless_callback   设备的串口回调函数
 // 返回参数     void
 // 使用示例     set_wireless_type(WIRELESS_UART);
-// 备注信息     一般由各摄像头初始化内部调用
+// 备注信息     一般由各无线模块初始化内部调用
 //-------------------------------------------------------------------------------------------------------------------
 void set_wireless_type (wireless_type_enum type_set, callback_function wireless_callback)
 {

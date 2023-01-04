@@ -451,7 +451,10 @@ void oled_show_float (uint16 x,uint16 y,const float dat,uint8 num,uint8 pointnum
 // 参数说明     dis_height      图像显示高度 参数范围 [0, 64]
 // 返回参数     void
 // 使用示例     oled_show_binary_image(0, 0, ov7725_image_binary[0], OV7725_W, OV7725_H, OV7725_W, OV7725_H);
-// 备注信息     
+// 备注信息     用于显示小钻风的未解压的压缩二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
 //-------------------------------------------------------------------------------------------------------------------
 void oled_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
 {
@@ -530,7 +533,10 @@ void oled_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 widt
 // 参数说明     threshold       二值化显示阈值 0-不开启二值化
 // 返回参数     void
 // 使用示例     oled_show_gray_image(0, 0, mt9v03x_image[0], width, height, 128, 64, x);
-// 备注信息     
+// 备注信息     用于显示总钻风的图像
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
 //-------------------------------------------------------------------------------------------------------------------
 void oled_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height, uint8 threshold)
 {
@@ -699,7 +705,6 @@ void oled_init (void)
     gpio_init(OLED_CS_PIN , GPO, GPIO_HIGH, GPO_PUSH_PULL);
 
     oled_set_dir(oled_display_dir);
-	oled_debug_init();
 
     OLED_CS(0);
     OLED_RES(0);
@@ -748,4 +753,5 @@ void oled_init (void)
 
     oled_clear();                                                               // 初始清屏
     oled_set_coordinate(0, 0);
+    oled_debug_init();
 }

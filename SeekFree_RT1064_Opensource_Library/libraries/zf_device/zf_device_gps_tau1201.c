@@ -223,8 +223,8 @@ static uint8 gps_gnrmc_parse (char *line, gps_info_struct *gps)
 {
     uint8 state, temp;
     
-    double  latitude;                                                           // 经度
-    double  longitude;                                                          // 纬度
+    double  latitude;                                                           // 纬度
+    double  longitude;                                                          // 经度
     
     float lati_cent_tmp, lati_second_tmp;
     float long_cent_tmp, long_second_tmp;

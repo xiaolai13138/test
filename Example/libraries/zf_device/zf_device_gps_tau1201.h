@@ -82,8 +82,8 @@ typedef struct
     uint16      longitude_cent;                                                 // 分
     uint16      longitude_second;                                               // 秒
     
-    double      latitude;                                                       // 经度
-    double      longitude;                                                      // 纬度
+    double      latitude;                                                       // 纬度
+    double      longitude;                                                      // 经度
     
     int8        ns;                                                             // 纬度半球 N（北半球）或 S（南半球）
     int8        ew;                                                             // 经度半球 E（东经）或 W（西经）

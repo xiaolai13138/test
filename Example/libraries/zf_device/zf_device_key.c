@@ -66,54 +66,21 @@ void key_scanner (void)
     uint8 i = 0;
     for(i = 0; i < KEY_NUMBER; i ++)
     {
-        switch(key_state[i])
+        if(KEY_RELEASE_LEVEL != gpio_get_level(key_index[i]))                   // 按键按下
         {
-            case KEY_RELEASE:
-                if(KEY_RELEASE_LEVEL != gpio_get_level(key_index[i]))
-                {
-                    if(++ key_press_time[i] >= KEY_MAX_SHOCK_PERIOD / scanner_period)
-                    {
-                        key_state[i] = KEY_SHORT_PRESS;
-                    }
-                    else
-                    {
-                        key_state[i] = KEY_CHECK_SHOCK;
-                    }
-                }
-                break;
-            case KEY_CHECK_SHOCK:
-                if(KEY_RELEASE_LEVEL != gpio_get_level(key_index[i]))
-                {
-                    if(++ key_press_time[i] >= KEY_MAX_SHOCK_PERIOD / scanner_period)
-                    {
-                        key_state[i] = KEY_SHORT_PRESS;
-                    }
-                }
-                else
-                {
-                    key_state[i] = KEY_RELEASE;
-                    key_press_time[i] = 0;
-                }
-                break;
-            case KEY_SHORT_PRESS:
-                if(++ key_press_time[i] >= KEY_LONG_PRESS_PERIOD / scanner_period)
-                {
-                    key_state[i] = KEY_LONG_PRESS;
-                }
-                if(KEY_RELEASE_LEVEL == gpio_get_level(key_index[i]))
-                {
-                    key_state[i] = KEY_RELEASE;
-                    key_press_time[i] = 0;
-                }
-                break;
-            case KEY_LONG_PRESS:
-                if(KEY_RELEASE_LEVEL == gpio_get_level(key_index[i]))
-                {
-                    key_state[i] = KEY_RELEASE;
-                    key_press_time[i] = 0;
-                }
-                break;
-                
+            key_press_time[i] ++;
+            if(key_press_time[i] >= KEY_LONG_PRESS_PERIOD / scanner_period)
+            {
+                key_state[i] = KEY_LONG_PRESS;
+            }
+        }
+        else                                                                    // 按键释放
+        {
+            if(key_state[i] != KEY_LONG_PRESS && key_press_time[i] >= KEY_MAX_SHOCK_PERIOD / scanner_period)
+            {
+                key_state[i] = KEY_SHORT_PRESS;
+            }
+            key_press_time[i] = 0;
         }
     }
 }
@@ -128,6 +95,33 @@ void key_scanner (void)
 key_state_enum key_get_state (key_index_enum key_n)
 {
     return key_state[key_n];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     清除对应按键状态
+// 参数说明     key_n           按键索引
+// 返回参数     void            无
+// 使用示例     key_clear_state(KEY_1);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
+void key_clear_state (key_index_enum key_n)
+{
+    key_state[key_n] = KEY_RELEASE;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     清除所有按键状态
+// 参数说明     void            无
+// 返回参数     void            无
+// 使用示例     key_clear_all_state();
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
+void key_clear_all_state (void)
+{
+    key_state[0] = KEY_RELEASE;
+    key_state[1] = KEY_RELEASE;
+    key_state[2] = KEY_RELEASE;
+    key_state[3] = KEY_RELEASE;
 }
 
 //-------------------------------------------------------------------------------------------------------------------

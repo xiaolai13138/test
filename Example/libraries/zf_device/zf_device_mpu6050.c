@@ -60,8 +60,8 @@
 
 #include "zf_device_mpu6050.h"
 
-int16 mpu6050_gyro_x = 0, mpu6050_gyro_y = 0, mpu6050_gyro_z = 0;                       // 三轴陀螺仪数据      gyro (陀螺仪)
-int16 mpu6050_acc_x  = 0, mpu6050_acc_y  = 0, mpu6050_acc_z  = 0;                       // 三轴加速度计数据    acc (accelerometer 加速度计)
+int16 mpu6050_gyro_x = 0, mpu6050_gyro_y = 0, mpu6050_gyro_z = 0;               // 三轴陀螺仪数据      gyro (陀螺仪)
+int16 mpu6050_acc_x = 0, mpu6050_acc_y = 0, mpu6050_acc_z = 0;                  // 三轴加速度计数据    acc (accelerometer 加速度计)
 
 #if MPU6050_USE_SOFT_IIC
 static soft_iic_info_struct mpu6050_iic_struct;
@@ -87,8 +87,8 @@ static uint8 mpu6050_self1_check (void)
     uint8 dat = 0, return_state = 0;
     uint16 timeout_count = 0;
 
-    mpu6050_write_register(MPU6050_PWR_MGMT_1, 0x00);           // 解除休眠状态
-    mpu6050_write_register(MPU6050_SMPLRT_DIV, 0x07);           // 125HZ采样率
+    mpu6050_write_register(MPU6050_PWR_MGMT_1, 0x00);                           // 解除休眠状态
+    mpu6050_write_register(MPU6050_SMPLRT_DIV, 0x07);                           // 125HZ采样率
     while(0x07 != dat)
     {
         if(timeout_count ++ > MPU6050_TIMEOUT_COUNT)
@@ -106,7 +106,7 @@ static uint8 mpu6050_self1_check (void)
 // 函数简介     获取 MPU6050 加速度计数据
 // 参数说明     void
 // 返回参数     void
-// 使用示例     mpu6050_get_acc();                              // 执行该函数后，直接查看对应的变量即可
+// 使用示例     mpu6050_get_acc();                                              // 执行该函数后，直接查看对应的变量即可
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
 void mpu6050_get_acc (void)
@@ -123,8 +123,8 @@ void mpu6050_get_acc (void)
 // 函数简介     获取 MPU6050 陀螺仪数据
 // 参数说明     void
 // 返回参数     void
-// 使用示例     mpu6050_get_gyro();                             // 执行该函数后，直接查看对应的变量即可
-// 备注信息
+// 使用示例     mpu6050_get_gyro();                                             // 执行该函数后，直接查看对应的变量即可
+// 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
 void mpu6050_get_gyro (void)
 {
@@ -148,10 +148,10 @@ float mpu6050_acc_transition (int16 acc_value)
     float acc_data = 0;
     switch(MPU6050_ACC_SAMPLE)
     {
-        case 0x00: acc_data = (float)acc_value / 16384; break;      // 0x00 加速度计量程为:±2g          获取到的加速度计数据 除以16384      可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x08: acc_data = (float)acc_value / 8192;  break;      // 0x08 加速度计量程为:±4g          获取到的加速度计数据 除以8192       可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x10: acc_data = (float)acc_value / 4096;  break;      // 0x10 加速度计量程为:±8g          获取到的加速度计数据 除以4096       可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x18: acc_data = (float)acc_value / 2048;  break;      // 0x18 加速度计量程为:±16g         获取到的加速度计数据 除以2048       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x00: acc_data = (float)acc_value / 16384; break;                  // 0x00 加速度计量程为:±2g     获取到的加速度计数据 除以 16384      可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x08: acc_data = (float)acc_value / 8192; break;                   // 0x08 加速度计量程为:±4g     获取到的加速度计数据 除以 8192       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x10: acc_data = (float)acc_value / 4096; break;                   // 0x10 加速度计量程为:±8g     获取到的加速度计数据 除以 4096       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x18: acc_data = (float)acc_value / 2048; break;                   // 0x18 加速度计量程为:±16g    获取到的加速度计数据 除以 2048       可以转化为带物理单位的数据，单位：g(m/s^2)
         default: break;
     }
     return acc_data;

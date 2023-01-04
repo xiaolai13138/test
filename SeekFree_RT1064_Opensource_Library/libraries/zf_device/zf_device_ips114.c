@@ -586,7 +586,7 @@ void ips114_show_uint (uint16 x, uint16 y, const uint32 dat, uint8 num)
 // 参数说明     x               坐标x方向的起点 参数范围 [0, ips114_x_max-1]
 // 参数说明     y               坐标y方向的起点 参数范围 [0, ips114_y_max-1]
 // 参数说明     dat             需要显示的变量 数据类型 float 或 double
-// 参数说明     num             整数位显示长度   最高10位  
+// 参数说明     num             整数位显示长度   最高8位  
 // 参数说明     pointnum        小数位显示长度   最高6位
 // 返回参数     void
 // 使用示例     ips114_show_float(0, 0, x, 2, 3);               // 显示浮点数 整数显示 2 位 小数显示 3 位
@@ -635,7 +635,10 @@ void ips114_show_float (uint16 x, uint16 y, const float dat, uint8 num, uint8 po
 // 参数说明     dis_height      图像显示高度 参数范围 [0, ips114_y_max]
 // 返回参数     void
 // 使用示例     ips114_show_binary_image(0, 0, ov7725_image_binary[0], OV7725_W, OV7725_H, OV7725_W, OV7725_H);
-// 备注信息     
+// 备注信息     用于显示小钻风的未解压的压缩二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
+//              这个函数不可以用来直接显示总钻风的未压缩的二值化图像
 //-------------------------------------------------------------------------------------------------------------------
 void ips114_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height)
 {
@@ -684,7 +687,10 @@ void ips114_show_binary_image (uint16 x, uint16 y, const uint8 *image, uint16 wi
 // 参数说明     threshold       二值化显示阈值 0-不开启二值化
 // 返回参数     void
 // 使用示例     ips114_show_gray_image(0, 0, mt9v03x_image[0], MT9V03X_W, MT9V03X_H, MT9V03X_W, MT9V03X_H, 0);
-// 备注信息     
+// 备注信息     用于显示总钻风的图像
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
+//              如果要显示二值化图像 直接修改最后一个参数为需要的二值化阈值即可
 //-------------------------------------------------------------------------------------------------------------------
 void ips114_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height, uint8 threshold)
 {
@@ -740,7 +746,10 @@ void ips114_show_gray_image (uint16 x, uint16 y, const uint8 *image, uint16 widt
 // 参数说明     color_mode      色彩模式 0-低位在前 1-高位在前
 // 返回参数     void
 // 使用示例     ips114_show_rgb565_image(0, 0, scc8660_image[0], SCC8660_W, SCC8660_H, SCC8660_W, SCC8660_H, 1);
-// 备注信息     
+// 备注信息     用于显示凌瞳的 RGB565 的图像
+//              如果要显示低位在前的其他 RGB565 图像 修改最后一个参数即可
+//              如果要显示低位在前的其他 RGB565 图像 修改最后一个参数即可
+//              如果要显示低位在前的其他 RGB565 图像 修改最后一个参数即可
 //-------------------------------------------------------------------------------------------------------------------
 void ips114_show_rgb565_image (uint16 x, uint16 y, const uint16 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height, uint8 color_mode)
 {

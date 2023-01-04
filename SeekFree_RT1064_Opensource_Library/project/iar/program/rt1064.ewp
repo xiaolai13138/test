@@ -1229,7 +1229,7 @@
             <name>$PROJ_DIR$\..\..\..\libraries\sdk\xip\evkmimxrt1064_flexspi_nor_config.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\libraries\sdk\xip\evkmimxrt1064_flexspi_nor_config.h</name>
+            <name>$PROJ_DIR$\..\..\..\libraries\sdk\xip\EVKMIMXRT1064_FLEXSPI_NOR_CONFIG.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\libraries\sdk\xip\evkmimxrt1064_sdram_ini_dcd.c</name>
@@ -1812,6 +1812,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\libraries\zf_device\zf_device_config.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\libraries\zf_device\zf_device_dl1a.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\libraries\zf_device\zf_device_dl1a.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\libraries\zf_device\zf_device_gps_tau1201.c</name>

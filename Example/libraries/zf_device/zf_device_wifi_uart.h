@@ -58,7 +58,7 @@
 #define WIFI_UART_RTS_PIN       (D26)                                           // 定义流控位引脚  指示当前模块是否可以接受数据  0-可以继续接收  1-不可以继续接收
 #define WIFI_UART_HARDWARE_RST  (1)                                             // 定义是否使用硬件复位引脚 0-使用软件复位 1-使用硬件 RST
 #if WIFI_UART_HARDWARE_RST                                                      // 建议使用硬件复位引脚 否则容易出现单片机复位后无法正常初始化模块
-#define WIFI_UART_RST_PIN       (B9)                                            // 定义硬件复位引脚
+#define WIFI_UART_RST_PIN       (D27)                                           // 定义硬件复位引脚
 #endif
 
 #define WIFI_UART_BUFFER_SIZE   (256)                                           // 定义接收缓存区大小

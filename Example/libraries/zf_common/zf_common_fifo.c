@@ -81,7 +81,7 @@ static void fifo_end_offset (fifo_struct *fifo, uint32 offset)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_clear (fifo_struct *fifo)
 {
-    zf_assert(fifo != NULL);
+    zf_assert(NULL != fifo);
     fifo_state_enum return_state = FIFO_SUCCESS;
     do
     {
@@ -96,15 +96,9 @@ fifo_state_enum fifo_clear (fifo_struct *fifo)
         fifo->size      = fifo->max;
         switch(fifo->type)
         {
-            case FIFO_DATA_8BIT:
-                memset(fifo->buffer, 0, fifo->max);
-                break;
-            case FIFO_DATA_16BIT:
-                memset(fifo->buffer, 0, fifo->max * 2);
-                break;
-            case FIFO_DATA_32BIT:
-                memset(fifo->buffer, 0, fifo->max * 4);
-                break;
+            case FIFO_DATA_8BIT:    memset(fifo->buffer, 0, fifo->max);     break;
+            case FIFO_DATA_16BIT:   memset(fifo->buffer, 0, fifo->max * 2); break;
+            case FIFO_DATA_32BIT:   memset(fifo->buffer, 0, fifo->max * 4); break;
         }
 //        memset(fifo->buffer, 0, fifo->max);
         fifo->execution &= ~FIFO_CLEAR;
@@ -135,7 +129,7 @@ uint32 fifo_used (fifo_struct *fifo)
 //-------------------------------------------------------------------------------------------------------------------
 fifo_state_enum fifo_write_element (fifo_struct *fifo, uint32 dat)
 {
-    zf_assert(fifo != NULL);
+    zf_assert(NULL != fifo);
     fifo_state_enum return_state = FIFO_SUCCESS;
     
     do
@@ -151,15 +145,9 @@ fifo_state_enum fifo_write_element (fifo_struct *fifo, uint32 dat)
         {
             switch(fifo->type)
             {
-                case FIFO_DATA_8BIT:
-                    ((uint8 *)fifo->buffer)[fifo->head] = dat;
-                    break;
-                case FIFO_DATA_16BIT:
-                    ((uint16 *)fifo->buffer)[fifo->head] = dat;
-                    break;
-                case FIFO_DATA_32BIT:
-                    ((uint32 *)fifo->buffer)[fifo->head] = dat;
-                    break;
+                case FIFO_DATA_8BIT:    ((uint8 *)fifo->buffer)[fifo->head] = dat;  break;
+                case FIFO_DATA_16BIT:   ((uint16 *)fifo->buffer)[fifo->head] = dat; break;
+                case FIFO_DATA_32BIT:   ((uint32 *)fifo->buffer)[fifo->head] = dat; break;
             }
             fifo_head_offset(fifo, 1);                                          // 头指针偏移
             fifo->size -= 1;                                                    // 缓冲区剩余长度减小

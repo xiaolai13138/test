@@ -73,17 +73,17 @@
 
 typedef struct
 {
-    uint16 type_index;
+    uint16 type_index;                                                          // 显示类型 0-串口 1-屏幕
 
-    uint16 display_x_max;
-    uint16 display_y_max;
+    uint16 display_x_max;                                                       // 屏幕显示范围
+    uint16 display_y_max;                                                       // 屏幕显示范围
 
-    uint8 font_x_size;
-    uint8 font_y_size;
+    uint8 font_x_size;                                                          // 屏幕显示字体大小
+    uint8 font_y_size;                                                          // 屏幕显示字体大小
 
-    void (*output_uart)             (const char *str);
-    void (*output_screen)           (uint16 x, uint16 y, const char *str);
-    void (*output_screen_clear)     (void);
+    void (*output_uart)             (const char *str);                          // 串口显示函数指针
+    void (*output_screen)           (uint16 x, uint16 y, const char *str);      // 屏幕字符串显示函数指针
+    void (*output_screen_clear)     (void);                                     // 屏幕清屏函数指针
 }debug_output_struct;
 
 #if DEBUG_UART_USE_INTERRUPT                                                    // 如果启用 debug uart 接收中断

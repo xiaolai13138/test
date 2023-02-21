@@ -69,6 +69,16 @@
 // 1：开启自动波特率 自动波特率的作用是修改 WIRELESS_UART_BAUD 之后不需要对模块进行配置 模块会自动设置为对应的波特率
 
 #define WIRELESS_UART_AUTO_BAUD_RATE    (0)
+
+#if (1 == WIRELESS_UART_AUTO_BAUD_RATE)
+typedef enum
+{
+    WIRELESS_UART_AUTO_BAUD_RATE_SUCCESS,
+    WIRELESS_UART_AUTO_BAUD_RATE_INIT,
+    WIRELESS_UART_AUTO_BAUD_RATE_START,
+    WIRELESS_UART_AUTO_BAUD_RATE_GET_ACK,
+}wireless_uart_auto_baudrate_state_enum;
+#endif
 // ------------------------------------ 自动波特率 ------------------------------------
 
 #define WIRELESS_UART_BUFFER_SIZE       (64 )

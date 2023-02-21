@@ -64,21 +64,25 @@ static const gpio_pin_enum  key_index[KEY_NUMBER] = KEY_LIST;
 void key_scanner (void)
 {
     uint8 i = 0;
-    for(i = 0; i < KEY_NUMBER; i ++)
+    for(i = 0; KEY_NUMBER > i; i ++)
     {
         if(KEY_RELEASE_LEVEL != gpio_get_level(key_index[i]))                   // 按键按下
         {
             key_press_time[i] ++;
-            if(key_press_time[i] >= KEY_LONG_PRESS_PERIOD / scanner_period)
+            if(KEY_LONG_PRESS_PERIOD / scanner_period <= key_press_time[i])
             {
                 key_state[i] = KEY_LONG_PRESS;
             }
         }
         else                                                                    // 按键释放
         {
-            if(key_state[i] != KEY_LONG_PRESS && key_press_time[i] >= KEY_MAX_SHOCK_PERIOD / scanner_period)
+            if((KEY_LONG_PRESS != key_state[i]) && (KEY_MAX_SHOCK_PERIOD / scanner_period <= key_press_time[i]))
             {
                 key_state[i] = KEY_SHORT_PRESS;
+            }
+            else
+            {
+                key_state[i] = KEY_RELEASE;
             }
             key_press_time[i] = 0;
         }
@@ -135,7 +139,7 @@ void key_init (uint32 period)
 {
     zf_assert(0 < period);
     uint8 loop_temp = 0; 
-    for(loop_temp = 0; loop_temp < KEY_NUMBER; loop_temp ++)
+    for(loop_temp = 0; KEY_NUMBER > loop_temp; loop_temp ++)
     {
         gpio_init(key_index[loop_temp], GPI, GPIO_HIGH, GPI_PULL_UP);
         key_state[loop_temp] = KEY_RELEASE;

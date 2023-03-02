@@ -38,7 +38,7 @@
 *                   模块管脚            单片机管脚
 *                   // 硬件 SPI 引脚
 *                   SCL/SPC             查看 zf_device_icm20602.h 中 ICM20602_SPC_PIN 宏定义
-*                   SDA/DSI             查看 zf_device_icm20602.h 中 ICM20602_SDI_PIN 宏定义
+*                   SDA/SDI             查看 zf_device_icm20602.h 中 ICM20602_SDI_PIN 宏定义
 *                   SA0/SDO             查看 zf_device_icm20602.h 中 ICM20602_SDO_PIN 宏定义
 *                   CS                  查看 zf_device_icm20602.h 中 ICM20602_CS_PIN 宏定义
 *                   VCC                 3.3V电源
@@ -47,7 +47,7 @@
 *
 *                   // 软件 IIC 引脚
 *                   SCL/SPC             查看 zf_device_icm20602.h 中 ICM20602_SCL_PIN 宏定义
-*                   SDA/DSI             查看 zf_device_icm20602.h 中 ICM20602_SDA_PIN 宏定义
+*                   SDA/SDI             查看 zf_device_icm20602.h 中 ICM20602_SDA_PIN 宏定义
 *                   VCC                 3.3V电源
 *                   GND                 电源地
 *                   其余引脚悬空

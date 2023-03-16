@@ -1,3 +1,6 @@
+V3.4.3
+	更新zf_driver_soft_iic驱动程序
+
 V3.4.2
 	修改zf_device_dl1a头部注释
 	更新iar工程的dap设置

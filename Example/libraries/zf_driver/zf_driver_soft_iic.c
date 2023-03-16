@@ -172,11 +172,12 @@ static uint8 soft_iic_send_data (soft_iic_info_struct *soft_iic_obj, const uint8
         ((data & temp) ? (gpio_high(soft_iic_obj->sda_pin)) : (gpio_low(soft_iic_obj->sda_pin)));
         temp >>= 1;
 
-        soft_iic_delay(soft_iic_obj->delay);
+        soft_iic_delay(soft_iic_obj->delay / 2);
         gpio_high(soft_iic_obj->scl_pin);                                       // SCL À­¸ß
         soft_iic_delay(soft_iic_obj->delay);
         gpio_low(soft_iic_obj->scl_pin);                                        // SCL À­µÍ
-    }
+		soft_iic_delay(soft_iic_obj->delay / 2);
+	}
     return ((soft_iic_wait_ack(soft_iic_obj) == 1) ? 0 : 1 );
 }
 

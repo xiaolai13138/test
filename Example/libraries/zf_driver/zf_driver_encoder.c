@@ -80,7 +80,7 @@ void qtimer_iomuxc(encoder_index_enum qtimern, encoder_channel1_enum ch1_pin, en
             if      (QTIMER3_ENCODER1_CH1_B16 == ch1_pin)  afio_init(IOMUXC_GPIO_AD_B1_00_QTIMER3_TIMER0,  0, QTIMER_PIN_CONF);
             else if (QTIMER3_ENCODER1_CH1_C6  == ch1_pin)  afio_init(IOMUXC_GPIO_B0_06_QTIMER3_TIMER0,     0, QTIMER_PIN_CONF);
             
-            else if (QTIMER3_ENCODER1_CH2_B17 == ch2_pin)  afio_init(IOMUXC_GPIO_AD_B1_01_QTIMER3_TIMER1,  0, QTIMER_PIN_CONF);
+            if (QTIMER3_ENCODER1_CH2_B17 == ch2_pin)  afio_init(IOMUXC_GPIO_AD_B1_01_QTIMER3_TIMER1,  0, QTIMER_PIN_CONF);
             else if (QTIMER3_ENCODER1_CH2_C7  == ch2_pin)  afio_init(IOMUXC_GPIO_B0_07_QTIMER3_TIMER1,     0, QTIMER_PIN_CONF);
         }break;
         

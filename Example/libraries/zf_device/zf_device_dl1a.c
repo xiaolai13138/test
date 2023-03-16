@@ -1,10 +1,10 @@
 /*********************************************************************************************************************
-* MM32F527X-E9P Opensourec Library 即（MM32F527X-E9P 开源库）是一个基于官方 SDK 接口的第三方开源库
+* RT1064DVL6A Opensourec Library 即（RT1064DVL6A 开源库）是一个基于官方 SDK 接口的第三方开源库
 * Copyright (c) 2022 SEEKFREE 逐飞科技
 * 
-* 本文件是 MM32F527X-E9P 开源库的一部分
+* 本文件是 RT1064DVL6A 开源库的一部分
 * 
-* MM32F527X-E9P 开源库 是免费软件
+* RT1064DVL6A 开源库 是免费软件
 * 您可以根据自由软件基金会发布的 GPL（GNU General Public License，即 GNU通用公共许可证）的条款
 * 即 GPL 的第3版（即 GPL3.0）或（您选择的）任何后来的版本，重新发布和/或修改它
 * 
@@ -21,11 +21,11 @@
 * 许可证副本在 libraries 文件夹下 即该文件夹下的 LICENSE 文件
 * 欢迎各位使用并传播本程序 但修改内容时必须保留逐飞科技的版权声明（即本声明）
 * 
-* 文件名称          zf_device_dl1a
+* 文件名称          zf_device_gps_tau1201
 * 公司名称          成都逐飞科技有限公司
 * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
-* 开发环境          MDK 5.37
-* 适用平台          MM32F527X_E9P
+* 开发环境          IAR 8.32.4 or MDK 5.33
+* 适用平台          RT1064DVL6A
 * 店铺链接          https://seekfree.taobao.com/
 * 
 * 修改记录

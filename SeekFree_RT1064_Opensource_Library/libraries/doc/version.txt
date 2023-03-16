@@ -1,3 +1,8 @@
+V3.4.2
+	修改zf_device_dl1a头部注释
+	更新iar工程的dap设置
+	修正zf_driver_encoder语法
+
 V3.4.1
 	修复ICM20602注释
 

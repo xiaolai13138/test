@@ -61,7 +61,7 @@ uint8 flash_check (uint32 sector_num, flash_page_enum page_num)
     uint16 i;
     
     status_t state = kStatus_Success;
-    DCACHE_CleanInvalidateByRange(FLASH_BASE_ADDR + sector_num * FLASH_SECTOR_SIZE, FLASH_PAGE_SIZE);//读取flash前，最好先清空缓存
+    DCACHE_CleanInvalidateByRange(FLASH_BASE_ADDR + sector_num * FLASH_SECTOR_SIZE + page_num * FLASH_PAGE_SIZE, FLASH_PAGE_SIZE);//读取flash前，最好先清空缓存
     
     for(i=0; i<FLASH_PAGE_SIZE/4; i++)
     {

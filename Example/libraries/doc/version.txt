@@ -1,4 +1,7 @@
-
+V3.4.5
+	zf_driver_soft_iic和zf_driver_soft_spi的延时函数的变量增加volatile属性，避免被优化
+	zf_driver_soft_iic中START信号末尾添加延时
+	修正zf_driver_soft_iic和zf_driver_soft_spi的语法
 V3.4.4
 	修复flash_check函数时清除cache地址不对的问题
 

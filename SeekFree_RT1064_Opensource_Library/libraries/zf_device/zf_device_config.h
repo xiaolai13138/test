@@ -1,10 +1,10 @@
 /*********************************************************************************************************************
-* RT1064DVL6A Opensourec Library 即（RT1064DVL6A 开源库）是一个基于官方 SDK 接口的第三方开源库
+* MM32F327X-G9P Opensourec Library 即（MM32F327X-G9P 开源库）是一个基于官方 SDK 接口的第三方开源库
 * Copyright (c) 2022 SEEKFREE 逐飞科技
 * 
-* 本文件是 RT1064DVL6A 开源库的一部分
+* 本文件是 MM32F327X-G9P 开源库的一部分
 * 
-* RT1064DVL6A 开源库 是免费软件
+* MM32F327X-G9P 开源库 是免费软件
 * 您可以根据自由软件基金会发布的 GPL（GNU General Public License，即 GNU通用公共许可证）的条款
 * 即 GPL 的第3版（即 GPL3.0）或（您选择的）任何后来的版本，重新发布和/或修改它
 * 
@@ -24,13 +24,13 @@
 * 文件名称          zf_device_config
 * 公司名称          成都逐飞科技有限公司
 * 版本信息          查看 libraries/doc 文件夹内 version 文件 版本说明
-* 开发环境          IAR 8.32.4 or MDK 5.33
+* 开发环境          IAR 8.32.4 or MDK 5.37
 * 适用平台          MM32F327X_G9P
 * 店铺链接          https://seekfree.taobao.com/
 * 
 * 修改记录
 * 日期              作者                备注
-* 2022-11-15        SeekFree            first version
+* 2022-08-10        Teternal            first version
 ********************************************************************************************************************/
 
 #ifndef _zf_device_config_h_
@@ -41,6 +41,11 @@ extern const unsigned char imu660ra_config_file[8192];
 unsigned char   mt9v03x_set_config_sccb         (void *soft_iic_obj, short int buff[10][2]);
 unsigned char   mt9v03x_set_exposure_time_sccb  (unsigned short int light);
 unsigned char   mt9v03x_set_reg_sccb            (unsigned char addr, unsigned short int data);
+
+unsigned char   scc8660_set_config_sccb         (void *soft_iic_obj, short int buff[11][2]);
+unsigned char   scc8660_set_brightness_sccb     (unsigned short int brightness);
+unsigned char   scc8660_set_manual_wb_sccb      (unsigned short int manual_wb);
+unsigned char   scc8660_set_reg_sccb            (unsigned char reg, unsigned short int data);
 
 #endif
 

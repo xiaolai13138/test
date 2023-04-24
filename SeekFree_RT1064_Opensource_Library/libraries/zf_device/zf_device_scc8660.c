@@ -54,8 +54,10 @@
 #include "zf_driver_gpio.h"
 #include "zf_driver_csi.h"
 #include "zf_driver_uart.h"
+#include "zf_driver_soft_iic.h"
 #include "zf_device_camera.h"
 #include "zf_device_type.h"
+#include "zf_device_config.h"
 
 #include "zf_device_scc8660.h"
 
@@ -73,6 +75,8 @@ AT_DTCM_SECTION_ALIGN(uint16 scc8660_image2[SCC8660_H][SCC8660_W],64);
 // 访问方式非常简单，可以直接使用下标的方式访问
 // 例如访问第10行 50列的点，scc8660_csi_image[10][50]就可以了
 uint16 (*scc8660_image)[SCC8660_W];
+
+static scc8660_type_enum scc8660_type;  
 
 // 需要配置到摄像头的数据 不允许在这修改参数
 static int16 scc8660_set_confing_buffer[SCC8660_CONFIG_FINISH][2]=
@@ -316,42 +320,51 @@ uint16 scc8660_get_version (void)
 // 使用示例     scc8660_set_bright(data);                                       // 通过该函数设置的参数，不会被51单片机保存
 // 备注信息     调用该函数前请先初始化摄像头配置串口
 //-------------------------------------------------------------------------------------------------------------------
-uint8 scc8660_set_bright (uint16 data)
+uint8 scc8660_set_brightness (uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_SET_BRIGHT;
-    uart_buffer[2] = data >> 8;
-    uart_buffer[3] = (uint8)data;
-
-    uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_UART == scc8660_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_SET_BRIGHT;
+        uart_buffer[2] = data >> 8;
+        uart_buffer[3] = (uint8)data;
+
+        uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
-    {
-        return_state = 1;
     }
+    else
+    {
+        return_state = scc8660_set_brightness_sccb(data);
+    }
+    
     return return_state;
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     单独设置白平衡
-// 参数说明     data            需要设置的亮度值
+// 参数说明     data            需要设置的白平衡 可选参数为：[0,0x65-0xa0] 0：关闭手动白平衡，启用自动白平衡    其他：手动白平衡 手动白平衡时 参数范围0x65-0xa0
 // 返回参数     uint8           1-失败 0-成功
 // 使用示例     scc8660_set_white_balance(data);                // 调用该函数前请先初始化摄像头配置串口
 // 备注信息     通过该函数设置的参数，不会被51单片机保存
@@ -359,32 +372,41 @@ uint8 scc8660_set_bright (uint16 data)
 uint8 scc8660_set_white_balance (uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_SET_MANUAL_WB;
-    uart_buffer[2] = data >> 8;
-    uart_buffer[3] = (uint8)data;
-
-    uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_UART == scc8660_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_SET_MANUAL_WB;
+        uart_buffer[2] = data >> 8;
+        uart_buffer[3] = (uint8)data;
+
+        uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
+
+    }
+    else
     {
-        return_state = 1;
+        return_state = scc8660_set_manual_wb_sccb(data);
     }
     return return_state;
 }
@@ -400,39 +422,48 @@ uint8 scc8660_set_white_balance (uint16 data)
 uint8 scc8660_set_reg (uint8 addr, uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_SET_REG_ADDR;
-    uart_buffer[2] = 0x00;
-    uart_buffer[3] = (uint8)addr;
-    uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
-
-    system_delay_ms(10);
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_SET_REG_DATA;
-    temp           = data;
-    uart_buffer[2] = temp >> 8;
-    uart_buffer[3] = (uint8)temp;
-    uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_UART == scc8660_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_SET_REG_ADDR;
+        uart_buffer[2] = 0x00;
+        uart_buffer[3] = (uint8)addr;
+        uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
+
+        system_delay_ms(10);
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_SET_REG_DATA;
+        temp           = data;
+        uart_buffer[2] = temp >> 8;
+        uart_buffer[3] = (uint8)temp;
+        uart_write_buffer(SCC8660_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_INIT_TIMEOUT <= timeout_count))
+
+    }
+    else
     {
-        return_state = 1;
+        return_state = scc8660_set_reg_sccb(addr, data);
     }
     return return_state;
 }
@@ -459,7 +490,7 @@ static void scc8660_uart_callback(void)
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      MT9V03X摄像头采集完成中断函数
+//  @brief      SCC8660摄像头采集完成中断函数
 //  @param      NULL
 //  @return     void					
 //  @since      v1.0
@@ -496,47 +527,52 @@ void scc8660_finished_callback(CSI_Type *base, csi_handle_t *handle, status_t st
 uint8 scc8660_init (void)
 {
     uint8 return_state = 0;
-    
-    set_camera_type(CAMERA_COLOR, NULL, NULL, &scc8660_uart_callback);                                              // 设置连接摄像头类型
-    camera_fifo_init();
-    
-    // 初始换串口 配置摄像头
-    uart_init(SCC8660_COF_UART, SCC8660_COF_BAUR, SCC8660_COF_UART_RX, SCC8660_COF_UART_TX);
-    uart_rx_interrupt(SCC8660_COF_UART, 1);
-    system_delay_ms(200);
-
-    fifo_clear(&camera_receiver_fifo);
-
-    scc8660_get_version();                                                      // 获取配置的方式
-
+    soft_iic_info_struct scc8660_iic_struct;
     do
     {
-        if(scc8660_set_config(scc8660_set_confing_buffer))
+        system_delay_ms(200);
+        set_camera_type(CAMERA_COLOR, NULL, NULL, NULL);                        // 设置连接摄像头类型
+        // 首先尝试SCCB通讯
+        scc8660_type = SCC8660_SCCB;
+        soft_iic_init(&scc8660_iic_struct, 0, SCC8660_COF_IIC_DELAY, SCC8660_COF_IIC_SCL, SCC8660_COF_IIC_SDA);
+        if(scc8660_set_config_sccb(&scc8660_iic_struct, scc8660_set_confing_buffer))
         {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "SCC8660 set config error.");
-            set_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
-        }
-
-        // 获取配置便于查看配置是否正确
-        if(scc8660_get_config(scc8660_get_confing_buffer))
-        {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "SCC8660 get config error.");
-            set_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
+            // SCCB通讯失败，尝试串口通讯
+            scc8660_type = SCC8660_UART;
+            camera_fifo_init();
+            set_camera_type(CAMERA_GRAYSCALE, NULL, NULL, &scc8660_uart_callback);  // 设置连接摄像头类型
+            uart_init (SCC8660_COF_UART, SCC8660_COF_BAUR, SCC8660_COF_UART_RX, SCC8660_COF_UART_TX);	//初始换串口 配置摄像头    
+            uart_rx_interrupt(SCC8660_COF_UART, 1);
+            fifo_clear(&camera_receiver_fifo);
+            
+            if(scc8660_set_config(scc8660_set_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "SCC8660 set config error.");
+                set_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
+            
+            // 获取配置便于查看配置是否正确
+            if(scc8660_get_config(scc8660_get_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是串口通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "SCC8660 get config error.");
+                set_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
         }
 
         csi_init(SCC8660_W * 2, SCC8660_H, &csi_handle, scc8660_finished_callback, SCC8660_VSYNC_PIN, SCC8660_PCLK_PIN, CSI_PIXCLK_RISING);
         csi_add_empty_buffer(&csi_handle, (uint8 *)scc8660_image1[0]);
         csi_add_empty_buffer(&csi_handle, (uint8 *)scc8660_image2[0]);
+
         csi_start(&csi_handle);
         scc8660_image = scc8660_image1;// 设置初值
         

@@ -1,7 +1,21 @@
+V3.5.0
+	修复WIFI UART模块初始化函数中调用了一些未定义函数的问题
+	修改wireless_uart_send_buff函数名称为wireless_uart_send_buffer
+	修改bluetooth_ch9141_send_buff函数名称为bluetooth_ch9141_send_buffer
+	修改bluetooth_ch9141_read_buff函数名称为bluetooth_ch9141_read_buffer
+	对部分程序编码方式进行了调整，例如if语句常量在前、switch增加{}
+	更新zf_device_config.lib文件
+	修改gps_gnrmc_parse函数，秒按照放大100倍进行保存
+	修改zf_driver_delay的实现
+	增加凌瞳去除51单片机后的支持
+	scc8660_set_bright函数的名称修改为scc8660_set_brightness
+	scc8660_flexio_set_bright函数的名称修改为scc8660_flexio_set_brightness
+	
 V3.4.5
 	zf_driver_soft_iic和zf_driver_soft_spi的延时函数的变量增加volatile属性，避免被优化
 	修正zf_driver_soft_iic和zf_driver_soft_spi的语法
 	修正zf_driver_soft_iic和zf_driver_soft_spi的语法
+	
 V3.4.4
 	修复flash_check函数时清除cache地址不对的问题
 

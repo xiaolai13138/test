@@ -60,6 +60,10 @@
 #define SCC8660_FLEXIO_COF_UART_TX      (UART4_RX_C17)                          // 凌瞳 UART-TX 引脚 要接在单片机 RX 上
 #define SCC8660_FLEXIO_COF_UART_RX      (UART4_TX_C16)                          // 凌瞳 UART-RX 引脚 要接在单片机 TX 上
 
+#define SCC8660_FLEXIO_COF_IIC_DELAY    (800)                                   // 凌瞳 IIC 延时
+#define SCC8660_FLEXIO_COF_IIC_SCL      (C17)                                   // 凌瞳 IIC-SCL 引脚
+#define SCC8660_FLEXIO_COF_IIC_SDA      (C16)                                   // 凌瞳 IIC-SDA 引脚
+
 #define SCC8660_FLEXIO_DMA_CH           (DMA_CH0)                               // 定义摄像头的DMA采集通道
 
 #define SCC8660_FLEXIO_VSYNC_PIN        C7                                      // 场中断引脚
@@ -118,6 +122,13 @@ typedef enum
     SCC8660_FLEXIO_SET_REG_DATA        = 0xFF, 
 }scc8660_flexio_cmd_enum;
 
+// 摄像头接口类型枚举
+typedef enum
+{
+    SCC8660_FLEXIO_UART,
+    SCC8660_FLEXIO_SCCB,
+}scc8660_flexio_type_enum;
+
 extern vuint8       scc8660_flexio_finish_flag;                                 // 一场图像采集完成标志位
 extern uint16       scc8660_flexio_image[SCC8660_FLEXIO_H][SCC8660_FLEXIO_W];
 
@@ -125,13 +136,13 @@ extern uint16       scc8660_flexio_image[SCC8660_FLEXIO_H][SCC8660_FLEXIO_W];
 uint16      scc8660_flexio_get_id              (void);
 uint16      scc8660_flexio_get_parameter       (uint16 config);
 uint16      scc8660_flexio_get_version         (void);
-uint8       scc8660_flexio_set_bright          (uint16 data);
+uint8       scc8660_flexio_set_brightness      (uint16 data);
 uint8       scc8660_flexio_set_white_balance   (uint16 data);
 uint8       scc8660_flexio_set_reg             (uint8 addr, uint16 data);
 
 // 对于RT1064来说，有两个接口都可以采集摄像头一个是CSI接口 一个是FLEXIO接口
-// 当只需要使用一个摄像头的时候，推荐使用CSI接口采集摄像头，也就是调用mt9v03x_init初始化摄像头即可
-// 当需要采集两个摄像头的时候可以分别调用mt9v03x_init 与 mt9v03x_flexio_init初始化两个摄像头
+// 当只需要使用一个摄像头的时候，推荐使用CSI接口采集摄像头，也就是调用scc8660_init初始化摄像头即可
+// 当需要采集两个摄像头的时候可以分别调用scc8660_init 与 scc8660_flexio_init初始化两个摄像头
 uint8       scc8660_flexio_init                 (void);
 
 #endif

@@ -53,15 +53,19 @@
 #include "zf_driver_exti.h"
 #include "zf_driver_gpio.h"
 #include "zf_driver_uart.h"
+#include "zf_driver_soft_iic.h"
 #include "zf_device_camera.h"
 #include "zf_device_type.h"
 #include "zf_driver_flexio_csi.h"
+#include "zf_device_config.h"
 
 #include "zf_device_scc8660_flexio.h"
 
 vuint8 scc8660_flexio_finish_flag = 0;                                                  // 一场图像采集完成标志位
 
 AT_DTCM_SECTION_ALIGN(uint16 scc8660_flexio_image[SCC8660_FLEXIO_H][SCC8660_FLEXIO_W], 4);
+
+static scc8660_flexio_type_enum scc8660_flexio_type;
 
 // 需要配置到摄像头的数据 不允许在这修改参数
 static int16 scc8660_flexio_set_confing_buffer[SCC8660_FLEXIO_CONFIG_FINISH][2]=
@@ -305,35 +309,43 @@ uint16 scc8660_flexio_get_version (void)
 // 使用示例     scc8660_flexio_set_bright(data);                                       // 通过该函数设置的参数，不会被51单片机保存
 // 备注信息     调用该函数前请先初始化摄像头配置串口
 //-------------------------------------------------------------------------------------------------------------------
-uint8 scc8660_flexio_set_bright (uint16 data)
+uint8 scc8660_flexio_set_brightness (uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_FLEXIO_SET_BRIGHT;
-    uart_buffer[2] = data >> 8;
-    uart_buffer[3] = (uint8)data;
-
-    uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_FLEXIO_UART == scc8660_flexio_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_FLEXIO_SET_BRIGHT;
+        uart_buffer[2] = data >> 8;
+        uart_buffer[3] = (uint8)data;
+
+        uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
+    }
+    else
     {
-        return_state = 1;
+        return_state = scc8660_set_brightness_sccb(data);
     }
     return return_state;
 }
@@ -348,33 +360,42 @@ uint8 scc8660_flexio_set_bright (uint16 data)
 uint8 scc8660_flexio_set_white_balance (uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_FLEXIO_SET_MANUAL_WB;
-    uart_buffer[2] = data >> 8;
-    uart_buffer[3] = (uint8)data;
-
-    uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_FLEXIO_UART == scc8660_flexio_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_FLEXIO_SET_MANUAL_WB;
+        uart_buffer[2] = data >> 8;
+        uart_buffer[3] = (uint8)data;
+
+        uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
-    {
-        return_state = 1;
     }
+    else
+    {
+        return_state = scc8660_set_manual_wb_sccb(data);
+    }    
+    
     return return_state;
 }
 
@@ -389,40 +410,49 @@ uint8 scc8660_flexio_set_white_balance (uint16 data)
 uint8 scc8660_flexio_set_reg (uint8 addr, uint16 data)
 {
     uint8 return_state = 0;
-    uint8  uart_buffer[4];
-    uint16 temp;
-    uint16 timeout_count = 0;
-    uint32 uart_buffer_index = 0;
-
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_FLEXIO_SET_REG_ADDR;
-    uart_buffer[2] = 0x00;
-    uart_buffer[3] = (uint8)addr;
-    uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
-
-    system_delay_ms(10);
-    uart_buffer[0] = 0xA5;
-    uart_buffer[1] = SCC8660_FLEXIO_SET_REG_DATA;
-    temp           = data;
-    uart_buffer[2] = temp >> 8;
-    uart_buffer[3] = (uint8)temp;
-    uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
-
-    do
+    
+    if(SCC8660_FLEXIO_UART == scc8660_flexio_type)
     {
-        if(3 <= fifo_used(&camera_receiver_fifo))
+        uint8  uart_buffer[4];
+        uint16 temp;
+        uint16 timeout_count = 0;
+        uint32 uart_buffer_index = 0;
+
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_FLEXIO_SET_REG_ADDR;
+        uart_buffer[2] = 0x00;
+        uart_buffer[3] = (uint8)addr;
+        uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
+
+        system_delay_ms(10);
+        uart_buffer[0] = 0xA5;
+        uart_buffer[1] = SCC8660_FLEXIO_SET_REG_DATA;
+        temp           = data;
+        uart_buffer[2] = temp >> 8;
+        uart_buffer[3] = (uint8)temp;
+        uart_write_buffer(SCC8660_FLEXIO_COF_UART, uart_buffer, 4);
+
+        do
         {
-            uart_buffer_index = 3;
-            fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
-            temp = uart_buffer[1] << 8 | uart_buffer[2];
-            break;
+            if(3 <= fifo_used(&camera_receiver_fifo))
+            {
+                uart_buffer_index = 3;
+                fifo_read_buffer(&camera_receiver_fifo, uart_buffer, &uart_buffer_index, FIFO_READ_AND_CLEAN);
+                temp = uart_buffer[1] << 8 | uart_buffer[2];
+                break;
+            }
+            system_delay_ms(1);
+        }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
+        if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
+        {
+            return_state = 1;
         }
-        system_delay_ms(1);
-    }while(SCC8660_FLEXIO_INIT_TIMEOUT > timeout_count ++);
-    if((temp != data) || (SCC8660_FLEXIO_INIT_TIMEOUT <= timeout_count))
-    {
-        return_state = 1;
     }
+    else
+    {
+        return_state = scc8660_set_reg_sccb(addr, data);
+    }
+
     return return_state;
 }
 
@@ -473,7 +503,6 @@ static void scc8660_flexio_vsync_callback(void)
 //-------------------------------------------------------------------------------------------------------------------
 static void scc8660_flexio_dma_callback(edma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-    // 一副图像从采集开始到采集结束耗时3.8MS左右(50FPS、188*120分辨率)
 	scc8660_flexio_finish_flag = 1; 
 }
 
@@ -487,44 +516,53 @@ static void scc8660_flexio_dma_callback(edma_handle_t *handle, void *param, bool
 uint8 scc8660_flexio_init (void)
 {
     uint8 return_state = 0;
-    
-    set_flexio_camera_type(CAMERA_COLOR, &scc8660_flexio_vsync_callback, NULL, &scc8660_flexio_uart_callback);                                              // 设置连接摄像头类型
-    camera_fifo_init();
-    
-    // 初始换串口 配置摄像头
-    uart_init(SCC8660_FLEXIO_COF_UART, SCC8660_FLEXIO_COF_BAUR, SCC8660_FLEXIO_COF_UART_RX, SCC8660_FLEXIO_COF_UART_TX);
-    uart_rx_interrupt(SCC8660_FLEXIO_COF_UART, 1);
-    system_delay_ms(200);
-
-    fifo_clear(&camera_receiver_fifo);
-
-    scc8660_flexio_get_version();                                                      // 获取配置的方式
-
+    soft_iic_info_struct scc8660_flexio_iic_struct;
     do
     {
-        if(scc8660_flexio_set_config(scc8660_flexio_set_confing_buffer))
+        // 对摄像头初始化之前先拉高场信号
+        gpio_init(SCC8660_FLEXIO_VSYNC_PIN, GPO, 1, GPO_PUSH_PULL);
+        
+        system_delay_ms(200);
+        set_flexio_camera_type(CAMERA_COLOR, &scc8660_flexio_vsync_callback, NULL, NULL);                                           // 设置连接摄像头类型
+        // 首先尝试SCCB通讯
+        scc8660_flexio_type = SCC8660_FLEXIO_SCCB;
+        soft_iic_init(&scc8660_flexio_iic_struct, 0, SCC8660_FLEXIO_COF_IIC_DELAY, SCC8660_FLEXIO_COF_IIC_SCL, SCC8660_FLEXIO_COF_IIC_SDA);
+        if(scc8660_set_config_sccb(&scc8660_flexio_iic_struct, scc8660_flexio_set_confing_buffer))
         {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "SCC8660 set config error.");
-            set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
+            // SCCB通讯失败，尝试串口通讯
+            scc8660_flexio_type = SCC8660_FLEXIO_UART;
+            camera_fifo_init();
+            set_flexio_camera_type(CAMERA_COLOR, &scc8660_flexio_vsync_callback, NULL, &scc8660_flexio_uart_callback);              // 设置连接摄像头类型
+            uart_init (SCC8660_FLEXIO_COF_UART, SCC8660_FLEXIO_COF_BAUR, SCC8660_FLEXIO_COF_UART_RX, SCC8660_FLEXIO_COF_UART_TX);	//初始换串口 配置摄像头    
+            uart_rx_interrupt(SCC8660_FLEXIO_COF_UART, 1);
+            fifo_clear(&camera_receiver_fifo);
+            
+            scc8660_flexio_get_version();                                                      // 获取配置的方式
+            
+            if(scc8660_flexio_set_config(scc8660_flexio_set_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是串口通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "SCC8660 set config error.");
+                set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
+
+            // 获取配置便于查看配置是否正确
+            if(scc8660_flexio_get_config(scc8660_flexio_get_confing_buffer))
+            {
+                // 如果程序在输出了断言信息 并且提示出错位置在这里
+                // 那么就是串口通信出错并超时退出了
+                // 检查一下接线有没有问题 如果没问题可能就是坏了
+                zf_log(0, "SCC8660 get config error.");
+                set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
+                return_state = 1;
+                break;
+            }
         }
 
-        // 获取配置便于查看配置是否正确
-        if(scc8660_flexio_get_config(scc8660_flexio_get_confing_buffer))
-        {
-            // 如果程序在输出了断言信息 并且提示出错位置在这里
-            // 那么就是串口通信出错并超时退出了
-            // 检查一下接线有没有问题 如果没问题可能就是坏了
-            zf_log(0, "SCC8660 get config error.");
-            set_flexio_camera_type(NO_CAMERE, NULL, NULL, NULL);
-            return_state = 1;
-            break;
-        }
-        
         flexio_csi_init(SCC8660_FLEXIO_DATA_PIN, SCC8660_FLEXIO_PCLK_PIN, SCC8660_FLEXIO_HREF_PIN, SCC8660_FLEXIO_W * 2, SCC8660_FLEXIO_H, (uint8 *)scc8660_flexio_image[0], scc8660_flexio_dma_callback);
         flexio_csi_enable_rxdma();
         NVIC_SetPriority(DMA0_DMA16_IRQn, 1);                   // 设置DMA中断优先级 范围0-15 越小优先级越高

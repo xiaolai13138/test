@@ -58,9 +58,11 @@
 static  fifo_struct         wireless_uart_fifo;
 static  uint8               wireless_uart_buffer[WIRELESS_UART_BUFFER_SIZE];    // 数据存放数组
 
-static          uint8       wireless_uart_data;
-static volatile uint32      wireless_auto_baud_flag = 0;
-static volatile uint8       wireless_auto_baud_data[3] = {0x00, 0x01, 0x03};
+static          uint8                                   wireless_uart_data          = 0;
+#if (1 == WIRELESS_UART_AUTO_BAUD_RATE)
+static volatile wireless_uart_auto_baudrate_state_enum  wireless_auto_baud_flag     = WIRELESS_UART_AUTO_BAUD_RATE_INIT;
+static volatile uint8                                   wireless_auto_baud_data[3]  = {0x00, 0x01, 0x03};
+#endif
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     无线转串口模块 发送数据
@@ -82,7 +84,7 @@ uint32 wireless_uart_send_byte (const uint8 data)
         time_count --;
         system_delay_ms(1);
     }
-    return (0 < time_count);
+    return (0 == time_count);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -90,12 +92,12 @@ uint32 wireless_uart_send_byte (const uint8 data)
 // 参数说明     *buff           发送缓冲区
 // 参数说明     len             发送数据长度
 // 返回参数     uint32          剩余发送长度
-// 使用示例     wireless_uart_send_buff(buff, 64);
+// 使用示例     wireless_uart_send_buffer(buff, 64);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 wireless_uart_send_buff (const uint8 *buff, uint32 len)
+uint32 wireless_uart_send_buffer (const uint8 *buff, uint32 len)
 {
-    zf_assert(buff != NULL);
+    zf_assert(NULL != buff);
     uint16 time_count = 0;
     while(0 != len)
     {
@@ -136,7 +138,7 @@ uint32 wireless_uart_send_buff (const uint8 *buff, uint32 len)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 wireless_uart_send_string (const char *str)
 {
-    zf_assert(str != NULL);
+    zf_assert(NULL != str);
     uint16 time_count = 0;
     uint32 len = strlen(str);
     while(0 != len)
@@ -179,10 +181,10 @@ uint32 wireless_uart_send_string (const char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void wireless_uart_send_image (const uint8 *image_addr, uint32 image_size)
 {
-    zf_assert(image_addr != NULL);
+    zf_assert(NULL != image_addr);
     extern uint8 camera_send_image_frame_header[4];
-    wireless_uart_send_buff(camera_send_image_frame_header, 4);
-    wireless_uart_send_buff((uint8 *)image_addr, image_size);
+    wireless_uart_send_buffer(camera_send_image_frame_header, 4);
+    wireless_uart_send_buffer((uint8 *)image_addr, image_size);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -190,12 +192,12 @@ void wireless_uart_send_image (const uint8 *image_addr, uint32 image_size)
 // 参数说明     *buff           接收缓冲区
 // 参数说明     len             读取数据长度
 // 返回参数     uint32          实际读取数据长度
-// 使用示例     wireless_uart_read_buff(buff, 32);
+// 使用示例     wireless_uart_read_buffer(buff, 32);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 wireless_uart_read_buff (uint8 *buff, uint32 len)
+uint32 wireless_uart_read_buffer (uint8 *buff, uint32 len)
 {
-    zf_assert(buff != NULL);
+    zf_assert(NULL != buff);
     uint32 data_len = len;
     fifo_read_buffer(&wireless_uart_fifo, buff, &data_len, FIFO_READ_AND_CLEAN);
     return data_len;
@@ -215,10 +217,11 @@ void wireless_uart_callback (void)
     uart_query_byte(WIRELESS_UART_INDEX, &wireless_uart_data);
     fifo_write_buffer(&wireless_uart_fifo, &wireless_uart_data, 1);
 #if WIRELESS_UART_AUTO_BAUD_RATE                                                // 开启自动波特率
-    if(wireless_auto_baud_flag == 1 && fifo_used(&wireless_uart_fifo) == 3)
+    if(WIRELESS_UART_AUTO_BAUD_RATE_START == wireless_auto_baud_flag && 3 == fifo_used(&wireless_uart_fifo))
     {
-        wireless_auto_baud_flag = 3;
-        fifo_read_buffer(&wireless_uart_fifo, (uint8 *)wireless_auto_baud_data, (uint32 *)&wireless_auto_baud_flag, FIFO_READ_AND_CLEAN);
+        uint32 wireless_auto_baud_count = 3;
+        wireless_auto_baud_flag = WIRELESS_UART_AUTO_BAUD_RATE_GET_ACK;
+        fifo_read_buffer(&wireless_uart_fifo, (uint8 *)wireless_auto_baud_data, (uint32 *)&wireless_auto_baud_count, FIFO_READ_AND_CLEAN);
     }
 #endif
 }

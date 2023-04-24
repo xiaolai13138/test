@@ -58,7 +58,7 @@
 static  fifo_struct     bluetooth_ch9141_fifo;
 static  uint8           bluetooth_ch9141_buffer[BLUETOOTH_CH9141_BUFFER_SIZE];  // 数据存放数组
 
-static  uint8           bluetooth_ch9141_data;
+static  uint8           bluetooth_ch9141_data = 0;
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     蓝牙转串口模块 发送数据
@@ -88,12 +88,12 @@ uint32 bluetooth_ch9141_send_byte (const uint8 data)
 // 参数说明     buff             需要发送的数据地址
 // 返回参数     len              发送长度
 // 使用示例     uint32           剩余未发送的字节数
-// 使用示例     bluetooth_ch9141_send_buff(buff, 16);
+// 使用示例     bluetooth_ch9141_send_buffer(buff, 16);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 bluetooth_ch9141_send_buff (const uint8 *buff, uint32 len)
+uint32 bluetooth_ch9141_send_buffer (const uint8 *buff, uint32 len)
 {
-    zf_assert(buff != NULL);
+    zf_assert(NULL != buff);
     uint16 time_count = 0;
     while(0 != len)
     {
@@ -134,7 +134,7 @@ uint32 bluetooth_ch9141_send_buff (const uint8 *buff, uint32 len)
 //-------------------------------------------------------------------------------------------------------------------
 uint32 bluetooth_ch9141_send_string (const char *str)
 {
-    zf_assert(str != NULL);
+    zf_assert(NULL != str);
     uint16 time_count = 0;
     uint32 len = strlen(str);
     while(0 != len)
@@ -177,11 +177,11 @@ uint32 bluetooth_ch9141_send_string (const char *str)
 //-------------------------------------------------------------------------------------------------------------------
 void bluetooth_ch9141_send_image (const uint8 *image_addr, uint32 image_size)
 {
-    zf_assert(image_addr != NULL);
+    zf_assert(NULL != image_addr);
 
     extern uint8 camera_send_image_frame_header[4];
-    bluetooth_ch9141_send_buff(camera_send_image_frame_header, 4);
-    bluetooth_ch9141_send_buff((uint8 *)image_addr, image_size);
+    bluetooth_ch9141_send_buffer(camera_send_image_frame_header, 4);
+    bluetooth_ch9141_send_buffer((uint8 *)image_addr, image_size);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -189,12 +189,12 @@ void bluetooth_ch9141_send_image (const uint8 *image_addr, uint32 image_size)
 // 参数说明     buff            存储的数据地址
 // 参数说明     len             长度
 // 返回参数     uint32          实际读取字节数
-// 使用示例     bluetooth_ch9141_read_buff(buff, 16);
+// 使用示例     bluetooth_ch9141_read_buffer(buff, 16);
 // 备注信息     
 //-------------------------------------------------------------------------------------------------------------------
-uint32 bluetooth_ch9141_read_buff (uint8 *buff, uint32 len)
+uint32 bluetooth_ch9141_read_buffer (uint8 *buff, uint32 len)
 {
-    zf_assert(buff != NULL);
+    zf_assert(NULL != buff);
     uint32 data_len = len;
     fifo_read_buffer(&bluetooth_ch9141_fifo, buff, &data_len, FIFO_READ_AND_CLEAN);
     return data_len;
@@ -225,7 +225,7 @@ void bluetooth_ch9141_uart_callback (void)
 uint8 bluetooth_ch9141_init (void)
 {
     uint8 return_state = 0;
-    set_wireless_type(BLUETOOTH_CH9141, &bluetooth_ch9141_uart_callback);
+    set_wireless_type(BLUETOOTH_CH9141, bluetooth_ch9141_uart_callback);
 
     fifo_init(&bluetooth_ch9141_fifo, FIFO_DATA_8BIT, bluetooth_ch9141_buffer, BLUETOOTH_CH9141_BUFFER_SIZE);
     // 本函数使用的波特率为115200 为蓝牙转串口模块的默认波特率 如需其他波特率请使用上位机修改模块参数

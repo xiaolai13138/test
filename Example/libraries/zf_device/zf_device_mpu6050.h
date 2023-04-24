@@ -116,11 +116,11 @@
 extern int16 mpu6050_gyro_x, mpu6050_gyro_y, mpu6050_gyro_z;                    // 三轴陀螺仪数据     gyro (陀螺仪)
 extern int16 mpu6050_acc_x,  mpu6050_acc_y,  mpu6050_acc_z;                     // 三轴加速度计数据    acc (accelerometer 加速度计)
 
-void    mpu6050_get_acc             (void);                                     // 获取 MPU6050 加速度计数据
-void    mpu6050_get_gyro            (void);                                     // 获取 MPU6050 陀螺仪数据
-float   mpu6050_acc_transition      (int16 acc_value);                          // 将   MPU6050 加速度计数据转换为实际物理数据
-float   mpu6050_gyro_transition     (int16 gyro_value);                         // 将   MPU6050 陀螺仪数据转换为实际物理数据
-uint8   mpu6050_init                (void);                                     // 初始化 MPU6050
+void    mpu6050_get_acc             (void);
+void    mpu6050_get_gyro            (void);
+float   mpu6050_acc_transition      (int16 acc_value);                          // 将 MPU6050 加速度计数据转换为实际物理数据
+float   mpu6050_gyro_transition     (int16 gyro_value);                         // 将 MPU6050 陀螺仪数据转换为实际物理数据
+uint8   mpu6050_init                (void);
 
 
 #endif

@@ -141,12 +141,12 @@ static uint8 absolute_encoder_self_check (void)
     uint16 time_count = 0;
     while(0x1C != absolute_encoder_read_register(6))                            // 获取状态寄存器
     {
-        for(i = 0; i < 6; i ++)
+        for(i = 0; 6 > i; i ++)
         {
             absolute_encoder_write_register(i + 1, dat[i]);                     // 写入默认配置参数
             system_delay_ms(1);
         }
-        if(time_count ++ > ABSOLUTE_ENCODER_TIMEOUT_COUNT)                      // 等待超时
+        if(ABSOLUTE_ENCODER_TIMEOUT_COUNT < time_count ++)                      // 等待超时
         {
             return_state = 1;
             break;
@@ -179,9 +179,9 @@ int16 absolute_encoder_get_location (void)
 int16 absolute_encoder_get_offset (void)
 {
     int16 result_data = 0;
-    if(func_abs(now_location - last_location) > 2048)
+    if(2048 < func_abs(now_location - last_location))
     {
-        result_data = (now_location > 2048 ? (now_location - 4096 - last_location) : (now_location + 4096 - last_location));
+        result_data = (2048 < now_location ? (now_location - 4096 - last_location) : (now_location + 4096 - last_location));
     }
     else
     {

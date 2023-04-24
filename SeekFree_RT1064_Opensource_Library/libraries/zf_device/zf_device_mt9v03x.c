@@ -70,8 +70,8 @@ AT_DTCM_SECTION_ALIGN(uint8 mt9v03x_image2[MT9V03X_H][MT9V03X_W], 64);
 // 例如访问第10行 50列的点，mt9v03x_csi_image[10][50]就可以了
 uint8 (*mt9v03x_image)[MT9V03X_W];
 
-static m9v03x_type_enum mt9v03x_type;  
-static uint16 mt9v03x_version = 0x00;
+static m9v03x_type_enum     mt9v03x_type = MT9V03X_SCCB;
+static uint16               mt9v03x_version = 0x00;
 
 // 需要配置到摄像头的数据 不允许在这修改参数
 static int16 mt9v03x_set_confing_buffer[MT9V03X_CONFIG_FINISH][2]=
@@ -116,7 +116,7 @@ static uint8 mt9v03x_set_config (int16 buff[MT9V03X_CONFIG_FINISH][2])
 {
     uint8 return_state = 1;
     uint8  uart_buffer[4];
-    uint16 temp;
+    uint16 temp = 0;
     uint16 timeout_count = 0;
     uint32 loop_count = 0;
     uint32 uart_buffer_index = 0;
@@ -128,7 +128,7 @@ static uint8 mt9v03x_set_config (int16 buff[MT9V03X_CONFIG_FINISH][2])
     }
     // 设置参数  具体请参看问题锦集手册
     // 开始配置摄像头并重新初始化
-    for(; loop_count < MT9V03X_SET_DATA; loop_count --)
+    for(; MT9V03X_SET_DATA > loop_count; loop_count --)
     {
         uart_buffer[0] = 0xA5;
         uart_buffer[1] = buff[loop_count][0];
@@ -170,7 +170,7 @@ static uint8 mt9v03x_get_config (int16 buff[MT9V03X_CONFIG_FINISH - 1][2])
 {
     uint8 return_state = 0;
     uint8  uart_buffer[4];
-    uint16 temp;
+    uint16 temp = 0;
     uint16 timeout_count = 0;
     uint32 loop_count = 0;
     uint32 uart_buffer_index = 0;
@@ -181,9 +181,9 @@ static uint8 mt9v03x_get_config (int16 buff[MT9V03X_CONFIG_FINISH - 1][2])
         default:        loop_count = MT9V03X_GAIN;       break;
     }
 
-    for(loop_count = loop_count - 1; loop_count >= 1; loop_count --)
+    for(loop_count = loop_count - 1; 1 <= loop_count; loop_count --)
     {
-        if(mt9v03x_version < 0x0230 && buff[loop_count][0] == MT9V03X_PCLK_MODE)
+        if((0x0230 > mt9v03x_version) && (MT9V03X_PCLK_MODE == buff[loop_count][0]))
         {
             continue;
         }
@@ -206,7 +206,7 @@ static uint8 mt9v03x_get_config (int16 buff[MT9V03X_CONFIG_FINISH - 1][2])
             }
             system_delay_ms(1);
         }while(MT9V03X_INIT_TIMEOUT > timeout_count ++);
-        if(timeout_count > MT9V03X_INIT_TIMEOUT)                                // 超时
+        if(MT9V03X_INIT_TIMEOUT < timeout_count)                                // 超时
         {
             return_state = 1;
             break;
@@ -224,7 +224,7 @@ static uint8 mt9v03x_get_config (int16 buff[MT9V03X_CONFIG_FINISH - 1][2])
 //-------------------------------------------------------------------------------------------------------------------
 uint16 mt9v03x_get_version (void)
 {
-    uint16 temp;
+    uint16 temp = 0;
     uint8  uart_buffer[4];
     uint16 timeout_count = 0;
     uint16 return_value = 0;
@@ -266,7 +266,7 @@ uint8 mt9v03x_set_exposure_time (uint16 light)
     if(MT9V03X_UART == mt9v03x_type)
     {
         uint8  uart_buffer[4];
-        uint16 temp;
+        uint16 temp = 0;
         uint16 timeout_count = 0;
         uint32 uart_buffer_index = 0;
 
@@ -315,7 +315,7 @@ uint8 mt9v03x_set_reg (uint8 addr, uint16 data)
     if(MT9V03X_UART == mt9v03x_type)
     {
         uint8  uart_buffer[4];
-        uint16 temp;
+        uint16 temp = 0;
         uint16 timeout_count = 0;
         uint32 uart_buffer_index = 0;
 

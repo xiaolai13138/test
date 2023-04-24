@@ -103,12 +103,12 @@ static uint8 ov7725_set_config (uint16 buff[OV7725_CONFIG_FINISH][2])
 {
     uint8 return_state = 1;
     uint8  uart_buffer[4];
-    uint16 temp;
+    uint16 temp = 0;
     uint16 timeout_count = 0;
     uint32 loop_count = 0;
     uint32 uart_buffer_index = 0;
 
-    for(loop_count = OV7725_ROW; loop_count < OV7725_SET_DATA; loop_count --)
+    for(loop_count = OV7725_ROW; OV7725_SET_DATA > loop_count; loop_count --)
     {
         uart_buffer[0] = 0xA5;
         uart_buffer[1] = buff[loop_count][0];
@@ -151,12 +151,12 @@ static uint8 ov7725_get_config (uint16 buff[OV7725_CONFIG_FINISH - 1][2])
 {
     uint8 return_state = 0;
     uint8  uart_buffer[4];
-    uint16 temp;
+    uint16 temp = 0;
     uint16 timeout_count = 0;
     uint32 loop_count = 0;
     uint32 uart_buffer_index = 0;
 
-    for(loop_count = OV7725_ROW - 1; loop_count >= 1; loop_count --)
+    for(loop_count = OV7725_ROW - 1; 1 <= loop_count; loop_count --)
     {
         uart_buffer[0] = 0xA5;
         uart_buffer[1] = OV7725_GET_STATUS;
@@ -180,7 +180,7 @@ static uint8 ov7725_get_config (uint16 buff[OV7725_CONFIG_FINISH - 1][2])
             }
             system_delay_ms(1);
         }while(OV7725_INIT_TIMEOUT > timeout_count ++);
-        if(timeout_count > OV7725_INIT_TIMEOUT)                                 // 超时
+        if(OV7725_INIT_TIMEOUT < timeout_count)                                 // 超时
         {
             return_state = 1;
             break;
@@ -212,7 +212,7 @@ static uint8 ov7725_iic_init (void)
     do
     {
         ov7725_idcode = soft_iic_sccb_read_register(&ov7725_iic_struct, OV7725_VER);
-        if( ov7725_idcode != OV7725_ID )
+        if(OV7725_ID != ov7725_idcode)
         {
             return_state = 1;                                                   // 校验摄像头ID号
             break;
@@ -317,7 +317,7 @@ static uint8 ov7725_iic_init (void)
 //-------------------------------------------------------------------------------------------------------------------
 uint16 ov7725_uart_get_id (void)
 {
-    uint16 temp;
+    uint16 temp = 0;
     uint8  uart_buffer[4];
     uint16 timeout_count = 0;
     uint16 return_value = 0;
@@ -356,7 +356,7 @@ uint16 ov7725_uart_get_id (void)
 //-------------------------------------------------------------------------------------------------------------------
 uint16 ov7725_get_version (void)
 {
-    uint16 temp;
+    uint16 temp = 0;
     uint8  uart_buffer[4];
     uint16 timeout_count = 0;
     uint16 return_value = 0;

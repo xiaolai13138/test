@@ -39,50 +39,60 @@
 
 #include "zf_driver_delay.h"
 
-static uint8 system_init_flag;
-
 #define SYSTEM_DELAY_GPT 					GPT2	                                    // 选择使用的GPT定时器
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      gpt初始化
+// 函数简介     system 延时函数 ms 级别
+// 参数说明     time        需要延时的时间 ms 级别
+// 返回参数     void
+// 使用示例     system_delay_ms(100);
+// 备注信息     
+//-------------------------------------------------------------------------------------------------------------------
+void system_delay_ms (uint32 time)
+{
+    while(time --)
+    {
+        GPT_SetOutputCompareValue(SYSTEM_DELAY_GPT, kGPT_OutputCompare_Channel1, BOARD_XTAL_FREQ/1000);
+        GPT_StartTimer(SYSTEM_DELAY_GPT);   // 启动定时器
+        while(!GPT_GetStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag));
+        GPT_ClearStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag);
+        GPT_StopTimer(SYSTEM_DELAY_GPT);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     system 延时函数 us 级别
+// 参数说明     time        需要延时的时间 us 级别
+// 返回参数     void
+// 使用示例     system_delay_us(100);
+// 备注信息     受限于程序运行跳转 此延时会比输入值高出一些
+//-------------------------------------------------------------------------------------------------------------------
+void system_delay_us (uint32 time)
+{
+    while(time --)
+    {
+        GPT_SetOutputCompareValue(SYSTEM_DELAY_GPT, kGPT_OutputCompare_Channel1, BOARD_XTAL_FREQ / 1000 / 1000);
+        GPT_StartTimer(SYSTEM_DELAY_GPT);   // 启动定时器
+        while(!GPT_GetStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag));
+        GPT_ClearStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag);
+        GPT_StopTimer(SYSTEM_DELAY_GPT);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      gpt作为延时初始化
 //  @param      void            
 //  @return     void
-//  Sample usage:               无需用户调用，用户请使用h文件中的宏定义
+//  Sample usage:               无需用户调用
 //-------------------------------------------------------------------------------------------------------------------
 void system_delay_init(void)
 {
     gpt_config_t gptConfig;
     
-    system_init_flag = 1;
     GPT_GetDefaultConfig(&gptConfig);                                                   // 获取默认配置
     gptConfig.clockSource = kGPT_ClockSource_Osc;
     gptConfig.divider = 1;
     GPT_Init(SYSTEM_DELAY_GPT, &gptConfig);                                             // GPT初始化 便于打开时钟
     GPT_Deinit(SYSTEM_DELAY_GPT);                                                       // GPT反初始化
     GPT_Init(SYSTEM_DELAY_GPT, &gptConfig);                                             // GPT初始化
-}
-
-//-------------------------------------------------------------------------------------------------------------------
-// 函数简介     system 延时函数
-// 参数说明     time			需要延时的时间
-// 参数说明     num			    需要延时的次数
-// 返回参数     void
-// 使用示例     system_delay(1000000, (time));
-// 备注信息     无需用户调用 用户请使用 zf_driver_delay.h 文件中的宏定义
-//-------------------------------------------------------------------------------------------------------------------
-void system_delay (uint32 time, uint32 num)
-{
-    if(0 == system_init_flag)
-    {
-        system_delay_init();
-    }
-    
-    while(num --)
-    {
-        GPT_SetOutputCompareValue(SYSTEM_DELAY_GPT, kGPT_OutputCompare_Channel1, time); // 设置定时时间
-        GPT_StartTimer(SYSTEM_DELAY_GPT);                                               // 启动定时器
-        while(!GPT_GetStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag));
-        GPT_ClearStatusFlags(SYSTEM_DELAY_GPT, kGPT_OutputCompare1Flag);
-        GPT_StopTimer(SYSTEM_DELAY_GPT);
-    }
 }

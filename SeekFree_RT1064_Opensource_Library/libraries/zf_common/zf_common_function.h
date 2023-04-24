@@ -72,6 +72,8 @@
 //====================================================宏定义函数区====================================================
 
 //=====================================================常规函数区=====================================================
+void        func_get_sin_amplitude_table        (uint32 *data_buffer, uint32 sample_max, uint32 amplitude_max, uint32 offset_degree);
+
 uint32      func_get_greatest_common_divisor    (uint32 num1, uint32 num2);
 
 void        func_soft_delay                     (volatile long t);

@@ -101,7 +101,14 @@ void set_flexio_camera_type (camera_type_enum type_set, callback_function vsync_
 void set_wireless_type (wireless_type_enum type_set, callback_function wireless_callback)
 {
     wireless_type = type_set;
-    wireless_module_uart_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
+    if(WIFI_SPI == wireless_type)
+    {
+        wireless_module_spi_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
+    }
+    else if(WIFI_UART == wireless_type)
+    {
+        wireless_module_uart_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
+    }
 }
 
 

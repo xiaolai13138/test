@@ -167,7 +167,6 @@ static uint8 soft_iic_send_data (soft_iic_info_struct *soft_iic_obj, const uint8
 {
     zf_assert(NULL != soft_iic_obj);
     uint8 temp = 0x80;
-
     while(temp)
     {
 //        gpio_set_level(soft_iic_obj->sda_pin, data & temp);

@@ -42,6 +42,8 @@
 
 uint32 system_clock = SYSTEM_CLOCK_600M;                                          // 系统时钟信息
 
+extern void system_delay_init(void);
+    
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     核心时钟恢复初始设置
 // 参数说明     void
@@ -79,6 +81,7 @@ void clock_init (uint32 clock)
 //    clock_reset();
     BOARD_ConfigMPU();
     BOARD_InitBootClocks();
+    system_delay_init();
     interrupt_init();
     //flash_init();
 }

@@ -60,6 +60,10 @@
 #define SCC8660_COF_UART_TX     (UART5_RX_C29)                                  // 凌瞳 UART-TX 引脚 要接在单片机 RX 上
 #define SCC8660_COF_UART_RX     (UART5_TX_C28)                                  // 凌瞳 UART-RX 引脚 要接在单片机 TX 上
 
+#define SCC8660_COF_IIC_DELAY   (800)                                           // 凌瞳 IIC 延时
+#define SCC8660_COF_IIC_SCL     (C29)                                           // 凌瞳 IIC-SCL 引脚
+#define SCC8660_COF_IIC_SDA     (C28)                                           // 凌瞳 IIC-SDA 引脚
+
 #define SCC8660_PCLK_PIN        (CSI_PIXCLK_B20)                                // PCLK 触发信号 TIM_ETR 引脚禁止随意修改
 #define SCC8660_VSYNC_PIN       (CSI_VSYNC_B22)                                 // 场中断引脚
 // 对于数据引脚这里不提供设置到其他引脚的定义
@@ -112,6 +116,13 @@ typedef enum
     SCC8660_SET_REG_DATA        = 0xFF, 
 }scc8660_cmd_enum;
 
+// 摄像头接口类型枚举
+typedef enum
+{
+    SCC8660_UART,
+    SCC8660_SCCB,
+}scc8660_type_enum;
+
 extern vuint8       scc8660_finish_flag;                                        // 一场图像采集完成标志位
 extern uint16       (*scc8660_image)[SCC8660_W];
 
@@ -119,7 +130,7 @@ extern uint16       (*scc8660_image)[SCC8660_W];
 uint16      scc8660_get_id              (void);
 uint16      scc8660_get_parameter       (uint16 config);
 uint16      scc8660_get_version         (void);
-uint8       scc8660_set_bright          (uint16 data);
+uint8       scc8660_set_brightness      (uint16 data);
 uint8       scc8660_set_white_balance   (uint16 data);
 uint8       scc8660_set_reg             (uint8 addr, uint16 data);
 

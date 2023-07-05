@@ -49,6 +49,8 @@ wireless_type_enum  wireless_type                   = NO_WIRELESS;
 callback_function   wireless_module_uart_handler    = type_default_callback;        // 无线串口接收中断函数指针，根据初始化时设置的函数进行跳转
 callback_function   wireless_module_spi_handler     = type_default_callback;        // WIFI SPI GPIO中断函数指针，根据初始化时设置的函数进行跳转
 
+tof_type_enum       tof_type                        = NO_TOF;
+callback_function   tof_module_exti_handler         = type_default_callback;        // ToF 模块 INT 更新中断
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     空回调函数
 // 参数说明     void        
@@ -111,4 +113,16 @@ void set_wireless_type (wireless_type_enum type_set, callback_function wireless_
     }
 }
 
-
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介     设置 ToF 模块类型
+// 参数说明     type_set        选定的 ToF 模块类型
+// 参数说明     exti_callback   设备的外部中断回调函数
+// 返回参数     void
+// 使用示例     set_tof_type(TOF_DL1A, dl1a_int_handler);
+// 备注信息     一般由各摄像头初始化内部调用
+//-------------------------------------------------------------------------------------------------------------------
+void set_tof_type (tof_type_enum type_set, callback_function exti_callback)
+{
+    tof_type = type_set;
+    tof_module_exti_handler = ((exti_callback == NULL) ? (type_default_callback) : (exti_callback));
+}

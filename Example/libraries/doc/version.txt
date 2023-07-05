@@ -1,3 +1,7 @@
+V3.5.1	
+	增加zf_device_dl1b驱动文件
+	zf_device_type新增ToF类别控制
+	修复soft_iic_transfer画数读取长度为0时发送restart信号的bug
 V3.5.0
 	修复WIFI UART模块初始化函数中调用了一些未定义函数的问题
 	修改wireless_uart_send_buff函数名称为wireless_uart_send_buffer

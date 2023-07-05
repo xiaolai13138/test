@@ -56,11 +56,20 @@ typedef enum
     WIFI_SPI,                                                                   // Wi-Fi SPI
 }wireless_type_enum;
 
+typedef enum
+{
+    NO_TOF = 0,                                                                 // Œﬁ…Ë±∏
+    TOF_DL1A,                                                                   // DL1A
+    TOF_DL1B,                                                                   // DL1B
+}tof_type_enum;
+
 typedef     void (*callback_function)       (void);
 
 extern      camera_type_enum                camera_type;                           
 extern      callback_function               camera_uart_handler;                                          
-            
+
+extern      tof_type_enum                   tof_type;
+
 extern      camera_type_enum                flexio_camera_type;                           
 extern      callback_function               flexio_camera_vsync_handler;                                  
 extern      callback_function               flexio_camera_uart_handler;                                   
@@ -69,11 +78,14 @@ extern      wireless_type_enum              wireless_type;
 extern      callback_function               wireless_module_uart_handler;    
 extern      callback_function               wireless_module_spi_handler;
 
+extern      callback_function               tof_module_exti_handler;
+
 void        type_default_callback           (void);
 void        set_camera_type                 (camera_type_enum type_set, callback_function vsync_callback, callback_function dma_callback, callback_function uart_callback);
 void        set_flexio_camera_type          (camera_type_enum type_set, callback_function vsync_callback, callback_function dma_callback, callback_function uart_callback);
 void        set_wireless_type               (wireless_type_enum type_set, callback_function wireless_callback);
 
+void        set_tof_type                    (tof_type_enum type_set, callback_function exti_callback);
 
 
 #endif

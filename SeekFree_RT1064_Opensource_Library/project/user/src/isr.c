@@ -195,6 +195,13 @@ void GPIO2_Combined_16_31_IRQHandler(void)
         exti_flag_clear(C16); // 清除中断标志位
     }
     
+    if(exti_flag_get(C20))
+    {
+        exti_flag_clear(C20);// 清除中断标志位
+        // -----------------* ToF INT 更新中断 预置中断处理函数 *-----------------
+        tof_module_exti_handler();
+        // -----------------* ToF INT 更新中断 预置中断处理函数 *-----------------
+    }
     
 }
 

@@ -107,7 +107,7 @@ void set_wireless_type (wireless_type_enum type_set, callback_function wireless_
     {
         wireless_module_spi_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
     }
-    else if(WIFI_UART == wireless_type)
+    else
     {
         wireless_module_uart_handler = ((wireless_callback == NULL) ? (type_default_callback) : (wireless_callback));
     }

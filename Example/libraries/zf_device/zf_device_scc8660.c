@@ -66,8 +66,8 @@ vuint8 scc8660_finish_flag = 0;                                                 
 // 定义图像缓冲区  如果用户需要访问图像数据 最好通过scc8660_csi_image来访问数据，最好不要直接访问缓冲区
 // 由于默认分辨率160*120数据量较小，所以默认将图像数组放置于DTCM区域，访问速度更快。
 // 以下注释的两句是将图像数组定义在SDRAM内，如果图像分辨率超过160*120，请将这两句解注并注释掉位于DTCM的两句。
-// AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi1_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
-// AT_SDRAM_SECTION_ALIGN(uint16 scc8660_csi2_image[SCC8660_CSI_PIC_H][SCC8660_CSI_PIC_W],64);
+// AT_SDRAM_SECTION_ALIGN(uint16 scc8660_image1[SCC8660_H][SCC8660_W],64);
+// AT_SDRAM_SECTION_ALIGN(uint16 scc8660_image2[SCC8660_H][SCC8660_W],64);
 AT_DTCM_SECTION_ALIGN(uint16 scc8660_image1[SCC8660_H][SCC8660_W],64);
 AT_DTCM_SECTION_ALIGN(uint16 scc8660_image2[SCC8660_H][SCC8660_W],64);
 
@@ -502,17 +502,17 @@ void scc8660_finished_callback(CSI_Type *base, csi_handle_t *handle, status_t st
     uint32 full_buffer_addr;
     if(csi_get_full_buffer(&csi_handle, &full_buffer_addr))
     {
-        csi_add_empty_buffer(&csi_handle, (uint8 *)full_buffer_addr);
         if(full_buffer_addr == (uint32)scc8660_image1[0])
         {
             scc8660_image = scc8660_image1;//采集完成
-            L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image1[0], SCC8660_IMAGE_SIZE);
+            csi_add_empty_buffer(&csi_handle, (uint8 *)scc8660_image2[0]);
         }
         else if(full_buffer_addr == (uint32)scc8660_image2[0])
         {
             scc8660_image = scc8660_image2;//采集完成
-            L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image1[0], SCC8660_IMAGE_SIZE);
+            csi_add_empty_buffer(&csi_handle, (uint8 *)scc8660_image1[0]);
         }
+		L1CACHE_CleanInvalidateDCacheByRange((uint32)scc8660_image[0], SCC8660_IMAGE_SIZE);
         scc8660_finish_flag = 1;//采集完成标志位置一
     }
 }

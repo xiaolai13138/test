@@ -42,7 +42,6 @@
 *                   VCC                 5V 电源
 *                   GND                 电源地
 *                   ------------------------------------
-*                   ------------------------------------
 ********************************************************************************************************************/
 
 #include "zf_common_debug.h"
@@ -538,7 +537,12 @@ void dl1a_get_distance (void)
 void dl1a_int_handler (void)
 {
 #if DL1A_INT_ENABLE
-    dl1a_get_distance();
+    if(exti_flag_get(DL1A_INT_PIN))
+    {
+        exti_flag_clear(DL1A_INT_PIN);
+        dl1a_get_distance();
+    }
+    
 #endif
 }
 
@@ -768,11 +772,11 @@ uint8 dl1a_init (void)
     }while(0);
 
 #if DL1A_INT_ENABLE
+    set_tof_type(TOF_DL1A, dl1a_int_handler);
     exti_init(DL1A_INT_PIN, EXTI_TRIGGER_FALLING);
     dl1a_int_handler();
     dl1a_finsh_flag = 0;
 #endif
-    set_tof_type(TOF_DL1A, dl1a_int_handler);
     
     return return_state;
 }

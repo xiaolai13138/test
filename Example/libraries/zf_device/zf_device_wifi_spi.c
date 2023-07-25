@@ -202,7 +202,33 @@ static void wifi_spi_send_data(const uint8 *buff, uint16 length)
     spi_write_8bit_array(WIFI_SPI_INDEX, (const uint8 *)&head.cmd, 3);
     spi_write_8bit_array(WIFI_SPI_INDEX, buff, length);
     gpio_set_level(WIFI_SPI_CS_PIN, 1);
-    wifi_spi_send_remain_length -= length;
+    wifi_spi_send_done();
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      发送数据到模块（多个源地址）
+//  @param      *multi_buffer   多个源地址以及每个源地址需要发送的长度
+//  @return     void					
+//  Sample usage:		
+//-------------------------------------------------------------------------------------------------------------------
+static void wifi_spi_send_data_multi(wifi_spi_send_multi_struct *multi_buffer)
+{
+    uint8 i;
+    wifi_spi_buffer_struct head;
+    
+    head.cmd = WIFI_SPI_WRITE_DATA;
+    head.addr = WIFI_SPI_WRITE_ADDR;
+    head.dummy = 0x00;
+
+    wifi_transmit_state = TRANSMIT_WRITE;
+    gpio_set_level(WIFI_SPI_CS_PIN, 0);
+    spi_write_8bit_array(WIFI_SPI_INDEX, (const uint8 *)&head.cmd, 3);
+    
+    for(i = 0; i < WIFI_SPI_MAX_MULTI; i++)
+    {
+        if(NULL != multi_buffer->source[i])   spi_write_8bit_array(WIFI_SPI_INDEX, multi_buffer->source[i], multi_buffer->length[i]);
+    }
+    gpio_set_level(WIFI_SPI_CS_PIN, 1);
     wifi_spi_send_done();
 }
 
@@ -286,12 +312,12 @@ static void wifi_spi_send_command(const char *str)
 //  @return     void					
 //  Sample usage:		
 //-------------------------------------------------------------------------------------------------------------------
-static void wifi_spi_check_state_read_buffer(void)
+void wifi_spi_check_state_read_buffer(void)
 {
     uint16 wifi_spi_receive_length; // 本次接收到的数据数量
     
     // 查询WIFI模块的状态
-    wifi_buffer_state = wifi_spi_read_state(&wifi_spi_receive_length); 
+    wifi_buffer_state = wifi_spi_read_state(&wifi_spi_receive_length);
     
     // 如果需要读取WIFI模块数据，则保存需要读取的长度
     if(BUFFER_READ == wifi_buffer_state)
@@ -309,7 +335,7 @@ static void wifi_spi_check_state_read_buffer(void)
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      发送数据到模块
 //  @param      *buff       需要发送的数据首地址     
-//  @param      length      需要发送的长度 最大4092
+//  @param      length      需要发送的长度
 //  @return     uint32      剩余未发送长度					
 //  Sample usage:		
 //-------------------------------------------------------------------------------------------------------------------
@@ -317,69 +343,83 @@ uint32 wifi_spi_write_data(const uint8 *buff, uint32 length)
 {
     uint16 send_length;
     uint32 wait_time;
-    uint32 wait_num;
     
     // 记录需要发送的长度
     wifi_spi_send_remain_length = length;
 
     while(wifi_spi_send_remain_length)
     {
-        // 等待传输进入空闲
-        wait_time = 1000;
-        while(TRANSMIT_IDLE != wifi_transmit_state)
+        send_length = (uint16)func_limit_ab(wifi_spi_send_remain_length, 1, WIFI_SPI_WRITE_MAX);
+        
+        // 请求发送数据
+        wifi_spi_ack_flag = 0;
+        wifi_spi_write_request(send_length);
+        
+        // 最长等待5秒
+        wait_time = 5000;
+        while(!wifi_spi_ack_flag)
         {
             wait_time--;
-            if(0 == wait_time)
-            {
-                break;
-            }
+            if(0 == wait_time)  break;
             system_delay_ms(1);
         }
-        if(0 == wait_time)  break;
-
-        if(WIFI_SPI_WRITE_MAX < wifi_spi_send_remain_length)
+        
+        if(BUFFER_WRITE == wifi_buffer_state)
         {
-            send_length = WIFI_SPI_WRITE_MAX;
+            // 发送消息
+            wifi_spi_send_data(buff, send_length);
+            buff += send_length;
+            wifi_spi_send_remain_length -= send_length;
+            wifi_buffer_state = BUFFER_IDLE;
         }
         else
         {
-            send_length = wifi_spi_send_remain_length;
+            break;
         }
-        
-        // 请求发送数据
-        wait_num = 10;
-        while(BUFFER_WRITE != wifi_buffer_state)
-        {
-            wifi_spi_ack_flag = 0;
-            wifi_spi_write_request(send_length);
-            wait_time = 500;
-            while(!wifi_spi_ack_flag)
-            {
-                wait_time--;
-                if(0 == wait_time)
-                {
-                    break;
-                }
-                system_delay_ms(1);
-            }
-            
-            wait_num--;
-            if(0 == wait_num)
-            {
-                wifi_spi_init_flag = 0; // 模块已断开
-                break;
-            }
-        }
-        
-        wifi_buffer_state = BUFFER_IDLE;
-        // 发送消息
-        wifi_spi_send_data(buff, send_length);
-        buff += send_length;
     }
-    
-    wifi_buffer_state = BUFFER_IDLE;
-    
+
     return wifi_spi_send_remain_length;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+//  @brief      发送数据到模块(多个源地址)
+//  @param      *multi_buffer   多个源地址以及每个源地址需要发送的长度
+//  @return     uint32          剩余未发送长度					
+//  Sample usage:		        发送数据总长度不能超过4092个
+//-------------------------------------------------------------------------------------------------------------------
+uint32 wifi_spi_write_data_multi(wifi_spi_send_multi_struct *multi_buffer)
+{
+    uint16 send_length;
+    uint32 wait_time;
+    
+    // 记录需要发送的长度
+    send_length = multi_buffer->length[0] + multi_buffer->length[1] + multi_buffer->length[2] + multi_buffer->length[3] + multi_buffer->length[4] + multi_buffer->length[5] + multi_buffer->length[6] + multi_buffer->length[7];
+    
+    if(WIFI_SPI_WRITE_MAX >= send_length)
+    {
+        // 请求发送数据
+        wifi_spi_ack_flag = 0;
+        wifi_spi_write_request(send_length);
+        
+        // 最长等待5秒
+        wait_time = 5000;
+        while(!wifi_spi_ack_flag)
+        {
+            wait_time--;
+            if(0 == wait_time)  break;
+            system_delay_ms(1);
+        }
+        
+        if(BUFFER_WRITE == wifi_buffer_state)
+        {
+            // 发送消息
+            wifi_spi_send_data_multi(multi_buffer);
+            send_length = 0;
+            wifi_buffer_state = BUFFER_IDLE;
+        }
+    }
+
+    return send_length;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -771,6 +811,26 @@ uint8 wifi_spi_set_model (wifi_spi_mode_enum  mode)
 }
 
 //--------------------------------------------------------------------------------------------------
+// 函数简介     关闭睡眠模式
+// 参数说明     mode            
+// 返回参数     uint8           0：成功   1：失败
+// 使用示例 
+// 备注信息     
+//--------------------------------------------------------------------------------------------------
+uint8 wifi_spi_close_sleep_model (void)
+{
+    uint8 return_state = 0;
+
+    wifi_spi_clear_receive_buffer(); // 清空WiFi接收缓冲区
+    wifi_spi_send_command("AT+SLEEP=0\r\n");
+    // 设置模块工作模式
+    return_state = wifi_spi_wait_ack("OK", WAIT_TIME_OUT);
+    wifi_spi_clear_receive_buffer(); // 清空WiFi接收缓冲区
+
+    return return_state;
+}
+
+//--------------------------------------------------------------------------------------------------
 // 函数简介     断开与wifi的连接
 // 参数说明     void
 // 返回参数     uint8           0：成功   1：失败
@@ -1011,162 +1071,6 @@ uint8 wifi_spi_disconnect_link (void)
     return return_state;
 }
 
-//--------------------------------------------------------------------------------------------------
-// 函数简介     TCP Server 断开指定连接 TCP/UDP Client 将不会有反应
-// 参数说明     link_id         将要断开的目标连接
-// 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_spi_disconnect_link_with_id(WIFI_SPI_LINK_0);
-// 备注信息     
-//--------------------------------------------------------------------------------------------------
-uint8 wifi_spi_disconnect_link_with_id (wifi_spi_link_id_enum link_id)
-{
-    char temp[64];
-    uint8 return_state = 0;
-
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-    do
-    {
-        if(WIFI_SPI_TCP_SERVER == wifi_spi_information.connect_mode)
-        {
-            sprintf(temp, "AT+CIPCLOSE=%d\r\n", link_id);
-            wifi_spi_send_command(temp);
-        }
-        else
-        {
-            return_state = 1;
-            break;
-        }
-
-        if(wifi_spi_wait_ack("OK", WAIT_TIME_OUT))
-        {
-            return_state = 1;
-            wifi_spi_information.connect_state = WIFI_SPI_SERVER_OFF;
-            break;
-        }
-    }while(0);
-    wifi_spi_clear_receive_buffer(); // 清空WiFi接收缓冲区
-
-    return return_state;
-}
-
-//--------------------------------------------------------------------------------------------------
-// 函数简介     建立 TCP 服务器
-// 参数说明     *port           端口值 字符串形式
-// 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_spi_entry_tcp_servers("80");
-// 备注信息     自动分配ID
-//--------------------------------------------------------------------------------------------------
-uint8 wifi_spi_entry_tcp_servers (char *port)
-{
-    char temp[64];
-    uint8 return_state = 0;
-
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-    do
-    {
-        if(wifi_spi_set_transfer_model("0"))                                   // 设置传输模式为普通传输模式
-        {
-            return_state = 1;
-            break;
-        }
-        wifi_spi_clear_receive_buffer();                                       // 清空WiFi接收缓冲区
-
-        if(wifi_spi_set_connect_model("1"))                                    // 设置连接模式为多连接模式
-        {
-            return_state = 1;
-            break;
-        }
-        wifi_spi_clear_receive_buffer();                                       // 清空WiFi接收缓冲区
-        sprintf(temp, "AT+CIPSERVER=1,%s\r\n", port);
-        wifi_spi_send_command(temp);
-
-        if(wifi_spi_wait_ack("OK", WAIT_TIME_OUT))
-        {
-            return_state = 1;
-            wifi_spi_information.connect_state = WIFI_SPI_SERVER_OFF;
-            break;
-        }
-        memcpy(wifi_spi_information.local_port, "       ", 7);
-        memcpy(wifi_spi_information.local_port, port, strlen(port));
-        wifi_spi_information.connect_state = WIFI_SPI_SERVER_ON;
-        wifi_spi_information.transfer_mode = WIFI_SPI_COMMAND;
-        wifi_spi_information.connect_mode = WIFI_SPI_TCP_SERVER;
-    }while(0);
-    wifi_spi_clear_receive_buffer(); // 清空WiFi接收缓冲区
-
-    return return_state;
-}
-
-//--------------------------------------------------------------------------------------------------
-// 函数简介     关闭 TCP 服务器
-// 参数说明     void
-// 返回参数     uint8           0：成功   1：失败
-// 使用示例     wifi_spi_exit_tcp_servers();
-// 备注信息     
-//--------------------------------------------------------------------------------------------------
-uint8 wifi_spi_exit_tcp_servers (void)
-{
-    uint8 return_state = 0;
-
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-    wifi_spi_send_command("AT+CIPSERVER=0,1\r\n");
-    return_state = wifi_spi_wait_ack("OK", WAIT_TIME_OUT);
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-
-    return return_state;
-}
-
-//--------------------------------------------------------------------------------------------------
-// 函数简介     TCP Server 模式下检查当前链接数量 并获取 IP
-// 参数说明     void
-// 返回参数     uint8           当前建立的连接数量
-// 使用示例     wifi_spi_tcp_servers_check_link();
-// 备注信息     
-//--------------------------------------------------------------------------------------------------
-uint8 wifi_spi_tcp_servers_check_link (void)
-{
-    uint8 return_value = 0;
-    uint8 loop_temp = 0;
-    uint8 linke_index = 0;
-    
-    uint8 receiver_buffer[256];
-    uint32 receiver_len = 256;
-
-    char* buffer_index;
-    char* start_index;
-    char* end_index;
-    
-    for(loop_temp = 0; loop_temp < 5; loop_temp ++)
-    {
-        memset(wifi_spi_information.remote_ip[loop_temp], 0, 15);
-    }
-
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-    wifi_spi_send_command("AT+CIPSTATE?\r\n");
-    if(0 == wifi_spi_wait_ack("OK", WAIT_TIME_OUT))
-    {
-        fifo_read_buffer(&wifi_spi_fifo, receiver_buffer, &receiver_len, FIFO_READ_ONLY);
-        buffer_index = (char *)receiver_buffer;
-        for(loop_temp = 0; loop_temp < 5; loop_temp ++)
-        {
-            start_index = strchr(buffer_index, ':');
-            if(NULL == start_index)
-            {
-                break;
-            }
-            start_index ++;
-            linke_index = *(start_index) - 0x30;
-            start_index += 9;
-            end_index = strchr((const char *)(start_index), '"');
-            memset(wifi_spi_information.remote_ip[linke_index], 0, 15);
-            memcpy(wifi_spi_information.remote_ip[linke_index], start_index, (end_index - start_index));
-            buffer_index = end_index;
-        }
-    }
-    wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-    return return_value;
-}
-
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     WiFi模块 发送字节函数
 // 参数说明     data            需要发送的数据
@@ -1211,7 +1115,7 @@ uint32 wifi_spi_send_byte (uint8 data)
             }
             else
             {
-                send_length = wifi_spi_write_data(&data, send_length);
+                send_length = (uint16)wifi_spi_write_data(&data, send_length);
             }
         }
     }
@@ -1283,6 +1187,39 @@ uint32 wifi_spi_send_buffer (const uint8 *buff, uint32 len)
 }
 
 //-------------------------------------------------------------------------------------------------------------------
+// 函数简介     WiFi模块 发送缓冲区函数(多个源地址)
+//  @param      *multi_buffer   多个源地址以及每个源地址需要发送的长度
+// 返回参数     uint32          剩余未发送数据长度
+// 使用示例     
+// 备注信息     需要发送多个数组时，采用此函数可以极大的降低通讯时间，发送数据总长度不能超过4092
+//-------------------------------------------------------------------------------------------------------------------
+uint32 wifi_spi_send_buffer_multi (wifi_spi_send_multi_struct *multi_buffer)
+{
+    uint8 i;
+    uint16 remain_length;
+    
+    if(wifi_spi_init_flag)
+    {
+        if(WIFI_SPI_SERVER_ON == wifi_spi_information.connect_state)
+        {
+            if(WIFI_SPI_COMMAND == wifi_spi_information.transfer_mode)
+            {
+                for(i = 0; i < WIFI_SPI_MAX_MULTI; i++)
+                {
+                    if(multi_buffer->source[i])    wifi_spi_send_buffer(multi_buffer->source[i], multi_buffer->length[i]);
+                }
+            }
+            else
+            {
+                remain_length = (uint16)wifi_spi_write_data_multi(multi_buffer);
+            }
+        }
+    }
+    
+    return remain_length;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 // 函数简介     WiFi模块 发送字符串函数
 // 参数说明     *str            需要发送的数据
 // 返回参数     uint32          剩余未发送数据长度
@@ -1295,7 +1232,7 @@ uint32 wifi_spi_send_string (const char *str)
     uint8 temp_length;
     uint16 send_length;
     
-    send_length = strlen(str);
+    send_length = (uint16)strlen(str);
     if(wifi_spi_init_flag)
     {
         if(WIFI_SPI_SERVER_ON == wifi_spi_information.connect_state)
@@ -1326,114 +1263,12 @@ uint32 wifi_spi_send_string (const char *str)
             }
             else
             {
-                send_length = wifi_spi_write_data((uint8 *)str, send_length);
+                send_length = (uint16)wifi_spi_write_data((uint8 *)str, send_length);
             }
         }
     }
     
     return send_length;
-}
-
-//-------------------------------------------------------------------------------------------------------------------
-// 函数简介     WiFi模块 发送图像函数
-// 参数说明     *image_addr     图像地址
-// 参数说明     image_size      图像大小（按字节算）
-// 返回参数     uint32          剩余未发送数据长度
-// 使用示例     wifi_spi_send_image(mt9v03x_image[0], MT9V03X_W * MT9V03X_H);
-// 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
-//-------------------------------------------------------------------------------------------------------------------
-uint32  wifi_spi_send_image (uint8 *image_addr, uint32 image_size)
-{
-    char temp[64];
-    uint8 temp_length;
-    uint16 send_length;
-    // 此函数还需要加上帧头信息
-    send_length = image_size;
-    if(wifi_spi_init_flag)
-    {
-        if(WIFI_SPI_SERVER_ON == wifi_spi_information.connect_state)
-        {
-            if(WIFI_SPI_COMMAND == wifi_spi_information.transfer_mode)
-            {
-                wifi_spi_clear_receive_buffer();                                   // 清空WiFi接收缓冲区
-                temp_length = (uint8)sprintf(temp, "AT+CIPSEND=");
-
-                if(WIFI_SPI_TCP_SERVER == wifi_spi_information.connect_mode)
-                {
-                    temp_length += sprintf(&temp[temp_length], "0,");
-                }
-                
-                temp_length += sprintf(&temp[temp_length], "%u\r\n", send_length);
-
-                wifi_spi_send_command(temp);
-                if(0 == wifi_spi_wait_ack("OK", WAIT_TIME_OUT))                    // 等待模块响应
-                {
-                    wifi_spi_clear_receive_buffer();                               // 清空WiFi接收缓冲区
-                    wifi_spi_write_data(image_addr, send_length);
-                    wifi_spi_wait_ack("bytes", 50);
-                    wifi_spi_clear_receive_buffer();                               // 清空WiFi接收缓冲区
-                    wifi_spi_wait_ack("OK", WAIT_TIME_OUT);
-                }
-            
-                wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-            }
-            else
-            {
-                send_length = wifi_spi_write_data(image_addr, send_length);
-            }
-        }
-    }
-    
-    return send_length;
-}
-
-//-------------------------------------------------------------------------------------------------------------------
-// 函数简介     WiFi 模块作为 TCP 服务器 向指定目标设备发送函数
-// 参数说明     buff            需要发送的数据地址
-// 参数说明     len             发送长度
-// 参数说明     id              目标 client id
-// 返回参数     uint32          剩余未发送数据长度
-// 使用示例     wifi_spi_tcp_servers_send_buffer("123", 3, WIFI_SPI_LINK_0);
-// 备注信息     当模块作为TCP服务器时，发送数据函数默认将数据发送至第一个连接模块的客户端
-//-------------------------------------------------------------------------------------------------------------------
-uint32 wifi_spi_tcp_servers_send_buffer (const uint8 *buff, uint32 len, wifi_spi_link_id_enum id)
-{
-    char temp[64];
-    uint16 send_length;
-    if(wifi_spi_init_flag)
-    {
-        if( WIFI_SPI_COMMAND == wifi_spi_information.transfer_mode && \
-            WIFI_SPI_TCP_SERVER == wifi_spi_information.connect_mode)
-        {
-            while(len)
-            {
-                if((WIFI_SPI_WRITE_MAX * 2) < len) send_length = WIFI_SPI_WRITE_MAX * 2;
-                else
-                {
-                    send_length = (uint16)len;
-                }
-                len -= send_length;
-
-                wifi_spi_clear_receive_buffer();                                   // 清空WiFi接收缓冲区
-                sprintf(temp, "AT+CIPSEND=%d,%u\r\n", id, send_length);
-
-                wifi_spi_send_command(temp);
-                if(0 == wifi_spi_wait_ack("OK", WAIT_TIME_OUT))                    // 等待模块响应
-                {
-                    wifi_spi_clear_receive_buffer();                               // 清空WiFi接收缓冲区
-                    wifi_spi_write_data(buff, send_length);
-                    wifi_spi_wait_ack("bytes", 50);
-                    wifi_spi_clear_receive_buffer();                               // 清空WiFi接收缓冲区
-                    wifi_spi_wait_ack("OK", WAIT_TIME_OUT);
-                }
-                buff += send_length;
-            }
-            
-            wifi_spi_clear_receive_buffer();                                           // 清空WiFi接收缓冲区
-        }
-    }
-    
-    return len;
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -1481,7 +1316,7 @@ void wifi_spi_callback (void)
 uint8 wifi_spi_init (char *wifi_ssid, char *pass_word, wifi_spi_mode_enum wifi_mode)
 {
     uint8 return_state = 0;
-    uint8 temp_isr;
+    uint32 temp_isr;
     
     spi_init(WIFI_SPI_INDEX, SPI_MODE0, WIFI_SPI_SPEED, WIFI_SPI_SCK_PIN, WIFI_SPI_MOSI_PIN, WIFI_SPI_MISO_PIN, SPI_CS_NULL);//硬件SPI初始化
     set_wireless_type(WIFI_SPI, wifi_spi_callback);
@@ -1492,17 +1327,17 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word, wifi_spi_mode_enum wifi_m
 
     temp_isr = interrupt_global_disable();
     exti_init(WIFI_SPI_INT_PIN, EXTI_TRIGGER_RISING);
-    exti_flag_clear(WIFI_SPI_INT_PIN);
-    NVIC_ClearPendingIRQ(GPIO1_Combined_16_31_IRQn);
-    interrupt_global_enable(temp_isr);
     interrupt_set_priority(GPIO1_Combined_16_31_IRQn, 15);
-
+    
     gpio_set_level(WIFI_SPI_RST_PIN, 0);
     system_delay_ms(50);
     gpio_set_level(WIFI_SPI_RST_PIN, 1);
     system_delay_ms(1000);
-
     
+    exti_flag_clear(WIFI_SPI_INT_PIN);
+    NVIC_ClearPendingIRQ(GPIO1_Combined_16_31_IRQn);
+    interrupt_global_enable(temp_isr);
+
     do
     {
         if(wifi_spi_echo_set("0"))                                             // 关闭模块回写
@@ -1522,6 +1357,13 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word, wifi_spi_mode_enum wifi_m
         if(wifi_spi_set_model(wifi_mode))                                      // 设置运行模式
         {
             zf_log(0, "set run mode failed");
+            return_state = 1;
+            break;
+        }
+        
+        if(wifi_spi_close_sleep_model())                                        // 关闭睡眠模式
+        {
+            zf_log(0, "set sleep mode failed");
             return_state = 1;
             break;
         }
@@ -1557,15 +1399,6 @@ uint8 wifi_spi_init (char *wifi_ssid, char *pass_word, wifi_spi_mode_enum wifi_m
             break;
         }
         // zf_log(0, "connect UDP server succeed");
-#endif
-#if WIFI_SPI_AUTO_CONNECT == 3
-        if(wifi_uart_entry_tcp_servers(WIFI_SPI_MINE_PORT))                                                                // 建立TCP服务器
-        {
-            zf_log(0, "build TCP server failed");
-            return_state = 1;
-            break;
-        }
-        // zf_log(0, "build TCP server succeed");
 #endif
         // 模块初始化成功
         wifi_spi_init_flag = 1;

@@ -148,10 +148,10 @@ float mpu6050_acc_transition (int16 acc_value)
     float acc_data = 0;
     switch(MPU6050_ACC_SAMPLE)
     {
-        case 0x00: acc_data = (float)acc_value / 16384; break;                  // 0x00 加速度计量程为:±2g     获取到的加速度计数据 除以 16384      可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x08: acc_data = (float)acc_value / 8192;  break;                  // 0x08 加速度计量程为:±4g     获取到的加速度计数据 除以 8192       可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x10: acc_data = (float)acc_value / 4096;  break;                  // 0x10 加速度计量程为:±8g     获取到的加速度计数据 除以 4096       可以转化为带物理单位的数据，单位：g(m/s^2)
-        case 0x18: acc_data = (float)acc_value / 2048;  break;                  // 0x18 加速度计量程为:±16g    获取到的加速度计数据 除以 2048       可以转化为带物理单位的数据，单位：g(m/s^2)
+        case 0x00: acc_data = (float)acc_value / 16384; break;                  // 0x00 加速度计量程为:±2 g    获取到的加速度计数据 除以 16384      可以转化为带物理单位的数据 (g 代表重力加速度 物理学名词 一般情况下 g 取 9.8 m/s^2 为标准值)
+        case 0x08: acc_data = (float)acc_value / 8192;  break;                  // 0x08 加速度计量程为:±4 g    获取到的加速度计数据 除以 8192       可以转化为带物理单位的数据 (g 代表重力加速度 物理学名词 一般情况下 g 取 9.8 m/s^2 为标准值)
+        case 0x10: acc_data = (float)acc_value / 4096;  break;                  // 0x10 加速度计量程为:±8 g    获取到的加速度计数据 除以 4096       可以转化为带物理单位的数据 (g 代表重力加速度 物理学名词 一般情况下 g 取 9.8 m/s^2 为标准值)
+        case 0x18: acc_data = (float)acc_value / 2048;  break;                  // 0x18 加速度计量程为:±16g    获取到的加速度计数据 除以 2048       可以转化为带物理单位的数据 (g 代表重力加速度 物理学名词 一般情况下 g 取 9.8 m/s^2 为标准值)
         default: break;
     }
     return acc_data;

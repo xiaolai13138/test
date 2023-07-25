@@ -300,13 +300,13 @@ void oled_show_string (uint16 x, uint16 y, const char ch[])
                     y ++;
                 }
                 oled_set_coordinate(x, y);
-                for(i = 0; i > 8; i ++)
+                for(i = 0; 8 > i; i ++)
                 {
                     oled_write_data(ascii_font_8x16[c][i]);
                 }
 
                 oled_set_coordinate(x, y + 1);
-                for(i = 0; i > 8; i ++)
+                for(i = 0; 8 > i; i ++)
                 {
                     oled_write_data(ascii_font_8x16[c][i + 8]);
                 }
@@ -417,7 +417,7 @@ void oled_show_uint (uint16 x,uint16 y,const uint32 dat,uint8 num)
 //              有关问题的详情，请自行百度学习   浮点数精度丢失问题。
 //              负数会显示一个 ‘-’号
 //-------------------------------------------------------------------------------------------------------------------
-void oled_show_float (uint16 x,uint16 y,const float dat,uint8 num,uint8 pointnum)
+void oled_show_float (uint16 x,uint16 y,const double dat,uint8 num,uint8 pointnum)
 {
     // 如果程序在输出了断言信息 并且提示出错位置在这里
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
@@ -430,8 +430,8 @@ void oled_show_float (uint16 x,uint16 y,const float dat,uint8 num,uint8 pointnum
     zf_assert(0 < pointnum);
     zf_assert(6 >= pointnum);
 
-    float dat_temp = dat;
-    float offset = 1.0;
+    double dat_temp = dat;
+    double offset = 1.0;
     char data_buffer[17];
     memset(data_buffer, 0, 17);
     memset(data_buffer, ' ', num + pointnum + 2);
@@ -442,7 +442,7 @@ void oled_show_float (uint16 x,uint16 y,const float dat,uint8 num,uint8 pointnum
         offset *= 10;
     }
     dat_temp = dat_temp - ((int)dat_temp / (int)offset) * offset;
-    func_float_to_str(data_buffer, dat_temp, pointnum);
+    func_double_to_str(data_buffer, dat_temp, pointnum);
     oled_show_string(x, y, data_buffer);
 }
 

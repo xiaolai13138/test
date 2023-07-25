@@ -228,22 +228,26 @@ static uint32_t CSI_TransferGetEmptyBufferCount(csi_handle_t *handle)
 
 static uint32_t CSI_TransferGetEmptyBuffer(csi_handle_t *handle)
 {
-    pvoid_to_u32_t buf;
+//    pvoid_to_u32_t buf;
 
-    buf.pvoid = handle->emptyBuffer;
+//    buf.pvoid = handle->emptyBuffer;
+//    handle->emptyBufferCnt--;
+//    handle->emptyBuffer = *(void **)(buf.pvoid);
+
+//    return buf.u32;
+    // 逐飞科技修改
     handle->emptyBufferCnt--;
-    handle->emptyBuffer = *(void **)(buf.pvoid);
-
-    return buf.u32;
+    return handle->frameBufferAddr[handle->emptyBufferCnt];
 }
 
 static void CSI_TransferPutEmptyBuffer(csi_handle_t *handle, uint32_t buffer)
 {
-    pvoid_to_u32_t buf;
-    buf.u32 = buffer;
-
-    *(void **)(buf.pvoid) = handle->emptyBuffer;
-    handle->emptyBuffer   = buf.pvoid;
+//    pvoid_to_u32_t buf;
+//    buf.u32 = buffer;
+    // 逐飞科技修改
+    handle->frameBufferAddr[handle->emptyBufferCnt] = buffer;
+//    *(void **)(buf.pvoid) = handle->emptyBuffer;
+//    handle->emptyBuffer   = buf.pvoid;
     handle->emptyBufferCnt++;
 }
 

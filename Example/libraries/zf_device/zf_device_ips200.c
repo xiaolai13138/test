@@ -83,7 +83,7 @@ static uint16                   ips200_y_max            = 320;
 
 static gpio_pin_enum            ips_rst_pin             = IPS200_RST_PIN_SPI;
 static gpio_pin_enum            ips_bl_pin              = IPS200_BLk_PIN_SPI;
-static gpio_pin_enum            ips_cs_pin              = IPS200_CS_PIN_SPI;
+gpio_pin_enum                   ips_cs_pin              = IPS200_CS_PIN_SPI;
 
 #if IPS200_USE_SOFT_SPI
 static soft_spi_info_struct                 ips200_spi;
@@ -698,7 +698,7 @@ void ips200_show_uint (uint16 x, uint16 y, const uint32 dat, uint8 num)
 //              有关问题的详情，请自行百度学习   浮点数精度丢失问题。
 //              负数会显示一个 ‘-’号
 //-------------------------------------------------------------------------------------------------------------------
-void ips200_show_float (uint16 x, uint16 y, const float dat, uint8 num, uint8 pointnum)
+void ips200_show_float (uint16 x, uint16 y, const double dat, uint8 num, uint8 pointnum)
 {
     // 如果程序在输出了断言信息 并且提示出错位置在这里
     // 那么一般是屏幕显示的时候超过屏幕分辨率范围了
@@ -709,8 +709,8 @@ void ips200_show_float (uint16 x, uint16 y, const float dat, uint8 num, uint8 po
     zf_assert(0 < pointnum);
     zf_assert(6 >= pointnum);
 
-    float dat_temp = dat;
-    float offset = 1.0;
+    double dat_temp = dat;
+    double offset = 1.0;
     char data_buffer[17];
     memset(data_buffer, 0, 17);
     memset(data_buffer, ' ', num+pointnum+2);
@@ -721,7 +721,7 @@ void ips200_show_float (uint16 x, uint16 y, const float dat, uint8 num, uint8 po
         offset *= 10;
     }
     dat_temp = dat_temp - ((int)dat_temp / (int)offset) * offset;
-    func_float_to_str(data_buffer, dat_temp, pointnum);
+    func_double_to_str(data_buffer, dat_temp, pointnum);
     ips200_show_string(x, y, data_buffer);
 }
 

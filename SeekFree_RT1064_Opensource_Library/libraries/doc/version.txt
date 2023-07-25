@@ -1,9 +1,25 @@
+	
+V3.5.3
+	修复凌瞳摄像头数组定义到SDRAM时，会导致图像花屏的问题
+	调整 FIFO 的读取操作策略 缓冲为空时可以清空 FIFO
+	修正 IMU963RA 注释错误
+	修正 MPU6050 注释错误
+	修改所有 IMU 的加速度计的量程单位描述
+	修复摄像头采集时，前四个字节数据不正确的问题
+	修复imu660ra_init函数中对于初始化成功判定不全面的问题
+	所有屏幕的浮点显示函数，float类型都修改为double
+	按键引脚定义修改为V3.0主板所用引脚
+	修复无线转串口无法启用自动波特率的问题
+	修复两寸SPI屏幕驱动在修改IPS200_CS_PIN_SPI宏定义无法使用的问题
+	
 V3.5.2	
 	修复除wifi模块外的无线模块无法设置回调函数的bug
+	
 V3.5.1	
 	增加zf_device_dl1b驱动文件
 	zf_device_type新增ToF类别控制
 	修复soft_iic_transfer画数读取长度为0时发送restart信号的bug
+	
 V3.5.0
 	修复WIFI UART模块初始化函数中调用了一些未定义函数的问题
 	修改wireless_uart_send_buff函数名称为wireless_uart_send_buffer

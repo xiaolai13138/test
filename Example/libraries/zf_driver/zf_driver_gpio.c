@@ -137,9 +137,9 @@ void gpio_set_dir(gpio_pin_enum pin, gpio_dir_enum dir, gpio_mode_enum pinconf)
 //  @param      pin         选择的引脚 (可选择范围由 common.h 内gpio_pin_enum枚举值确定)
 //  @param      dir         引脚的方向   输出：GPO   输入：GPI
 //  @param      dat         引脚初始化时设置的电平状态，输出时有效 0：低电平 1：高电平
-//  @param      pinconf     引脚配置（可设置参数由zf_iomuxc.h文件内PINCONF_enum枚举值确定，多个条件使用 | 相或）
+//  @param      pinconf     引脚配置（可设置参数由zf_driver_gpio.h文件内gpio_mode_enum枚举值确定，多个条件使用 | 相或）
 //  @return     void
-//  Sample usage:           gpio_init(B9, GPO, 1, GPIO_PIN_CONFIG);//B9初始化为GPIO功能、输出模式、输出高电平、上拉47K IO速度100MHZ 驱动强度R0
+//  Sample usage:           gpio_init(B9, GPO, 1, GPO_PUSH_PULL);//B9初始化为GPIO功能、输出模式、推挽输出
 //-------------------------------------------------------------------------------------------------------------------
 void gpio_init(gpio_pin_enum pin, gpio_dir_enum dir, uint8 dat, uint32 pinconf)
 {

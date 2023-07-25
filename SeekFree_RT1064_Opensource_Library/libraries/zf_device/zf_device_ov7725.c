@@ -49,6 +49,7 @@
 
 #include "zf_common_debug.h"
 #include "zf_common_interrupt.h"
+#include "fsl_cache.h"
 #include "zf_driver_delay.h"
 #include "zf_driver_csi.h"
 #include "zf_driver_gpio.h"
@@ -418,14 +419,15 @@ void ov7725_finished_callback(CSI_Type *base, csi_handle_t *handle, status_t sta
     uint32 full_buffer_addr;
     if(csi_get_full_buffer(&csi_handle, &full_buffer_addr))
     {
-        csi_add_empty_buffer(&csi_handle, (uint8 *)full_buffer_addr);
         if(full_buffer_addr == (uint32)ov7725_image_binary1[0])
         {
             ov7725_image_binary = ov7725_image_binary1; // image_csi1采集完成
+        csi_add_empty_buffer(&csi_handle, ov7725_image_binary2[0]);
         }
         else if(full_buffer_addr == (uint32)ov7725_image_binary2[0])
         {
             ov7725_image_binary = ov7725_image_binary2; // image_csi2采集完成
+        csi_add_empty_buffer(&csi_handle, ov7725_image_binary1[0]);
         }
         ov7725_finish_flag = 1;                         // 采集完成标志位置一
     }
@@ -444,7 +446,7 @@ uint8 ov7725_init (void)
 
     do
     {
-        set_camera_type(CAMERA_GRAYSCALE, NULL, NULL, &ov7725_uart_callback);       // 设置连接摄像头类型
+        set_camera_type(CAMERA_BIN_UART, NULL, NULL, &ov7725_uart_callback);       // 设置连接摄像头类型
         camera_fifo_init();
 
         uart_init(OV7725_COF_UART, OV7725_COF_BAUR, OV7725_COF_UART_RX, OV7725_COF_UART_TX);
@@ -457,7 +459,7 @@ uint8 ov7725_init (void)
         if(ov7725_get_config(ov7725_get_confing_buffer))
         {
             system_delay_ms(200);
-            set_camera_type(NO_CAMERE, NULL, NULL, NULL);
+            set_camera_type(CAMERA_BIN_IIC, NULL, NULL, NULL);
             if(ov7725_iic_init())
             {
                 // 如果程序在输出了断言信息 并且提示出错位置在这里
@@ -494,10 +496,13 @@ uint8 ov7725_init (void)
                 break;
             }
         }
-        
+
         csi_init(OV7725_W / 8, OV7725_H, &csi_handle, ov7725_finished_callback, OV7725_VSYNC_PIN, OV7725_PCLK_PIN, CSI_PIXCLK_FALLING);
         csi_add_empty_buffer(&csi_handle, ov7725_image_binary1[0]);
         csi_add_empty_buffer(&csi_handle, ov7725_image_binary2[0]);
+
+        
+        
         csi_start(&csi_handle);
         ov7725_image_binary = ov7725_image_binary1;// 设置初值
         

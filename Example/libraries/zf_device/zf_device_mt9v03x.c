@@ -391,14 +391,15 @@ void mt9v03x_finished_callback(CSI_Type *base, csi_handle_t *handle, status_t st
     uint32 full_buffer_addr;
     if(csi_get_full_buffer(&csi_handle, &full_buffer_addr))
     {
-        csi_add_empty_buffer(&csi_handle, (uint8 *)full_buffer_addr);
         if(full_buffer_addr == (uint32)mt9v03x_image1[0])
         {
             mt9v03x_image = mt9v03x_image1; // image_csi1采集完成
+            csi_add_empty_buffer(&csi_handle, mt9v03x_image2[0]);
         }
         else if(full_buffer_addr == (uint32)mt9v03x_image2[0])
         {
             mt9v03x_image = mt9v03x_image2; // image_csi2采集完成
+            csi_add_empty_buffer(&csi_handle, mt9v03x_image1[0]);
         }
         mt9v03x_finish_flag = 1;            // 采集完成标志位置一
     }

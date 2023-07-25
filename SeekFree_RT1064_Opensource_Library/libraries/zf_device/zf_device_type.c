@@ -126,3 +126,5 @@ void set_tof_type (tof_type_enum type_set, callback_function exti_callback)
     tof_type = type_set;
     tof_module_exti_handler = ((exti_callback == NULL) ? (type_default_callback) : (exti_callback));
 }
+
+

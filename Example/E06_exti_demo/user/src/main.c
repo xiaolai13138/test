@@ -62,13 +62,12 @@
 // **************************** 代码区域 ****************************
 #define LED1                    (B9 )
 
-#define KEY1                    (C31)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
-#define KEY2                    (C27)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
-#define KEY3                    (C26)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
-#define KEY4                    (C4 )                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
+#define KEY1                    (C15)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
+#define KEY2                    (C14)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
+#define KEY3                    (C13)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
+#define KEY4                    (C12)                                           // 使用的外部中断输入引脚 如果修改 需要同步对应修改外部中断编号与 isr.c 中的调用
 
-#define KEY1_EXTI               (GPIO2_Combined_16_31_IRQn)                     // 对应外部中断的中断编号 
-#define KEY4_EXTI               (GPIO2_Combined_0_15_IRQn)                      // 对应外部中断的中断编号 
+#define KEY_EXTI               (GPIO2_Combined_16_31_IRQn)                     // 对应外部中断的中断编号 
 
 uint8 exti_state[4];
 
@@ -87,8 +86,7 @@ int main (void)
     exti_init(KEY3, EXTI_TRIGGER_BOTH);                                         // 初始化 KEY3 为外部中断输入 双边沿触发
     exti_init(KEY4, EXTI_TRIGGER_BOTH);                                         // 初始化 KEY4 为外部中断输入 双边沿触发
 
-    interrupt_set_priority(KEY1_EXTI, 0);                                       // 设置 KEY1 对应外部中断的中断有先级为 0  KEY1 KEY2 KEY3共用一个中断函数
-    interrupt_set_priority(KEY4_EXTI, 3);                                       // 设置 KEY4 对应外部中断的中断有先级为 3
+    interrupt_set_priority(KEY_EXTI, 0);                                       // 设置 KEY1 对应外部中断的中断有先级为 0  KEY1 KEY2 KEY3 KEY4共用一个中断函数
     // 此处编写用户代码 例如外设初始化代码等
 
     while(1)

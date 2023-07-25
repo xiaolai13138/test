@@ -60,9 +60,9 @@
 #define OV7725_COF_UART_TX     (UART5_RX_C29)                                   // 小钻风 UART-TX 引脚 要接在单片机 RX 上
 #define OV7725_COF_UART_RX     (UART5_TX_C28)                                   // 小钻风 UART-RX 引脚 要接在单片机 TX 上
 
-#define OV7725_COF_IIC_DELAY    (800)                                           // 小钻风 IIC 延时
-#define OV7725_COF_IIC_SCL      (C29)                                           // 小钻风 IIC-SCL 引脚
-#define OV7725_COF_IIC_SDA      (C28)                                           // 小钻风 IIC-SDA 引脚
+#define OV7725_COF_IIC_DELAY   (800)                                            // 小钻风 IIC 延时
+#define OV7725_COF_IIC_SCL     (C29)                                            // 小钻风 IIC-SCL 引脚
+#define OV7725_COF_IIC_SDA     (C28)                                            // 小钻风 IIC-SDA 引脚
 
 #define OV7725_PCLK_PIN        (CSI_PIXCLK_B20)                                 // PCLK 触发信号 TIM_ETR 引脚禁止随意修改
 #define OV7725_VSYNC_PIN       (CSI_VSYNC_B22)                                  // 场中断引脚

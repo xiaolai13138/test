@@ -140,7 +140,11 @@ void dl1b_get_distance (void)
 void dl1b_int_handler (void)
 {
 #if DL1B_INT_ENABLE
-    dl1b_get_distance();
+    if(exti_flag_get(DL1B_INT_PIN))
+    {
+        exti_flag_clear(DL1B_INT_PIN);
+        dl1b_get_distance();
+    }
 #endif
 }
 
@@ -208,11 +212,11 @@ uint8 dl1b_init (void)
     }while(0);
 
 #if DL1B_INT_ENABLE
+    set_tof_type(TOF_DL1B, dl1b_int_handler);
     exti_init(DL1B_INT_PIN, EXTI_TRIGGER_FALLING);
     dl1b_int_handler();
     dl1b_finsh_flag = 0;
 #endif
-    set_tof_type(TOF_DL1B, dl1b_int_handler);
 
     return return_state;
 }

@@ -236,10 +236,11 @@ typedef void (*csi_transfer_callback_t)(CSI_Type *base, csi_handle_t *handle, st
 struct _csi_handle
 {
     uint32_t frameBufferQueue[CSI_DRIVER_ACTUAL_QUEUE_SIZE]; /*!< Frame buffer queue. */
-
+    uint32_t frameBufferAddr[CSI_DRIVER_ACTUAL_QUEUE_SIZE];
     volatile uint8_t queueWriteIdx;  /*!< Pointer to save incoming item. */
     volatile uint8_t queueReadIdx;   /*!< Pointer to read out the item. */
-    void *volatile emptyBuffer;      /*!< Pointer to maintain the empty frame buffers. */
+    // Öð·É¿Æ¼¼ÐÞ¸Ä
+    //void *volatile emptyBuffer;      /*!< Pointer to maintain the empty frame buffers. */
     volatile uint8_t emptyBufferCnt; /*!< Empty frame buffers count. */
 
     volatile uint8_t activeBufferNum; /*!< How many frame buffers are in progres currently. */

@@ -106,7 +106,7 @@ int main (void)
             printf("Time: %d s.\r\n", assert_count / 1000);                     // printf 使用方法不作介绍
         }
 #if DEBUG_UART_USE_INTERRUPT                                                    // 如果开启了 debug uart 接收中断
-        debug_uart_data_len = debug_read_ring_buffer(debug_uart_data_buffer);   // 获取数据
+        debug_uart_data_len = debug_read_ring_buffer(debug_uart_data_buffer, 64);   // 获取数据
         if(debug_uart_data_len != 0)                                            // 判断是否收到 debug uart 数据
         {
             printf("\r\n");                                                     // 输出换行

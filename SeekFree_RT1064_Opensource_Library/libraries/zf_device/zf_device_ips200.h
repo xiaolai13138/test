@@ -62,6 +62,7 @@
 #define _zf_device_ips200_h_
 
 #include "zf_common_typedef.h"
+#include "zf_driver_gpio.h"
 
 #define IPS200_USE_SOFT_SPI             (0 )                                    // 默认使用硬件 SPI 方式驱动 建议使用硬件 SPI 方式驱动
 #if IPS200_USE_SOFT_SPI                                                         // 这两段 颜色正常的才是正确的 颜色灰的就是没有用的
@@ -118,7 +119,7 @@
 #define IPS200_WR(x)       	            fast_gpio_set_level(IPS200_WR_PIN_PARALLEL8,x)
 #define IPS200_RS(x)       	            fast_gpio_set_level(IPS200_RS_PIN_PARALLEL8,x)
 #define IPS200_RST(x)      	            fast_gpio_set_level(ips_rst_pin,x)
-#define IPS200_CS(x)       	            fast_gpio_set_level(IPS200_CS_PIN_PARALLEL8,x)
+#define IPS200_CS(x)       	            fast_gpio_set_level(ips_cs_pin,x)
 #define IPS200_BL(x)		            fast_gpio_set_level(ips_bl_pin,x)
                     
 #define IPS200_DC(x)                    fast_gpio_set_level(IPS200_DC_PIN_SPI,x)
@@ -145,6 +146,10 @@ typedef enum
     IPS200_16X16_FONT                   = 2,                                    // 16x16    字体 目前不支持
 }ips200_font_size_enum;
 
+
+extern  gpio_pin_enum                   ips_cs_pin;
+
+
 void    ips200_clear                    (void);
 void    ips200_full                     (const uint16 color);
 void    ips200_set_dir                  (ips200_dir_enum dir);
@@ -157,7 +162,7 @@ void    ips200_show_char                (uint16 x, uint16 y, const char dat);
 void    ips200_show_string              (uint16 x, uint16 y, const char dat[]);
 void    ips200_show_int                 (uint16 x, uint16 y, const int32 dat, uint8 num);
 void    ips200_show_uint                (uint16 x, uint16 y, const uint32 dat, uint8 num);
-void    ips200_show_float               (uint16 x, uint16 y, const float dat, uint8 num, uint8 pointnum);
+void    ips200_show_float               (uint16 x, uint16 y, const double dat, uint8 num, uint8 pointnum);
 
 void    ips200_show_binary_image        (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height);
 void    ips200_show_gray_image          (uint16 x, uint16 y, const uint8 *image, uint16 width, uint16 height, uint16 dis_width, uint16 dis_height, uint8 threshold);

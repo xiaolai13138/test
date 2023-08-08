@@ -138,10 +138,10 @@ uint8 flash_write_page (uint32 sector_num, flash_page_enum page_num, const uint3
         flash_erase_page(sector_num, page_num);                                 // ²Á³ıÕâÒ»Ò³
     }
     
-    for(i=0; i<16; i++)
+    for(i=0; i<FLASH_PAGE_NUM_DRIVER; i++)
     {
         primask = interrupt_global_disable();
-        state = rom_api_flexspi_nor_flash_page_program(flash_instance, &config, sector_num * FLASH_SECTOR_SIZE + page_num * FLASH_PAGE_SIZE,(uint32 *)&flash_union_buffer[i*64]);
+        state = rom_api_flexspi_nor_flash_page_program(flash_instance, &config, sector_num * FLASH_SECTOR_SIZE + page_num * FLASH_PAGE_SIZE + (i * (FLASH_PAGE_SIZE/FLASH_PAGE_NUM_DRIVER)),(uint32 *)&flash_union_buffer[i*64]);
         interrupt_global_enable(primask);
         if(state != kStatus_Success)
         {

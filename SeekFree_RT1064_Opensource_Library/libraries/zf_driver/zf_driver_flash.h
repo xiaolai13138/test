@@ -39,10 +39,12 @@
 #include "zf_common_typedef.h"
 
 #define FLASH_BASE_ADDR             (0x70000000)
-#define FLASH_PAGE_SIZE             (0x00001000)                                // 4096 byte
-#define FLASH_PAGE_NUM              (8)                                         // 一个扇区8个页
-#define FLASH_SECTOR_SIZE           (FLASH_PAGE_SIZE * FLASH_PAGE_NUM)          // 4K byte
+#define FLASH_PAGE_SIZE             (0x00001000)                                // 4K (实际是芯片的Sector大小)
+#define FLASH_PAGE_NUM              (8)                                         // 一个块8个扇区
+#define FLASH_SECTOR_SIZE           (FLASH_PAGE_SIZE * FLASH_PAGE_NUM)          // 32K (实际是芯片Block大小)
 #define FLASH_OPERATION_TIME_OUT    (0x0FFF)
+
+#define FLASH_PAGE_NUM_DRIVER       (16)
 
 #define FLASH_DATA_BUFFER_SIZE      (FLASH_PAGE_SIZE / sizeof(flash_data_union))// 自动计算每个页能够存下多少个数据
 

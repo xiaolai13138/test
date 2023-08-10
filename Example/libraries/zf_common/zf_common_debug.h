@@ -90,9 +90,9 @@ uint32      debug_send_buffer       (const uint8 *buff, uint32 len);            
 #if DEBUG_UART_USE_INTERRUPT                                                    // 如果启用 debug uart 接收中断
 #define     DEBUG_RING_BUFFER_LEN   (64)                                        // 定义环形缓冲区大小 默认 64byte
 void        debug_interrupr_handler (void);
-uint32      debug_read_ring_buffer (uint8 *buff, uint32 len);
 #endif
 
+uint32      debug_read_ring_buffer      (uint8 *buff, uint32 len);
 void        debug_assert_enable         (void);
 void        debug_assert_disable        (void);
 void        debug_assert_handler        (uint8 pass, char *file, int line);

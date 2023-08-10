@@ -45,9 +45,9 @@
 #if DEBUG_UART_USE_INTERRUPT                                                    // 如果启用 debug uart 接收中断
 uint8                       debug_uart_buffer[DEBUG_RING_BUFFER_LEN];           // 数据存放数组
 uint8                       debug_uart_data = 0;
-fifo_struct                 debug_uart_fifo;
 #endif
 
+fifo_struct                 debug_uart_fifo;
 static debug_output_struct  debug_output_info;
 static volatile uint8       zf_debug_init_flag = 0;
 static volatile uint8       zf_debug_assert_enable = 1;
@@ -260,7 +260,6 @@ uint32 debug_send_buffer(const uint8 *buff, uint32 len)
     return 0;
 }
 
-#if DEBUG_UART_USE_INTERRUPT                                                    // 条件编译 只有在启用串口中断才编译
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     读取 debug 环形缓冲区数据
@@ -276,6 +275,7 @@ uint32 debug_read_ring_buffer (uint8 *buff, uint32 len)
     return len;
 }
 
+#if DEBUG_UART_USE_INTERRUPT                                                    // 条件编译 只有在启用串口中断才编译
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介     debug 串口中断处理函数 isr.c 中对应串口中断服务函数调用
 // 参数说明     void
